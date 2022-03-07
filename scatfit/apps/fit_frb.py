@@ -4,6 +4,7 @@
 #
 
 import argparse
+import sys
 
 import corner
 from iqrm import iqrm_mask
@@ -75,6 +76,14 @@ def parse_args():
         ],
         default="scattered_isotropic_dfb_instrumental",
         help="Use the specified scattering model.",
+    )
+
+    parser.add_argument(
+        "--showmodels",
+        action="store_true",
+        dest="show_models",
+        default=False,
+        help="Show comparison plot of scattering models.",
     )
 
     args = parser.parse_args()
@@ -334,7 +343,9 @@ def fit_profile(cand, plot_range, fscrunch_factor):
         sub_profile = sub_profile - np.nanmean(sub_profile)
         sub_profile = sub_profile / np.nanmax(sub_profile)
 
-        quantiles = np.quantile(sub_profile, q=[0.25, 0.75], axis=None)
+        # compute baseline statistics outside the central +- 20 ms
+        mask = np.abs(fit_range) > 20.0
+        quantiles = np.quantile(sub_profile[mask], q=[0.25, 0.75], axis=None)
         std = 0.7413 * np.abs(quantiles[1] - quantiles[0])
         snr = np.nanmax(sub_profile) / std
         print("S/N: {0:.2f}".format(snr))
@@ -525,7 +536,9 @@ def main():
 
     args = parse_args()
 
-    plot_profile_models()
+    if args.show_models:
+        plot_profile_models()
+        sys.exit(0)
 
     yobj = your.Your(args.filename)
     print(yobj.your_header)
