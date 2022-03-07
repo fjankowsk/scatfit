@@ -1,29 +1,17 @@
-# README #
+# Fast Radio Burst scattering fits #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+This repository contains code to fit Fast Radio Burst profiles to measure scattering and other parameters. The code is mainly developed for Python 3, but Python 2 from version 2.7 onwards should work fine.
 
-### What is this repository for? ###
+## Author ##
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+The software is primarily developed and maintained by Fabian Jankowski. For more information feel free to contact me via: fabian.jankowski at manchester.ac.uk.
 
-### How do I get set up? ###
+## Citation ##
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+If you make use of the software, please add a link to this repository and cite our upcoming paper. See the CITATION file.
 
-### Contribution guidelines ###
+## Installation ##
 
-* Writing tests
-* Code review
-* Other guidelines
+The easiest and recommended way to install the software is through `pip` directly from the bitbucket repository. For example, to install the master branch of the code, use the following command:
 
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+`pip3 install git+https://bitbucket.org/jankowsk/scatfit.git@master`
