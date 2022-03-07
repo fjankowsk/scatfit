@@ -17,6 +17,7 @@ import pandas as pd
 import your
 from your.candidate import Candidate
 
+from scatfit.dm import get_dm_smearing
 import scatfit.pulsemodels as pulsemodels
 
 
@@ -49,6 +50,7 @@ def parse_args():
         "--fscrunch",
         dest="fscrunch_factor",
         default=256,
+        metavar='factor',
         type=int,
         help="Integrate this many frequency channels.",
     )
@@ -57,6 +59,7 @@ def parse_args():
         "--tscrunch",
         dest="tscrunch_factor",
         default=1,
+        metavar='factor',
         type=int,
         help="Integrate this many time samples.",
     )
@@ -97,30 +100,6 @@ def use_custom_matplotlib_formatting():
     matplotlib.rcParams["ytick.major.width"] = 1.5
     matplotlib.rcParams["ytick.minor.size"] = 4
     matplotlib.rcParams["ytick.minor.width"] = 1.5
-
-
-def get_dm_smearing(f_lo, f_hi, dm):
-    """
-    Compute the intra-channel dispersive smearing.
-
-    Parameters
-    ----------
-    f_lo: float
-        The low frequency edge of the channel in GHz.
-    f_hi: float
-        The high frequency edge of the channel in GHz.
-    dm: float
-        The dispersion measure of the source in pc/cm^3.
-
-    Returns
-    -------
-    dt: float
-        The intra-channel dispersive smearing in ms.
-    """
-
-    dt = 4.148808 * (f_lo ** (-2) - f_hi ** (-2)) * dm
-
-    return dt
 
 
 def plot_profile_models():
