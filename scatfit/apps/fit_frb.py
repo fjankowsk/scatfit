@@ -50,7 +50,7 @@ def parse_args():
         "--fscrunch",
         dest="fscrunch_factor",
         default=256,
-        metavar='factor',
+        metavar="factor",
         type=int,
         help="Integrate this many frequency channels.",
     )
@@ -59,7 +59,7 @@ def parse_args():
         "--tscrunch",
         dest="tscrunch_factor",
         default=1,
-        metavar='factor',
+        metavar="factor",
         type=int,
         help="Integrate this many time samples.",
     )
@@ -358,6 +358,13 @@ def fit_profile(cand, plot_range, fscrunch_factor):
 
         fitresult = fit_profile_model(fit_range, sub_profile, dm_smear)
 
+        # compute profile statistics
+        fluxsum = (
+            np.sum(fitresult.best_fit[fitresult.best_fit >= 0])
+            * np.abs(np.diff(fit_range))[0]
+        )
+        weq = fluxsum / np.max(fitresult.best_fit)
+
         temp = pd.DataFrame(
             {
                 "band": iband,
@@ -369,6 +376,8 @@ def fit_profile(cand, plot_range, fscrunch_factor):
                 "taus": fitresult.best_values["taus"],
                 "err_taus": fitresult.params["taus"].stderr,
                 "taud": fitresult.best_values["taud"],
+                "fluxsum": fluxsum,
+                "weq": weq,
             },
             index=[iband],
         )
