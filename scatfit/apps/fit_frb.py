@@ -340,14 +340,14 @@ def fit_profile(cand, plot_range, fscrunch_factor):
         sub_profile = sub_profile[mask]
 
         # remove baseline and normalise
-        sub_profile = sub_profile - np.nanmean(sub_profile)
-        sub_profile = sub_profile / np.nanmax(sub_profile)
+        sub_profile = sub_profile - np.mean(sub_profile)
+        sub_profile = sub_profile / np.max(sub_profile)
 
         # compute baseline statistics outside the central +- 20 ms
         mask = np.abs(fit_range) > 20.0
         quantiles = np.quantile(sub_profile[mask], q=[0.25, 0.75], axis=None)
         std = 0.7413 * np.abs(quantiles[1] - quantiles[0])
-        snr = np.nanmax(sub_profile) / std
+        snr = np.max(sub_profile) / std
         print("S/N: {0:.2f}".format(snr))
 
         # if not snr >= 4.0:
@@ -601,8 +601,8 @@ def main():
 
     # band-integrated profile
     profile = np.sum(cand.dedispersed.T, axis=0)
-    profile = profile - np.nanmean(profile)
-    profile = profile / np.nanmax(profile)
+    profile = profile - np.mean(profile)
+    profile = profile / np.max(profile)
 
     fact = 1000 * cand.tsamp * args.tscrunch_factor
     plot_range = np.linspace(0, fact * len(profile), num=len(profile))
