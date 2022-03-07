@@ -538,6 +538,7 @@ def main():
 
     if args.show_models:
         plot_profile_models()
+        plt.show()
         sys.exit(0)
 
     yobj = your.Your(args.filename)
