@@ -17,7 +17,7 @@ import pandas as pd
 import your
 from your.candidate import Candidate
 
-import pulsemodels
+import scatfit.pulsemodels as pulsemodels
 
 
 def parse_args():
