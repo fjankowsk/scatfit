@@ -44,6 +44,11 @@ setup(
         "scipy",
         "your",
     ],
+    entry_points={
+        "console_scripts": [
+            "scatfit-fitfrb = scatfit.apps.fit_frb:main",
+        ],
+    },
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "License :: OSI Approved :: MIT License",
