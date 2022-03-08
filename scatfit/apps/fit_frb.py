@@ -96,6 +96,14 @@ def parse_args():
     )
 
     parser.add_argument(
+        "--publish",
+        dest="publish",
+        action="store_true",
+        default=False,
+        help="Output plots suitable for publication.",
+    )
+
+    parser.add_argument(
         "-z",
         "--zoom",
         dest="zoom",
@@ -386,7 +394,7 @@ def main():
         bin_burst = np.argmax(profile)
     plot_range -= fact * bin_burst
 
-    params = {"zoom": args.zoom}
+    params = {"publish": args.publish, "zoom": args.zoom}
 
     # fit integrated profile
     fit_df = fit_profile(cand, plot_range, args.fscrunch_factor, args.smodel, params)

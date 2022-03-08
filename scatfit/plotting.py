@@ -200,14 +200,15 @@ def plot_profile_fit(fit_range, sub_profile, fitresult, iband, params):
         zorder=3,
     )
 
-    ax1.plot(
-        fit_range,
-        fitresult.init_fit,
-        color="tab:blue",
-        ls="dotted",
-        lw=1.5,
-        zorder=6,
-    )
+    if not params["publish"]:
+        ax1.plot(
+            fit_range,
+            fitresult.init_fit,
+            color="tab:blue",
+            ls="dotted",
+            lw=1.5,
+            zorder=6,
+        )
 
     ax1.plot(
         fit_range,
@@ -219,7 +220,7 @@ def plot_profile_fit(fit_range, sub_profile, fitresult, iband, params):
     )
 
     ax1.set_ylabel("Flux (a.u.)")
-    if params["zoom"] is None:
+    if not params["publish"]:
         ax1.set_title("Sub-band {0}".format(iband))
 
     # hide bottom ticks
