@@ -258,8 +258,8 @@ def plot_width_scaling(t_df, cand):
     ax.scatter(
         x=1e-3 * df["cfreq"],
         y=df["weq"],
-        color="lightgrey",
-        marker="d",
+        color="grey",
+        marker="*",
         zorder=8,
         label=r"$\mathrm{W}_\mathrm{eq}$",
     )
