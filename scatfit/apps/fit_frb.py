@@ -48,6 +48,15 @@ def parse_args():
     )
 
     parser.add_argument(
+        "--binburst",
+        dest="bin_burst",
+        default=None,
+        metavar="bin",
+        type=int,
+        help="Specify the burst location bin manually.",
+    )
+
+    parser.add_argument(
         "--fscrunch",
         dest="fscrunch_factor",
         default=256,
@@ -360,7 +369,10 @@ def main():
     plot_range = np.linspace(0, fact * len(profile), num=len(profile))
 
     # centre on the burst
-    bin_burst = np.argmax(profile)
+    if args.bin_burst is not None:
+        bin_burst = args.bin_burst
+    else:
+        bin_burst = np.argmax(profile)
     plot_range -= fact * bin_burst
 
     # fit integrated profile
