@@ -183,10 +183,14 @@ def plot_profile_fit(fit_range, sub_profile, fitresult, iband):
     Plot the profile fit.
     """
 
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
+    fig, (ax1, ax2) = plt.subplots(
+        nrows=2,
+        ncols=1,
+        sharex="col",
+        gridspec_kw={"height_ratios": [1, 0.3], "hspace": 0},
+    )
 
-    ax.step(
+    ax1.step(
         fit_range,
         sub_profile,
         where="mid",
@@ -196,7 +200,7 @@ def plot_profile_fit(fit_range, sub_profile, fitresult, iband):
         zorder=3,
     )
 
-    ax.plot(
+    ax1.plot(
         fit_range,
         fitresult.init_fit,
         color="tab:blue",
@@ -205,7 +209,7 @@ def plot_profile_fit(fit_range, sub_profile, fitresult, iband):
         zorder=6,
     )
 
-    ax.plot(
+    ax1.plot(
         fit_range,
         fitresult.best_fit,
         color="tab:red",
@@ -214,10 +218,31 @@ def plot_profile_fit(fit_range, sub_profile, fitresult, iband):
         zorder=8,
     )
 
-    ax.set_title("Sub-band {0}".format(iband))
-    ax.set_xlabel("Time (ms)")
-    ax.set_ylabel("Flux (a.u.)")
-    ax.set_xlim(left=-50.0, right=50.0)
+    ax1.set_title("Sub-band {0}".format(iband))
+    ax1.set_ylabel("Flux (a.u.)")
+
+    # hide bottom ticks
+    ax1.tick_params(bottom=False)
+
+    # residuals
+    residual = sub_profile - fitresult.best_fit
+
+    ax2.step(
+        fit_range,
+        residual,
+        where="mid",
+        color="black",
+        ls="solid",
+        lw=1.0,
+        zorder=3,
+    )
+
+    ax2.set_xlabel("Time (ms)")
+    ax2.set_ylabel("Residual")
+    ax2.set_xlim(left=-50.0, right=50.0)
+
+    # align the labels of the subplots horizontally and vertically
+    fig.align_labels()
 
     fig.tight_layout()
 
@@ -305,7 +330,7 @@ def plot_width_scaling(t_df, cand):
     )
 
     ax.grid()
-    ax.legend(loc="best", frameon=False)
+    ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.3), frameon=False, ncol=4)
     ax.set_xlabel("Frequency (GHz)")
     ax.set_ylabel("Width (ms)")
     ax.set_xscale("log")
