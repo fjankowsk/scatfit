@@ -254,14 +254,18 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel):
                 "err_fluence": fitresult.params["fluence"].stderr,
                 "sigma": fitresult.best_values["sigma"],
                 "err_sigma": fitresult.params["sigma"].stderr,
-                "taus": fitresult.best_values["taus"],
-                "err_taus": fitresult.params["taus"].stderr,
-                "taud": fitresult.best_values["taud"],
                 "fluxsum": fluxsum,
                 "weq": weq,
             },
             index=[iband],
         )
+
+        if "taus" in fitresult.best_values:
+            temp["taus"] = fitresult.best_values["taus"]
+            temp["err_taus"] = fitresult.params["taus"].stderr
+
+        if "taud" in fitresult.best_values:
+            temp["taud"] = fitresult.best_values["taud"]
 
         df = pd.concat([df, temp], ignore_index=True)
 

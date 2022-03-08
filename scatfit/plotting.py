@@ -126,6 +126,13 @@ def plot_profile_models():
 
     ax.plot(
         plot_range,
+        pulsemodels.gaussian_normed(plot_range, 1.0, 10.0, 1.5),
+        lw=2,
+        label="unscattered",
+    )
+
+    ax.plot(
+        plot_range,
         pulsemodels.scattered_profile(plot_range, 1.0, 0.0, 1.5, 2.5, 0.1),
         lw=2,
         label="convolved",
@@ -238,15 +245,16 @@ def plot_width_scaling(t_df, cand):
         label="FWHM",
     )
 
-    ax.errorbar(
-        x=1e-3 * df["cfreq"],
-        y=df["taus"],
-        yerr=df["err_taus"],
-        fmt="x",
-        color="dimgrey",
-        zorder=4,
-        label=r"$\tau_\mathrm{s}$",
-    )
+    if "taus" in df.columns:
+        ax.errorbar(
+            x=1e-3 * df["cfreq"],
+            y=df["taus"],
+            yerr=df["err_taus"],
+            fmt="x",
+            color="dimgrey",
+            zorder=4,
+            label=r"$\tau_\mathrm{s}$",
+        )
 
     # intra-channel dispersive smearing
     f_lo = np.sort(freqs)
