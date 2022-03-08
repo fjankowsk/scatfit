@@ -189,9 +189,6 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel):
             "err_fluence",
             "sigma",
             "err_sigma",
-            "taus",
-            "err_taus",
-            "taud",
             "fluxsum",
             "weq",
         ]
