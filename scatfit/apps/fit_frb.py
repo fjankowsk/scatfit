@@ -4,6 +4,7 @@
 #
 
 import argparse
+import inspect
 import sys
 
 import corner
@@ -90,19 +91,41 @@ def parse_args():
     return args
 
 
-def fit_profile_model(fit_range, profile, dm_smear):
+def fit_profile_model(fit_range, profile, dm_smear, smodel):
     """
     Fit a profile model to data.
     """
 
-    model = Model(pulsemodels.gaussian_scattered_dfb_instrumental)
+    if smodel == "unscattered":
+        scat_model = pulsemodels.gaussian_normed
+    elif smodel == "scattered_isotropic":
+        scat_model = pulsemodels.scattered_gaussian_pulse
+    elif smodel == "scattered_isotropic_afb_instrumental":
+        scat_model = pulsemodels.gaussian_scattered_afb_instrumental
+    elif smodel == "scattered_isotropic_dfb_instrumental":
+        scat_model = pulsemodels.gaussian_scattered_dfb_instrumental
+    else:
+        raise NotImplementedError(
+            "Scattering model not implemented: {0}".format(smodel)
+        )
+
+    model = Model(scat_model)
 
     model.set_param_hint("fluence", value=5.0, min=0.1)
     model.set_param_hint("center", value=0.0, min=-20.0, max=20.0)
     model.set_param_hint("sigma", value=1.0, min=0.1, max=20.0)
     model.set_param_hint("taus", value=0.5, min=0.01, max=20.0)
-    model.set_param_hint("taud", value=dm_smear, vary=False)
-    model.set_param_hint("dc", value=0.0, min=-0.3, max=0.3)
+
+    arg_list = list(inspect.signature(scat_model).parameters.keys())
+
+    if "dc" in arg_list:
+        model.set_param_hint("dc", value=0.0, min=-0.3, max=0.3)
+
+    if "taui" in arg_list:
+        model.set_param_hint("taui", value=0.30624, vary=False)
+
+    if "taud" in arg_list:
+        model.set_param_hint("taud", value=dm_smear, vary=False)
 
     fitparams = model.make_params()
 
@@ -151,7 +174,7 @@ def fit_profile_model(fit_range, profile, dm_smear):
     return fitresult_emcee
 
 
-def fit_profile(cand, plot_range, fscrunch_factor):
+def fit_profile(cand, plot_range, fscrunch_factor, smodel):
     """
     Fit an FRB profile.
     """
@@ -167,6 +190,8 @@ def fit_profile(cand, plot_range, fscrunch_factor):
             "taus",
             "err_taus",
             "taud",
+            "fluxsum",
+            "weq",
         ]
     )
     freqs = cand.chan_freqs
@@ -210,7 +235,7 @@ def fit_profile(cand, plot_range, fscrunch_factor):
             )
         )
 
-        fitresult = fit_profile_model(fit_range, sub_profile, dm_smear)
+        fitresult = fit_profile_model(fit_range, sub_profile, dm_smear, smodel)
 
         plotting.plot_profile_fit(fit_range, sub_profile, fitresult, iband)
 
@@ -336,7 +361,7 @@ def main():
     plot_range -= fact * bin_burst
 
     # fit integrated profile
-    fit_df = fit_profile(cand, plot_range, args.fscrunch_factor)
+    fit_df = fit_profile(cand, plot_range, args.fscrunch_factor, args.smodel)
 
     print(fit_df)
     plotting.plot_width_scaling(fit_df, cand)
