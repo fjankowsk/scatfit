@@ -126,7 +126,7 @@ def plot_profile_models():
 
     ax.plot(
         plot_range,
-        pulsemodels.gaussian_normed(plot_range, 1.0, 10.0, 1.5),
+        pulsemodels.gaussian_normed(plot_range, 5.0, 10.0, 1.5),
         lw=2,
         label="unscattered",
     )
