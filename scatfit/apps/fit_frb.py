@@ -122,12 +122,12 @@ def fit_profile_model(fit_range, profile, dm_smear, smodel):
 
     model.set_param_hint("fluence", value=5.0, min=0.1)
     model.set_param_hint("center", value=0.0, min=-20.0, max=20.0)
-    model.set_param_hint("sigma", value=1.0, min=0.1, max=20.0)
+    model.set_param_hint("sigma", value=1.0, min=0.30624, max=20.0)
 
     arg_list = list(inspect.signature(scat_model).parameters.keys())
 
     if "taus" in arg_list:
-        model.set_param_hint("taus", value=0.5, min=0.01, max=20.0)
+        model.set_param_hint("taus", value=1.5, min=0.1, max=20.0)
 
     if "taui" in arg_list:
         model.set_param_hint("taui", value=0.30624, vary=False)
