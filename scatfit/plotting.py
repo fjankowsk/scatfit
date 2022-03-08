@@ -246,6 +246,8 @@ def plot_profile_fit(fit_range, sub_profile, fitresult, iband):
 
     fig.tight_layout()
 
+    fig.savefig("scattering_fit_band_{0}.pdf".format(iband), bbox_inches="tight")
+
 
 def plot_width_scaling(t_df, cand):
     """
