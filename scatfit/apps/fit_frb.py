@@ -212,6 +212,8 @@ def fit_profile(cand, plot_range, fscrunch_factor):
 
         fitresult = fit_profile_model(fit_range, sub_profile, dm_smear)
 
+        plotting.plot_profile_fit(fit_range, sub_profile, fitresult, iband)
+
         # compute profile statistics
         fluxsum = (
             np.sum(fitresult.best_fit[fitresult.best_fit >= 0])
@@ -238,44 +240,6 @@ def fit_profile(cand, plot_range, fscrunch_factor):
 
         df = pd.concat([df, temp], ignore_index=True)
 
-        fig = plt.figure()
-        ax = fig.add_subplot(111)
-
-        ax.step(
-            fit_range,
-            sub_profile,
-            where="mid",
-            color="black",
-            ls="solid",
-            lw=1.0,
-            zorder=3,
-        )
-
-        ax.plot(
-            fit_range,
-            fitresult.init_fit,
-            color="tab:blue",
-            ls="dotted",
-            lw=1.5,
-            zorder=6,
-        )
-
-        ax.plot(
-            fit_range,
-            fitresult.best_fit,
-            color="tab:red",
-            ls="dashed",
-            lw=2.0,
-            zorder=8,
-        )
-
-        ax.set_title("Sub-band {0}".format(iband))
-        ax.set_xlabel("Time (ms)")
-        ax.set_ylabel("Flux (a.u.)")
-        ax.set_xlim(left=-50.0, right=50.0)
-
-        fig.tight_layout()
-
     # compute fwhm and fwtm
     df["fwhm"] = pulsemodels.gaussian_fwhm(df["sigma"])
     df["err_fwhm"] = pulsemodels.gaussian_fwhm(df["err_sigma"])
@@ -288,6 +252,7 @@ def fit_profile(cand, plot_range, fscrunch_factor):
 #
 # MAIN
 #
+
 
 def main():
     args = parse_args()

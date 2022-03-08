@@ -171,6 +171,50 @@ def plot_profile_models():
     fig.tight_layout()
 
 
+def plot_profile_fit(fit_range, sub_profile, fitresult, iband):
+    """
+    Plot the profile fit.
+    """
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+
+    ax.step(
+        fit_range,
+        sub_profile,
+        where="mid",
+        color="black",
+        ls="solid",
+        lw=1.0,
+        zorder=3,
+    )
+
+    ax.plot(
+        fit_range,
+        fitresult.init_fit,
+        color="tab:blue",
+        ls="dotted",
+        lw=1.5,
+        zorder=6,
+    )
+
+    ax.plot(
+        fit_range,
+        fitresult.best_fit,
+        color="tab:red",
+        ls="dashed",
+        lw=2.0,
+        zorder=8,
+    )
+
+    ax.set_title("Sub-band {0}".format(iband))
+    ax.set_xlabel("Time (ms)")
+    ax.set_ylabel("Flux (a.u.)")
+    ax.set_xlim(left=-50.0, right=50.0)
+
+    fig.tight_layout()
+
+
 def plot_width_scaling(t_df, cand):
     """
     Plot the scaling of fitted widths with frequency.
