@@ -42,6 +42,7 @@ setup(
         "numpy",
         "pandas",
         "scipy",
+        "tqdm",
         "your",
     ],
     entry_points={
