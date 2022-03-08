@@ -37,7 +37,7 @@ def gaussian_normed(x, fluence, center, sigma):
     return res
 
 
-def scattered_gaussian_pulse(x, fluence, center, sigma, tau, dc):
+def scattered_gaussian_pulse(x, fluence, center, sigma, taus, dc):
     """
     A scattered Gaussian pulse. Analytical approach, assuming thin screen scattering.
 
@@ -53,7 +53,7 @@ def scattered_gaussian_pulse(x, fluence, center, sigma, tau, dc):
         The mean of the Gaussian, i.e. its location.
     sigma: float
         The Gaussian standard deviation.
-    tau: float
+    taus: float
         The scattering time.
     dc: float
         The vertical offset of the profile from the baseline.
@@ -64,17 +64,17 @@ def scattered_gaussian_pulse(x, fluence, center, sigma, tau, dc):
         The profile data.
     """
 
-    if sigma / tau >= 10.0:
+    if sigma / taus >= 10.0:
         res = dc + gaussian_normed(x, fluence, center, sigma)
     else:
-        A = 0.5 * (fluence / tau)
+        A = 0.5 * (fluence / taus)
 
-        B = np.exp(0.5 * np.power(sigma / tau, 2))
+        B = np.exp(0.5 * np.power(sigma / taus, 2))
 
-        C = np.exp(-(x - center) / tau)
+        C = np.exp(-(x - center) / taus)
 
         D = 1 + special.erf(
-            (x - (center + np.power(sigma, 2) / tau)) / (sigma * np.sqrt(2.0))
+            (x - (center + np.power(sigma, 2) / taus)) / (sigma * np.sqrt(2.0))
         )
 
         mask = D == 0
@@ -250,7 +250,7 @@ def gaussian_fwtm(sigma):
     return res
 
 
-def broadening_function(x, tau):
+def broadening_function(x, taus):
     """
     A broadening function for isotropic scattering.
 
@@ -258,8 +258,8 @@ def broadening_function(x, tau):
     ----------
     x: ~np.array
         The running variable (time).
-    tau: float
-        The scattering timescale.
+    taus: float
+        The scattering time.
 
     Returns
     -------
@@ -270,12 +270,12 @@ def broadening_function(x, tau):
     res = np.zeros(len(x))
 
     mask = x >= 0.0
-    res[mask] = (1 / tau) * np.exp(-x[mask] / tau)
+    res[mask] = (1 / taus) * np.exp(-x[mask] / taus)
 
     return res
 
 
-def scattered_profile(x, fluence, center, sigma, tau, dc):
+def scattered_profile(x, fluence, center, sigma, taus, dc):
     """
     A scattered pulse profile.
 
@@ -289,7 +289,7 @@ def scattered_profile(x, fluence, center, sigma, tau, dc):
         The mean of the Gaussian, i.e. its location.
     sigma: float
         The Gaussian standard deviation.
-    tau: float
+    taus: float
         The scattering time.
     dc: float
         The vertical offset of the profile from the baseline.
@@ -302,7 +302,7 @@ def scattered_profile(x, fluence, center, sigma, tau, dc):
 
     scattered = dc + np.convolve(
         gaussian_normed(x, fluence, center, sigma),
-        broadening_function(x, tau),
+        broadening_function(x, taus),
         mode="same",
     )
 
