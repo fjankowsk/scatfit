@@ -178,7 +178,7 @@ def plot_profile_models():
     fig.tight_layout()
 
 
-def plot_profile_fit(fit_range, sub_profile, fitresult, iband):
+def plot_profile_fit(fit_range, sub_profile, fitresult, iband, params):
     """
     Plot the profile fit.
     """
@@ -218,8 +218,9 @@ def plot_profile_fit(fit_range, sub_profile, fitresult, iband):
         zorder=8,
     )
 
-    ax1.set_title("Sub-band {0}".format(iband))
     ax1.set_ylabel("Flux (a.u.)")
+    if params["zoom"] is None:
+        ax1.set_title("Sub-band {0}".format(iband))
 
     # hide bottom ticks
     ax1.tick_params(bottom=False)
@@ -239,7 +240,12 @@ def plot_profile_fit(fit_range, sub_profile, fitresult, iband):
 
     ax2.set_xlabel("Time (ms)")
     ax2.set_ylabel("Residual")
-    ax2.set_xlim(left=-50.0, right=50.0)
+
+    # zoom in
+    if params["zoom"] is not None:
+        ax2.set_xlim(left=params["zoom"][0], right=params["zoom"][1])
+    else:
+        ax2.set_xlim(left=-50.0, right=50.0)
 
     # align the labels of the subplots horizontally and vertically
     fig.align_labels()

@@ -95,6 +95,17 @@ def parse_args():
         help="Show comparison plot of scattering models.",
     )
 
+    parser.add_argument(
+        "-z",
+        "--zoom",
+        dest="zoom",
+        type=float,
+        nargs=2,
+        metavar=("start", "end"),
+        default=None,
+        help="Zoom into this time region.",
+    )
+
     args = parser.parse_args()
 
     return args
@@ -185,7 +196,7 @@ def fit_profile_model(fit_range, profile, dm_smear, smodel):
     return fitresult_emcee
 
 
-def fit_profile(cand, plot_range, fscrunch_factor, smodel):
+def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
     """
     Fit an FRB profile.
     """
@@ -245,7 +256,7 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel):
 
         fitresult = fit_profile_model(fit_range, sub_profile, dm_smear, smodel)
 
-        plotting.plot_profile_fit(fit_range, sub_profile, fitresult, iband)
+        plotting.plot_profile_fit(fit_range, sub_profile, fitresult, iband, params)
 
         # compute profile statistics
         fluxsum = (
@@ -375,8 +386,10 @@ def main():
         bin_burst = np.argmax(profile)
     plot_range -= fact * bin_burst
 
+    params = {"zoom": args.zoom}
+
     # fit integrated profile
-    fit_df = fit_profile(cand, plot_range, args.fscrunch_factor, args.smodel)
+    fit_df = fit_profile(cand, plot_range, args.fscrunch_factor, args.smodel, params)
 
     print(fit_df)
     plotting.plot_width_scaling(fit_df, cand)
