@@ -241,8 +241,27 @@ def plot_width_scaling(t_df, cand):
         yerr=df["err_fwhm"],
         fmt="o",
         color="black",
-        zorder=5,
-        label="FWHM",
+        zorder=7,
+        label=r"$\mathrm{W}_{50}$",
+    )
+
+    ax.errorbar(
+        x=1e-3 * df["cfreq"],
+        y=df["fwtm"],
+        yerr=df["err_fwtm"],
+        fmt="+",
+        color="darkgrey",
+        zorder=6,
+        label=r"$\mathrm{W}_{10}$",
+    )
+
+    ax.scatter(
+        x=1e-3 * df["cfreq"],
+        y=df["weq"],
+        color="lightgrey",
+        marker="d",
+        zorder=8,
+        label=r"$\mathrm{W}_\mathrm{eq}$",
     )
 
     if "taus" in df.columns:
