@@ -74,7 +74,7 @@ def parse_args():
             "scattered_isotropic_afb_instrumental",
             "scattered_isotropic_dfb_instrumental",
         ],
-        default="scattered_isotropic_dfb_instrumental",
+        default="scattered_isotropic",
         help="Use the specified scattering model.",
     )
 
