@@ -205,12 +205,7 @@ def gaussian_scattered_dfb_instrumental(x, fluence, center, sigma, taus, taud, d
 
     B = boxcar(x, taud)
 
-    res = dc + signal.convolve(A, B, mode="same")
-
-    # ensure that the pulse energy (i.e. fluence) is conserved
-    sum_res = np.sum(res)
-    if sum_res != 0:
-        res = np.sum(A) * res / sum_res
+    res = dc + signal.convolve(A, B, mode="same") / np.sum(B)
 
     return res
 
@@ -305,17 +300,10 @@ def scattered_profile(x, fluence, center, sigma, taus, dc):
         The profile data.
     """
 
-    profile = gaussian_normed(x, fluence, center, sigma)
+    A = gaussian_normed(x, fluence, center, sigma)
 
-    scattered = dc + signal.convolve(
-        profile,
-        broadening_function(x, taus),
-        mode="same",
-    )
+    B = broadening_function(x, taus)
 
-    # ensure that the pulse energy (i.e. fluence) is conserved
-    sum_scattered = np.sum(scattered)
-    if sum_scattered != 0:
-        scattered = np.sum(profile) * scattered / sum_scattered
+    scattered = dc + signal.convolve(A, B, mode="same") / np.sum(B)
 
     return scattered
