@@ -133,14 +133,14 @@ def plot_profile_models():
 
     ax.plot(
         plot_range,
-        pulsemodels.scattered_profile(plot_range, 1.0, 0.0, 1.5, 2.5, 0.1),
+        pulsemodels.scattered_profile(plot_range, 5.0, 0.0, 1.5, 2.5, 0.1),
         lw=2,
         label="convolved",
     )
 
     ax.plot(
         plot_range,
-        pulsemodels.scattered_profile(plot_range, 2.0, 20.0, 1.5, 2.5, 0.1),
+        pulsemodels.scattered_profile(plot_range, 5.0, 20.0, 1.5, 2.5, 0.1),
         lw=2,
         label="convolved",
     )
