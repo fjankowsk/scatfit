@@ -495,10 +495,14 @@ def main():
     fit_df = fit_profile(cand, plot_range, args.fscrunch_factor, args.smodel, params)
     print(fit_df)
 
-    if args.fit_scatindex:
-        fit_powerlaw(fit_df["cfreq"], fit_df["taus"], fit_df["err_taus"])
+    if args.fit_scatindex and "taus" in fit_df.columns:
+        fitresult = fit_powerlaw(
+            fit_df["cfreq"].values, fit_df["taus"].values, fit_df["err_taus"].values
+        )
+    else:
+        fitresult = None
 
-    plotting.plot_width_scaling(fit_df, cand)
+    plotting.plot_width_scaling(fit_df, cand, fitresult)
 
     plotting.plot_frb(cand, plot_range, profile)
 

@@ -256,7 +256,7 @@ def plot_profile_fit(fit_range, sub_profile, fitresult, iband, params):
     fig.savefig("scattering_fit_band_{0}.pdf".format(iband), bbox_inches="tight")
 
 
-def plot_width_scaling(t_df, cand):
+def plot_width_scaling(t_df, cand, fitresult):
     """
     Plot the scaling of fitted widths with frequency.
     """
@@ -307,6 +307,17 @@ def plot_width_scaling(t_df, cand):
             color="dimgrey",
             zorder=4,
             label=r"$\tau_\mathrm{s}$",
+        )
+
+    # scattering time fit
+    if fitresult is not None:
+        ax.plot(
+            fitresult.data,
+            fitresult.best_fit,
+            color="dimgrey",
+            ls="solid",
+            lw=2.0,
+            zorder=4.5,
         )
 
     # intra-channel dispersive smearing
