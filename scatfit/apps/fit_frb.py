@@ -497,7 +497,9 @@ def main():
 
     if args.fit_scatindex and "taus" in fit_df.columns:
         fitresult = fit_powerlaw(
-            fit_df["cfreq"].values, fit_df["taus"].values, fit_df["err_taus"].values
+            fit_df["cfreq"].to_numpy(),
+            fit_df["taus"].to_numpy(),
+            fit_df["err_taus"].to_numpy(),
         )
     else:
         fitresult = None

@@ -309,25 +309,16 @@ def plot_width_scaling(t_df, cand, fitresult):
             label=r"$\tau_\mathrm{s}$",
         )
 
-    # scattering time fit
-    if fitresult is not None:
-        ax.plot(
-            fitresult.data,
-            fitresult.best_fit,
-            color="dimgrey",
-            ls="solid",
-            lw=2.0,
-            zorder=4.5,
-        )
-
     # intra-channel dispersive smearing
     f_lo = np.sort(freqs)
     f_hi = f_lo + np.abs(chan_bw)
 
     dm_smear = get_dm_smearing(f_lo * 1e-3, f_hi * 1e-3, cand.dm)
 
+    plot_range = 0.5 * (f_lo + f_hi)
+
     ax.plot(
-        1e-3 * 0.5 * (f_lo + f_hi),
+        1e-3 * plot_range,
         dm_smear,
         color="grey",
         ls="dashed",
@@ -337,10 +328,10 @@ def plot_width_scaling(t_df, cand, fitresult):
     )
 
     # instrumental smearing
-    instrumental_smear = np.full(len(f_lo), 0.30624)
+    instrumental_smear = np.full(len(plot_range), 0.30624)
 
     ax.plot(
-        1e-3 * 0.5 * (f_lo + f_hi),
+        1e-3 * plot_range,
         instrumental_smear,
         color="grey",
         ls="dotted",
@@ -348,6 +339,19 @@ def plot_width_scaling(t_df, cand, fitresult):
         zorder=3,
         label=r"$t_\mathrm{samp}$",
     )
+
+    # scattering time fit
+    if fitresult is not None:
+        out = fitresult.eval(x=plot_range)
+
+        ax.plot(
+            1e-3 * plot_range,
+            10**out,
+            color="dimgrey",
+            ls="solid",
+            lw=2.0,
+            zorder=4.5,
+        )
 
     ax.grid()
     ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.0), frameon=False, ncol=3)
