@@ -391,6 +391,9 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
 
         df = pd.concat([df, temp], ignore_index=True)
 
+    # convert object to numeric
+    df = df.apply(pd.to_numeric)
+
     # compute fwhm and fwtm
     df["fwhm"] = pulsemodels.gaussian_fwhm(df["sigma"])
     df["err_fwhm"] = pulsemodels.gaussian_fwhm(df["err_sigma"])
@@ -497,7 +500,7 @@ def main():
 
     if args.fit_scatindex and "taus" in fit_df.columns:
         fitresult = fit_powerlaw(
-            fit_df["cfreq"].to_numpy(),
+            1e-3 * fit_df["cfreq"].to_numpy(),
             fit_df["taus"].to_numpy(),
             fit_df["err_taus"].to_numpy(),
         )
