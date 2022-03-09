@@ -312,12 +312,13 @@ def plot_width_scaling(t_df, cand, fitresult):
     # scattering time fit
     if fitresult is not None:
         ax.plot(
-            x=1e-3 * df["cfreq"],
-            y=10**fitresult.best_fit,
+            1e-3 * df["cfreq"],
+            10**fitresult.best_fit,
             color="dimgrey",
             ls="solid",
             lw=2.0,
-            zorder=4.5,
+            zorder=3.5,
+            label=r"$\tau$ fit",
         )
 
     # intra-channel dispersive smearing
