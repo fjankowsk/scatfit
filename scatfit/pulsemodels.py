@@ -205,7 +205,7 @@ def gaussian_scattered_dfb_instrumental(x, fluence, center, sigma, taus, taud, d
 
     B = boxcar(x, taud)
 
-    res = dc + signal.convolve(A, B, mode="same") / np.sum(B)
+    res = dc + signal.oaconvolve(A, B, mode="same") / np.sum(B)
 
     return res
 
@@ -304,6 +304,6 @@ def scattered_profile(x, fluence, center, sigma, taus, dc):
 
     B = broadening_function(x, taus)
 
-    scattered = dc + signal.convolve(A, B, mode="same") / np.sum(B)
+    scattered = dc + signal.oaconvolve(A, B, mode="same") / np.sum(B)
 
     return scattered
