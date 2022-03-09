@@ -309,6 +309,17 @@ def plot_width_scaling(t_df, cand, fitresult):
             label=r"$\tau_\mathrm{s}$",
         )
 
+    # scattering time fit
+    if fitresult is not None:
+        ax.plot(
+            x=1e-3 * df["cfreq"],
+            y=10**fitresult.best_fit,
+            color="dimgrey",
+            ls="solid",
+            lw=2.0,
+            zorder=4.5,
+        )
+
     # intra-channel dispersive smearing
     f_lo = np.sort(freqs)
     f_hi = f_lo + np.abs(chan_bw)
@@ -339,19 +350,6 @@ def plot_width_scaling(t_df, cand, fitresult):
         zorder=3,
         label=r"$t_\mathrm{samp}$",
     )
-
-    # scattering time fit
-    if fitresult is not None:
-        out = fitresult.eval(x=plot_range)
-
-        ax.plot(
-            1e-3 * plot_range,
-            10**out,
-            color="dimgrey",
-            ls="solid",
-            lw=2.0,
-            zorder=4.5,
-        )
 
     ax.grid()
     ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.0), frameon=False, ncol=3)

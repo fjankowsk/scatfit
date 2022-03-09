@@ -188,6 +188,7 @@ def fit_powerlaw(x, y, err_y):
     fitresult_emcee = model.fit(
         data=log_y,
         x=log_x,
+        weights=1.0 / log_err_y,
         params=emcee_params,
         method="emcee",
         fit_kws=emcee_kws,
