@@ -4,7 +4,7 @@
 #
 
 import numpy as np
-from scipy import special
+from scipy import signal, special
 
 
 def gaussian_normed(x, fluence, center, sigma):
@@ -205,7 +205,7 @@ def gaussian_scattered_dfb_instrumental(x, fluence, center, sigma, taus, taud, d
 
     B = boxcar(x, taud)
 
-    res = dc + np.convolve(A, B, mode="same")
+    res = dc + signal.convolve(A, B, mode="same")
 
     # ensure that the pulse energy (i.e. fluence) is conserved
     sum_res = np.sum(res)
@@ -307,7 +307,7 @@ def scattered_profile(x, fluence, center, sigma, taus, dc):
 
     profile = gaussian_normed(x, fluence, center, sigma)
 
-    scattered = dc + np.convolve(
+    scattered = dc + signal.convolve(
         profile,
         broadening_function(x, taus),
         mode="same",
