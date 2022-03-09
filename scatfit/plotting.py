@@ -318,7 +318,7 @@ def plot_width_scaling(t_df, cand, fitresult):
             ls="solid",
             lw=2.0,
             zorder=3.5,
-            label=r"$\tau$ fit",
+            label=r"$\tau_\mathrm{s}$ fit",
         )
 
     # intra-channel dispersive smearing
@@ -353,7 +353,7 @@ def plot_width_scaling(t_df, cand, fitresult):
     )
 
     ax.grid()
-    ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.0), frameon=False, ncol=3)
+    ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.0), frameon=False, ncol=4)
     ax.set_xlabel("Frequency (GHz)")
     ax.set_ylabel("Width (ms)")
     ax.set_xscale("log")
