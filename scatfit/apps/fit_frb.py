@@ -75,6 +75,14 @@ def parse_args():
     )
 
     parser.add_argument(
+        "--fitscatindex",
+        action="store_true",
+        dest="fit_scatindex",
+        default=False,
+        help="Fit the scattering times and determine the scattering index.",
+    )
+
+    parser.add_argument(
         "--smodel",
         dest="smodel",
         choices=[
@@ -118,6 +126,90 @@ def parse_args():
     args = parser.parse_args()
 
     return args
+
+
+def linear(x, x0, slope, intercept):
+    """
+    A linear function.
+
+    Parameters
+    ----------
+    x: ~np.array
+        The running variable.
+    x0: float
+        The reference location.
+    slope: float
+        The slope of the line.
+    intercept: float
+        The y value at x0.
+
+    Returns
+    -------
+    res: ~np.array
+        The model data.
+    """
+
+    res = slope * (x - x0) + intercept
+
+    return res
+
+
+def fit_powerlaw(x, y, err_y):
+    """
+    Fit a power law to data.
+    """
+
+    # convert to logscale
+    log_x = np.log10(x)
+    log_y = np.log10(y)
+    log_err_y = err_y / (np.log(10) * y)
+
+    model = Model(linear)
+
+    model.set_param_hint("x0", value=np.log10(np.mean(x)), vary=False)
+    model.set_param_hint("slope", value=-4.4)
+    model.set_param_hint("intercept", value=np.log10(np.mean(y)))
+
+    fitparams = model.make_params()
+
+    fitresult_ml = model.fit(
+        data=log_y, x=log_x, weights=1.0 / log_err_y, params=fitparams, method="leastsq"
+    )
+
+    if not fitresult_ml.success:
+        raise RuntimeError("Fit did not converge.")
+
+    print(fitresult_ml.fit_report())
+
+    emcee_kws = dict(steps=2000, burn=700, thin=20, is_weighted=True, progress=True)
+
+    emcee_params = fitresult_ml.params.copy()
+
+    fitresult_emcee = model.fit(
+        data=log_y,
+        x=log_x,
+        params=emcee_params,
+        method="emcee",
+        fit_kws=emcee_kws,
+    )
+
+    print(fitresult_emcee.fit_report())
+
+    # get maximum likelihood values
+    max_likelihood = np.argmax(fitresult_emcee.lnprob)
+    max_likelihood_idx = np.unravel_index(max_likelihood, fitresult_emcee.lnprob.shape)
+    max_likelihood_values = fitresult_emcee.chain[max_likelihood_idx]
+
+    corner.corner(
+        fitresult_emcee.flatchain,
+        labels=fitresult_emcee.var_names,
+        truths=max_likelihood_values,
+        quantiles=[0.16, 0.5, 0.84],
+        show_titles=True,
+        title_kwargs={"fontsize": 10},
+    )
+
+    return fitresult_emcee
 
 
 def fit_profile_model(fit_range, profile, dm_smear, smodel):
@@ -401,8 +493,11 @@ def main():
 
     # fit integrated profile
     fit_df = fit_profile(cand, plot_range, args.fscrunch_factor, args.smodel, params)
-
     print(fit_df)
+
+    if args.fit_scatindex:
+        fit_powerlaw(fit_df["cfreq"], fit_df["taus"], fit_df["err_taus"])
+
     plotting.plot_width_scaling(fit_df, cand)
 
     plotting.plot_frb(cand, plot_range, profile)
