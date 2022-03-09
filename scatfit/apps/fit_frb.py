@@ -75,6 +75,14 @@ def parse_args():
     )
 
     parser.add_argument(
+        "--fast",
+        dest="fast",
+        action="store_true",
+        default=False,
+        help="Enable fast processing. This reduces the number of MCMC steps drastically.",
+    )
+
+    parser.add_argument(
         "--fitscatindex",
         action="store_true",
         dest="fit_scatindex",
@@ -213,7 +221,7 @@ def fit_powerlaw(x, y, err_y):
     return fitresult_emcee
 
 
-def fit_profile_model(fit_range, profile, dm_smear, smodel):
+def fit_profile_model(fit_range, profile, dm_smear, smodel, params):
     """
     Fit a profile model to data.
     """
@@ -267,8 +275,11 @@ def fit_profile_model(fit_range, profile, dm_smear, smodel):
 
     print(fitresult_ml.fit_report())
 
-    # emcee_kws = dict(steps=300, burn=100, thin=20, is_weighted=False, progress=True)
     emcee_kws = dict(steps=6000, burn=700, thin=20, is_weighted=False, progress=True)
+
+    if params["fast"]:
+        emcee_kws["steps"] = 300
+        emcee_kws["burn"] = 100
 
     emcee_params = fitresult_ml.params.copy()
     emcee_params.add("__lnsigma", value=np.log(0.1), min=np.log(0.001), max=np.log(2.0))
@@ -493,7 +504,7 @@ def main():
         bin_burst = np.argmax(profile)
     plot_range -= fact * bin_burst
 
-    params = {"publish": args.publish, "zoom": args.zoom}
+    params = {"fast": args.fast, "publish": args.publish, "zoom": args.zoom}
 
     # fit integrated profile
     fit_df = fit_profile(cand, plot_range, args.fscrunch_factor, args.smodel, params)
