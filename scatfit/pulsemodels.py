@@ -148,7 +148,7 @@ def gaussian_scattered_afb_instrumental(
 
 def boxcar(x, width):
     """
-    A simple normalised boxcar function.
+    A simple boxcar function.
 
     Parameters
     ----------
@@ -167,8 +167,6 @@ def boxcar(x, width):
 
     mask = np.abs(x) <= 0.5 * width
     res[mask] = 1.0
-
-    res = res / np.sum(res)
 
     return res
 
@@ -208,6 +206,11 @@ def gaussian_scattered_dfb_instrumental(x, fluence, center, sigma, taus, taud, d
     B = boxcar(x, taud)
 
     res = dc + np.convolve(A, B, mode="same")
+
+    # ensure that the pulse energy (i.e. fluence) is conserved
+    sum_res = np.sum(res)
+    if sum_res != 0:
+        res = np.sum(A) * res / sum_res
 
     return res
 
@@ -302,10 +305,17 @@ def scattered_profile(x, fluence, center, sigma, taus, dc):
         The profile data.
     """
 
+    profile = gaussian_normed(x, fluence, center, sigma)
+
     scattered = dc + np.convolve(
-        gaussian_normed(x, fluence, center, sigma),
+        profile,
         broadening_function(x, taus),
         mode="same",
     )
+
+    # ensure that the pulse energy (i.e. fluence) is conserved
+    sum_scattered = np.sum(scattered)
+    if sum_scattered != 0:
+        scattered = np.sum(profile) * scattered / sum_scattered
 
     return scattered
