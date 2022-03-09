@@ -334,8 +334,8 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
         sub_profile = sub_profile - np.mean(sub_profile)
         sub_profile = sub_profile / np.max(sub_profile)
 
-        # compute baseline statistics outside the central +- 20 ms
-        mask = np.abs(fit_range) > 20.0
+        # compute baseline statistics outside the central +- 30 ms
+        mask = np.abs(fit_range) > 30.0
         quantiles = np.quantile(sub_profile[mask], q=[0.25, 0.75], axis=None)
         std = 0.7413 * np.abs(quantiles[1] - quantiles[0])
         snr = np.max(sub_profile) / std
