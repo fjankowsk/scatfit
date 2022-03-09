@@ -369,7 +369,7 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
             )
         )
 
-        fitresult = fit_profile_model(fit_range, sub_profile, dm_smear, smodel)
+        fitresult = fit_profile_model(fit_range, sub_profile, dm_smear, smodel, params)
 
         plotting.plot_profile_fit(fit_range, sub_profile, fitresult, iband, params)
 
