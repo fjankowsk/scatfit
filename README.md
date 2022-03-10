@@ -22,7 +22,7 @@ This will automatically install all dependencies.
 
 ```bash
 $ scatfit-fitfrb -h
-usage: scatfit-fitfrb [-h] [--binburst bin] [--fscrunch factor] [--tscrunch factor] [--fitscatindex]
+usage: scatfit-fitfrb [-h] [--binburst bin] [--fscrunch factor] [--tscrunch factor] [--fast] [--fitscatindex]
                       [--smodel {unscattered,scattered_isotropic,scattered_isotropic_convolving,scattered_isotropic_afb_instrumental,scattered_isotropic_dfb_instrumental}]
                       [--showmodels] [--publish] [-z start end]
                       filename dm
@@ -38,6 +38,7 @@ optional arguments:
   --binburst bin        Specify the burst location bin manually. (default: None)
   --fscrunch factor     Integrate this many frequency channels. (default: 256)
   --tscrunch factor     Integrate this many time samples. (default: 1)
+  --fast                Enable fast processing. This reduces the number of MCMC steps drastically. (default: False)
   --fitscatindex        Fit the scattering times and determine the scattering index. (default: False)
   --smodel {unscattered,scattered_isotropic,scattered_isotropic_convolving,scattered_isotropic_afb_instrumental,scattered_isotropic_dfb_instrumental}
                         Use the specified scattering model. (default: scattered_isotropic)
