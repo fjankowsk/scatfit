@@ -276,7 +276,7 @@ def plot_width_scaling(t_df, cand, fitresult):
         fmt="o",
         color="black",
         zorder=7,
-        label=r"$\mathrm{W}_{50i}$",
+        label=r"$\mathrm{W}_\mathrm{50i}$",
     )
 
     ax.errorbar(
@@ -286,7 +286,7 @@ def plot_width_scaling(t_df, cand, fitresult):
         fmt="+",
         color="darkgrey",
         zorder=6,
-        label=r"$\mathrm{W}_{10i}$",
+        label=r"$\mathrm{W}_\mathrm{10i}$",
     )
 
     ax.scatter(
@@ -311,7 +311,7 @@ def plot_width_scaling(t_df, cand, fitresult):
         x=1e-3 * df["cfreq"],
         y=df["fwtm_post"],
         color="grey",
-        marker="s",
+        marker="+",
         zorder=9,
         label=r"$\mathrm{W}_\mathrm{10p}$",
     )
