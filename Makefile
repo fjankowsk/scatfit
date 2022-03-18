@@ -1,5 +1,5 @@
 BLK         =   black
-PY          =   python
+PIP         =   pip
 
 BASEDIR     =   $(CURDIR)
 SRCDIR      =   ${BASEDIR}/scatfit
@@ -21,6 +21,6 @@ clean:
 	rm -rf ${BASEDIR}/scatfit.egg-info
 
 install:
-	${PY} setup.py install
+	${PIP} install .
 
 .PHONY: help black clean install
