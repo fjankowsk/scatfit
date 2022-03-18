@@ -380,10 +380,8 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
         )
         weq = fluxsum / np.max(fitresult.best_fit)
 
-        fwhm_post = pulsemodels.get_full_width_post(fit_range, fitresult.best_fit, 0.5)
-        fwtm_post = pulsemodels.get_full_width_post(fit_range, fitresult.best_fit, 0.1)
-        # one bin or sample as error
-        err_fwhm_post = np.abs(np.diff(fit_range))[0]
+        fwhm_post = pulsemodels.full_width_post(fit_range, fitresult.best_fit, 0.5)
+        fwtm_post = pulsemodels.full_width_post(fit_range, fitresult.best_fit, 0.1)
 
         temp = pd.DataFrame(
             {
@@ -396,9 +394,7 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
                 "fluxsum": fluxsum,
                 "weq": weq,
                 "fwhm_post": fwhm_post,
-                "err_fwhm_post": err_fwhm_post,
                 "fwtm_post": fwtm_post,
-                "err_fwtm_post": err_fwhm_post,
             },
             index=[iband],
         )

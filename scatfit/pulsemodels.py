@@ -250,6 +250,26 @@ def gaussian_fwtm(sigma):
     return res
 
 
+def full_width_post(x, amp, level):
+    """
+    Compute the full pulse width post scattering numerically.
+
+    Parameters
+    ----------
+    x: ~np.array
+        The running variable (time).
+    amp: ~np.array
+        The pulse amplitude.
+    level: float
+        The level at which to evaluate the pulse width.
+    """
+
+    mask = amp >= level * np.max(amp)
+    width = np.abs(np.max(x[mask]) - np.min(x[mask]))
+
+    return width
+
+
 def pbf_isotropic(x, taus):
     """
     A pulse broadening function for isotropic scattering.
@@ -307,23 +327,3 @@ def scattered_profile(x, fluence, center, sigma, taus, dc):
     scattered = dc + signal.oaconvolve(A, B, mode="same") / np.sum(B)
 
     return scattered
-
-
-def get_full_width_post(x, amp, level):
-    """
-    Compute the full pulse width post scattering numerically.
-
-    Parameters
-    ----------
-    x: ~np.array
-        The running variable (time).
-    amp: ~np.array
-        The pulse amplitude.
-    level: float
-        The level at which to evaluate the pulse width.
-    """
-
-    mask = amp >= level * np.max(amp)
-    width = np.abs(np.max(x[mask]) - np.min(x[mask]))
-
-    return width
