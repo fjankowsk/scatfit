@@ -276,7 +276,7 @@ def plot_width_scaling(t_df, cand, fitresult):
         fmt="o",
         color="black",
         zorder=7,
-        label=r"$\mathrm{W}_{50}$",
+        label=r"$\mathrm{W}_{50i}$",
     )
 
     ax.errorbar(
@@ -286,7 +286,7 @@ def plot_width_scaling(t_df, cand, fitresult):
         fmt="+",
         color="darkgrey",
         zorder=6,
-        label=r"$\mathrm{W}_{10}$",
+        label=r"$\mathrm{W}_{10i}$",
     )
 
     ax.scatter(
@@ -296,6 +296,24 @@ def plot_width_scaling(t_df, cand, fitresult):
         marker="*",
         zorder=8,
         label=r"$\mathrm{W}_\mathrm{eq}$",
+    )
+
+    ax.scatter(
+        x=1e-3 * df["cfreq"],
+        y=df["fwhm_post"],
+        color="grey",
+        marker="d",
+        zorder=9,
+        label=r"$\mathrm{W}_\mathrm{50p}$",
+    )
+
+    ax.scatter(
+        x=1e-3 * df["cfreq"],
+        y=df["fwtm_post"],
+        color="grey",
+        marker="s",
+        zorder=9,
+        label=r"$\mathrm{W}_\mathrm{10p}$",
     )
 
     if "taus" in df.columns:
