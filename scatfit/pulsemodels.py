@@ -250,9 +250,9 @@ def gaussian_fwtm(sigma):
     return res
 
 
-def broadening_function(x, taus):
+def pbf_isotropic(x, taus):
     """
-    A broadening function for isotropic scattering.
+    A pulse broadening function for isotropic scattering.
 
     Parameters
     ----------
@@ -302,7 +302,7 @@ def scattered_profile(x, fluence, center, sigma, taus, dc):
 
     A = gaussian_normed(x, fluence, center, sigma)
 
-    B = broadening_function(x, taus)
+    B = pbf_isotropic(x, taus)
 
     scattered = dc + signal.oaconvolve(A, B, mode="same") / np.sum(B)
 
