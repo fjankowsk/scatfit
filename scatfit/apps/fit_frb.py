@@ -263,8 +263,8 @@ def fit_profile_model(fit_range, profile, dm_smear, smodel, params):
 
     fitparams = model.make_params()
 
-    fitparams.add("fwhm", expr="2.3548200*sigma")
-    fitparams.add("fwtm", expr="4.2919320*sigma")
+    fitparams.add("w50i", expr="2.3548200*sigma")
+    fitparams.add("w10i", expr="4.2919320*sigma")
 
     fitresult_ml = model.fit(
         data=profile, x=fit_range, params=fitparams, method="leastsq"
@@ -380,8 +380,8 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
         )
         weq = fluxsum / np.max(fitresult.best_fit)
 
-        fwhm_post = pulsemodels.full_width_post(fit_range, fitresult.best_fit, 0.5)
-        fwtm_post = pulsemodels.full_width_post(fit_range, fitresult.best_fit, 0.1)
+        w50_post = pulsemodels.full_width_post(fit_range, fitresult.best_fit, 0.5)
+        w10_post = pulsemodels.full_width_post(fit_range, fitresult.best_fit, 0.1)
 
         temp = pd.DataFrame(
             {
@@ -393,8 +393,8 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
                 "err_sigma": fitresult.params["sigma"].stderr,
                 "fluxsum": fluxsum,
                 "weq": weq,
-                "fwhm_post": fwhm_post,
-                "fwtm_post": fwtm_post,
+                "w50p": w50_post,
+                "w10p": w10_post,
             },
             index=[iband],
         )
@@ -411,11 +411,11 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
     # convert object to numeric
     df = df.apply(pd.to_numeric)
 
-    # compute fwhm and fwtm
-    df["fwhm"] = pulsemodels.gaussian_fwhm(df["sigma"])
-    df["err_fwhm"] = pulsemodels.gaussian_fwhm(df["err_sigma"])
-    df["fwtm"] = pulsemodels.gaussian_fwtm(df["sigma"])
-    df["err_fwtm"] = pulsemodels.gaussian_fwtm(df["err_sigma"])
+    # compute intrinsic w50 and w10
+    df["w50i"] = pulsemodels.gaussian_fwhm(df["sigma"])
+    df["err_w50i"] = pulsemodels.gaussian_fwhm(df["err_sigma"])
+    df["w10i"] = pulsemodels.gaussian_fwtm(df["sigma"])
+    df["err_w10i"] = pulsemodels.gaussian_fwtm(df["err_sigma"])
 
     return df
 

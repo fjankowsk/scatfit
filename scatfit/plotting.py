@@ -271,8 +271,8 @@ def plot_width_scaling(t_df, cand, fitresult):
 
     ax.errorbar(
         x=1e-3 * df["cfreq"],
-        y=df["fwhm"],
-        yerr=df["err_fwhm"],
+        y=df["w50i"],
+        yerr=df["err_w50i"],
         fmt="o",
         color="black",
         zorder=7,
@@ -300,7 +300,7 @@ def plot_width_scaling(t_df, cand, fitresult):
 
     ax.scatter(
         x=1e-3 * df["cfreq"],
-        y=df["fwhm_post"],
+        y=df["w50p"],
         color="grey",
         marker="d",
         zorder=9,
