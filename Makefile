@@ -16,6 +16,9 @@ black:
 
 clean:
 	rm -f ${SRCDIR}/*.pyc
+	rm -f ${SRCDIR}/apps/*.pyc
+	rm -rf ${SRCDIR}/__pycache__
+	rm -rf ${SRCDIR}/apps/__pycache__
 	rm -rf ${BASEDIR}/build
 	rm -rf ${BASEDIR}/dist
 	rm -rf ${BASEDIR}/scatfit.egg-info
