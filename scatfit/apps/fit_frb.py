@@ -362,8 +362,9 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
             "err_fluence",
             "sigma",
             "err_sigma",
-            "fluxsum",
             "weq",
+            "w50p",
+            "w10p",
         ]
     )
     freqs = cand.chan_freqs
