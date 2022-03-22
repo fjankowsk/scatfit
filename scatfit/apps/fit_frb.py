@@ -349,7 +349,6 @@ def compute_post_widths(fit_range, t_fitresult):
 
     for field in df.columns:
         quantiles = np.quantile(df[field], q=[0.16, 0.5, 0.84])
-        print(quantiles)
 
         error = np.maximum(
             np.abs(quantiles[1] - quantiles[0]), np.abs(quantiles[2] - quantiles[1])
