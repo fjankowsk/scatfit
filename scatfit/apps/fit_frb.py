@@ -351,15 +351,11 @@ def compute_post_widths(fit_range, t_fitresult):
         quantiles = np.quantile(df[field], q=[0.16, 0.5, 0.84])
         print(quantiles)
 
-        widths[field] = (
-            {
-                "value": quantiles[1],
-                "error": np.maximum(
-                    np.abs(quantiles[1] - quantiles[0]),
-                    np.abs(quantiles[2] - quantiles[1]),
-                ),
-            },
+        error = np.maximum(
+            np.abs(quantiles[1] - quantiles[0]), np.abs(quantiles[2] - quantiles[1])
         )
+
+        widths[field] = {"value": quantiles[1], "error": error}
 
     return widths
 
