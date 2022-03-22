@@ -311,6 +311,44 @@ def fit_profile_model(fit_range, profile, dm_smear, smodel, params):
     return fitresult_emcee
 
 
+def compute_post_widths(fit_range, fitresult):
+    """
+    Compute the full post-scattering widths numerically.
+
+    Parameters
+    ----------
+    fit_range: ~np.array
+    fitresult:
+
+    Returns
+    -------
+    df: ~pd.DataFrame
+    """
+
+    print(fitresult.flatchain)
+
+    df = pd.DataFrame(colums=["weq", "w50p", "w10p"])
+
+    for idx, item in enumerate(fitresult.flatchain):
+        fitresult.eval(params=item)
+
+        weq_post = pulsemodels.equivalent_width(fit_range, fitresult.best_fit)
+        w50_post = pulsemodels.full_width_post(fit_range, fitresult.best_fit, 0.5)
+        w10_post = pulsemodels.full_width_post(fit_range, fitresult.best_fit, 0.1)
+
+        temp = pd.DataFrame(
+            {"weq": weq_post, "w50p": w50_post, "w10p": w10_post},
+            index=[idx],
+        )
+
+        df = pd.concat([df, temp], ignore_index=True)
+
+    # convert object to numeric
+    df = df.apply(pd.to_numeric)
+
+    return df
+
+
 def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
     """
     Fit an FRB profile.
@@ -374,12 +412,7 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
         plotting.plot_profile_fit(fit_range, sub_profile, fitresult, iband, params)
 
         # compute profile statistics
-        fluxsum = (
-            np.sum(fitresult.best_fit[fitresult.best_fit >= 0])
-            * np.abs(np.diff(fit_range))[0]
-        )
-        weq = fluxsum / np.max(fitresult.best_fit)
-
+        weq_post = pulsemodels.equivalent_width(fit_range, fitresult.best_fit)
         w50_post = pulsemodels.full_width_post(fit_range, fitresult.best_fit, 0.5)
         w10_post = pulsemodels.full_width_post(fit_range, fitresult.best_fit, 0.1)
 
@@ -391,8 +424,7 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
                 "err_fluence": fitresult.params["fluence"].stderr,
                 "sigma": fitresult.best_values["sigma"],
                 "err_sigma": fitresult.params["sigma"].stderr,
-                "fluxsum": fluxsum,
-                "weq": weq,
+                "weq": weq_post,
                 "w50p": w50_post,
                 "w10p": w10_post,
             },

@@ -250,6 +250,30 @@ def gaussian_fwtm(sigma):
     return res
 
 
+def equivalent_width(x, amp):
+    """
+    Compute the boxcar equivalent width.
+
+    Parameters
+    ----------
+    x: ~np.array
+        The running variable (time).
+    amp: ~np.array
+        The pulse amplitude.
+
+    Returns
+    -------
+    weq: float
+        The equivalent width.
+    """
+
+    mask = amp >= 0
+    fluxsum = np.sum(amp[mask]) * np.abs(np.diff(x))[0]
+    weq = fluxsum / np.max(amp)
+
+    return weq
+
+
 def full_width_post(x, amp, level):
     """
     Compute the full pulse width post scattering numerically.
@@ -262,6 +286,11 @@ def full_width_post(x, amp, level):
         The pulse amplitude.
     level: float
         The level at which to evaluate the pulse width.
+
+    Returns
+    -------
+    width: float
+        The full pulse width at the given level.
     """
 
     mask = amp >= level * np.max(amp)
