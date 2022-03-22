@@ -314,7 +314,8 @@ def fit_profile_model(fit_range, profile, dm_smear, smodel, params):
 
 def compute_post_widths(fit_range, t_fitresult):
     """
-    Compute the full post-scattering widths numerically.
+    Compute the full post-scattering widths numerically
+    from the Markov chain samples.
     """
 
     fitresult = copy.deepcopy(t_fitresult)
@@ -348,6 +349,7 @@ def compute_post_widths(fit_range, t_fitresult):
 
     for field in df.columns:
         quantiles = np.quantile(df[field], q=[0.16, 0.5, 0.84])
+        print(quantiles)
 
         widths[field] = (
             {
@@ -376,8 +378,11 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
             "sigma",
             "err_sigma",
             "weq",
+            "err_weq",
             "w50p",
+            "err_w50p",
             "w10p",
+            "err_w10p",
         ]
     )
     freqs = cand.chan_freqs
@@ -427,11 +432,6 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
 
         # compute profile statistics
         widths_post = compute_post_widths(fit_range, fitresult)
-        print(widths_post)
-
-        weq_post = pulsemodels.equivalent_width(fit_range, fitresult.best_fit)
-        w50_post = pulsemodels.full_width_post(fit_range, fitresult.best_fit, 0.5)
-        w10_post = pulsemodels.full_width_post(fit_range, fitresult.best_fit, 0.1)
 
         temp = pd.DataFrame(
             {
@@ -441,9 +441,12 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
                 "err_fluence": fitresult.params["fluence"].stderr,
                 "sigma": fitresult.best_values["sigma"],
                 "err_sigma": fitresult.params["sigma"].stderr,
-                "weq": weq_post,
-                "w50p": w50_post,
-                "w10p": w10_post,
+                "weq": widths_post["weq"]["value"],
+                "err_weq": widths_post["weq"]["error"],
+                "w50p": widths_post["w50p"]["value"],
+                "err_w50p": widths_post["w50p"]["error"],
+                "w10p": widths_post["w10p"]["value"],
+                "err_w10p": widths_post["w10p"]["error"],
             },
             index=[iband],
         )
