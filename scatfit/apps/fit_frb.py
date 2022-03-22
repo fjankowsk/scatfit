@@ -4,6 +4,7 @@
 #
 
 import argparse
+import copy
 import inspect
 import sys
 
@@ -311,17 +312,23 @@ def fit_profile_model(fit_range, profile, dm_smear, smodel, params):
     return fitresult_emcee
 
 
-def compute_post_widths(fit_range, fitresult):
+def compute_post_widths(fit_range, t_fitresult):
     """
     Compute the full post-scattering widths numerically.
     """
 
-    print(fitresult.flatchain)
+    fitresult = copy.deepcopy(t_fitresult)
 
-    df = pd.DataFrame(colums=["weq", "w50p", "w10p"])
+    samples = fitresult.flatchain
+    params = fitresult.params.copy()
 
-    for idx, item in enumerate(fitresult.flatchain):
-        amps = fitresult.eval(params=item)
+    df = pd.DataFrame(columns=["weq", "w50p", "w10p"])
+
+    for idx in range(len(samples)):
+        for field in samples.columns:
+            params[field].set(value=samples.loc[idx, field])
+
+        amps = fitresult.eval(params=params, x=fit_range)
 
         weq_post = pulsemodels.equivalent_width(fit_range, amps)
         w50_post = pulsemodels.full_width_post(fit_range, amps, 0.5)
@@ -337,30 +344,22 @@ def compute_post_widths(fit_range, fitresult):
     # convert object to numeric
     df = df.apply(pd.to_numeric)
 
-    df_widths = pd.DataFrame(columns=["name", "value", "error"])
+    widths = {}
 
     for field in df.columns:
         quantiles = np.quantile(df[field], q=[0.16, 0.5, 0.84])
-        print(quantiles)
 
-        temp = pd.DataFrame(
+        widths[field] = (
             {
-                "name": field,
                 "value": quantiles[1],
                 "error": np.maximum(
                     np.abs(quantiles[1] - quantiles[0]),
                     np.abs(quantiles[2] - quantiles[1]),
                 ),
             },
-            index=[field],
         )
 
-        df_widths = pd.concat([df_widths, temp], ignore_index=True)
-
-    # convert object to numeric
-    df_widths = df_widths.apply(pd.to_numeric)
-
-    return df_widths
+    return widths
 
 
 def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
@@ -427,8 +426,8 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
         plotting.plot_profile_fit(fit_range, sub_profile, fitresult, iband, params)
 
         # compute profile statistics
-        df_widths_post = compute_post_widths(fit_range, fitresult)
-        print(df_widths_post)
+        widths_post = compute_post_widths(fit_range, fitresult)
+        print(widths_post)
 
         weq_post = pulsemodels.equivalent_width(fit_range, fitresult.best_fit)
         w50_post = pulsemodels.full_width_post(fit_range, fitresult.best_fit, 0.5)
