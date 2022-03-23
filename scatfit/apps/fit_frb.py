@@ -371,6 +371,7 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
             "cfreq",
             "fluence",
             "err_fluence",
+            "center",
             "sigma",
             "err_sigma",
             "weq",
@@ -435,6 +436,7 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
                 "cfreq": cfreq,
                 "fluence": fitresult.best_values["fluence"],
                 "err_fluence": fitresult.params["fluence"].stderr,
+                "center": fitresult.best_values["center"],
                 "sigma": fitresult.best_values["sigma"],
                 "err_sigma": fitresult.params["sigma"].stderr,
                 "weq": widths_post["weq"]["value"],
@@ -557,18 +559,20 @@ def main():
         bin_burst = np.argmax(profile)
     plot_range -= fact * bin_burst
 
-    start_mjd = Time(yobj.your_header.start, format="mjd", scale="utc", precision=9)
-    burst_offset = TimeDelta(
-        bin_burst * yobj.your_header.tsamp * args.tscrunch_factor, format="sec"
-    )
-    mjd_topo = start_mjd + burst_offset
-    print("Topocentric burst arrival time: {0}".format(mjd_topo))
-
     params = {"fast": args.fast, "publish": args.publish, "zoom": args.zoom}
 
     # fit integrated profile
     fit_df = fit_profile(cand, plot_range, args.fscrunch_factor, args.smodel, params)
     print(fit_df)
+
+    # best topocentric burst arrival time
+    start_mjd = Time(yobj.your_header.tstart, format="mjd", scale="utc", precision=9)
+    burst_offset = TimeDelta(
+        bin_burst * yobj.your_header.tsamp * args.tscrunch_factor, format="sec"
+    )
+    fit_offset = TimeDelta(1.0e-3 * fit_df["center"], format="sec")
+    mjd_topo = start_mjd + burst_offset + fit_offset
+    print("Topocentric burst arrival time: {0}".format(mjd_topo))
 
     if args.fit_scatindex and "taus" in fit_df.columns:
         fitresult = fit_powerlaw(
