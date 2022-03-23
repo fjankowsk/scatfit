@@ -572,7 +572,11 @@ def main():
     )
     fit_offset = TimeDelta(1.0e-3 * fit_df["center"].iloc[0], format="sec")
     mjd_topo = start_mjd + burst_offset + fit_offset
-    print("Topocentric burst arrival time: {0}".format(mjd_topo))
+    print(
+        "Topocentric burst arrival time at {0:.2f} MHz: MJD {1}".format(
+            fit_df["cfreq"].iloc[0], mjd_topo
+        )
+    )
 
     if args.fit_scatindex and "taus" in fit_df.columns:
         fitresult = fit_powerlaw(
