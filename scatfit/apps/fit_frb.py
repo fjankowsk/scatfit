@@ -570,7 +570,7 @@ def main():
     burst_offset = TimeDelta(
         bin_burst * yobj.your_header.tsamp * args.tscrunch_factor, format="sec"
     )
-    fit_offset = TimeDelta(1.0e-3 * fit_df["center"], format="sec")
+    fit_offset = TimeDelta(1.0e-3 * fit_df["center"].iloc[0], format="sec")
     mjd_topo = start_mjd + burst_offset + fit_offset
     print("Topocentric burst arrival time: {0}".format(mjd_topo))
 
