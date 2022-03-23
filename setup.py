@@ -33,6 +33,7 @@ setup(
     license="MIT",
     packages=find_packages(),
     install_requires=[
+        "astropy",
         "corner",
         "emcee",
         "iqrm @ git+https://github.com/v-morello/iqrm.git@master",

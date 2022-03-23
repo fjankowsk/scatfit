@@ -8,6 +8,7 @@ import copy
 import inspect
 import sys
 
+from astropy.time import Time, TimeDelta
 import corner
 from iqrm import iqrm_mask
 from lmfit import Model
@@ -555,6 +556,13 @@ def main():
     else:
         bin_burst = np.argmax(profile)
     plot_range -= fact * bin_burst
+
+    start_mjd = Time(yobj.your_header.start, format="mjd", scale="utc", precision=9)
+    burst_offset = TimeDelta(
+        bin_burst * yobj.your_header.tsamp * args.tscrunch_factor, format="sec"
+    )
+    mjd_topo = start_mjd + burst_offset
+    print("Topocentric burst arrival time: {0}".format(mjd_topo))
 
     params = {"fast": args.fast, "publish": args.publish, "zoom": args.zoom}
 
