@@ -382,8 +382,6 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
             "err_w10p",
         ]
     )
-    freqs = cand.chan_freqs
-    chan_bw = np.diff(freqs)[0]
 
     for iband in range(cand.dedispersed.T.shape[0]):
         print("Running sub-band: {0}".format(iband))
@@ -411,9 +409,14 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
             print("Profile S/N too low: {0:.2f}".format(snr))
             continue
 
-        cfreq = freqs[0] + (0.5 + iband) * fscrunch_factor * chan_bw
-        f_lo = cfreq - 0.5 * np.abs(chan_bw)
-        f_hi = cfreq + 0.5 * np.abs(chan_bw)
+        idx_hi = iband * fscrunch_factor
+        idx_lo = idx_hi + fscrunch_factor - 1
+        f_hi = cand.chan_freqs[idx_hi]
+        f_lo = cand.chan_freqs[idx_lo]
+        cfreq = 0.5 * (f_hi + f_lo)
+        print("Sub-band frequencies (MHz): {0}, {1}, {2}".format(f_lo, cfreq, f_hi))
+
+        assert f_lo < f_hi
 
         dm_smear = get_dm_smearing(f_lo, f_hi, cand.dm)
 
