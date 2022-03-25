@@ -321,6 +321,11 @@ def compute_post_widths(fit_range, t_fitresult):
 
     fitresult = copy.deepcopy(t_fitresult)
 
+    # oversample the model
+    dense_range = np.linspace(
+        np.min(fit_range), np.max(fit_range), num=4 * len(fit_range)
+    )
+
     samples = fitresult.flatchain
     params = fitresult.params.copy()
 
@@ -330,11 +335,11 @@ def compute_post_widths(fit_range, t_fitresult):
         for field in samples.columns:
             params[field].set(value=samples.loc[idx, field])
 
-        amps = fitresult.eval(params=params, x=fit_range)
+        amps = fitresult.eval(params=params, x=dense_range)
 
-        weq_post = pulsemodels.equivalent_width(fit_range, amps)
-        w50_post = pulsemodels.full_width_post(fit_range, amps, 0.5)
-        w10_post = pulsemodels.full_width_post(fit_range, amps, 0.1)
+        weq_post = pulsemodels.equivalent_width(dense_range, amps)
+        w50_post = pulsemodels.full_width_post(dense_range, amps, 0.5)
+        w10_post = pulsemodels.full_width_post(dense_range, amps, 0.1)
 
         temp = pd.DataFrame(
             {"weq": weq_post, "w50p": w50_post, "w10p": w10_post},
@@ -414,14 +419,14 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
         f_hi = cand.chan_freqs[idx_hi]
         f_lo = cand.chan_freqs[idx_lo]
         cfreq = 0.5 * (f_hi + f_lo)
-        print("Sub-band frequencies (MHz): {0}, {1}, {2}".format(f_lo, cfreq, f_hi))
+        chan_bw = np.abs(np.diff(cand.chan_freqs))[0]
 
-        assert f_lo < f_hi
-
-        dm_smear = get_dm_smearing(f_lo, f_hi, cand.dm)
+        dm_smear = get_dm_smearing(
+            cfreq - 0.5 * chan_bw, cfreq + 0.5 * chan_bw, cand.dm
+        )
 
         print(
-            "Frequencies (MHz), DM smearing (ms): {0:.2f} {1:.2f} {2:.2f} {3:.2f}".format(
+            "Frequencies (MHz), DM smearing (ms): {0:.2f}, {1:.2f}, {2:.2f}, {3:.2f}".format(
                 f_lo, cfreq, f_hi, dm_smear
             )
         )
