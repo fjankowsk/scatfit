@@ -30,4 +30,7 @@ def get_dm_smearing(f_lo, f_hi, dm):
 
     dt = kdm * (f_lo ** (-2) - f_hi ** (-2)) * dm
 
+    # we want ms
+    dt = 1.0e3 * dt
+
     return dt
