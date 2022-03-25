@@ -343,7 +343,7 @@ def plot_width_scaling(t_df, cand, fitresult):
     f_lo = np.sort(freqs)
     f_hi = f_lo + np.abs(chan_bw)
 
-    dm_smear = get_dm_smearing(f_lo * 1e-3, f_hi * 1e-3, cand.dm)
+    dm_smear = get_dm_smearing(f_lo, f_hi, cand.dm)
 
     plot_range = 0.5 * (f_lo + f_hi)
 

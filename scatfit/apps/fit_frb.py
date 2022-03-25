@@ -415,7 +415,7 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
         f_lo = cfreq - 0.5 * np.abs(chan_bw)
         f_hi = cfreq + 0.5 * np.abs(chan_bw)
 
-        dm_smear = get_dm_smearing(f_lo * 1e-3, f_hi * 1e-3, cand.dm)
+        dm_smear = get_dm_smearing(f_lo, f_hi, cand.dm)
 
         print(
             "Frequencies (MHz), DM smearing (ms): {0:.2f} {1:.2f} {2:.2f} {3:.2f}".format(
