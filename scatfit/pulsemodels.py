@@ -294,7 +294,12 @@ def full_width_post(x, amp, level):
     """
 
     mask = amp >= level * np.max(amp)
-    width = np.abs(np.max(x[mask]) - np.min(x[mask]))
+
+    # treat special case when pulse is only one sample wide
+    if len(x[mask]) > 1:
+        width = np.abs(np.max(x[mask]) - np.min(x[mask]))
+    else:
+        width = np.diff(x)[0]
 
     return width
 
