@@ -569,19 +569,22 @@ def main():
     fit_df = fit_profile(cand, plot_range, args.fscrunch_factor, args.smodel, params)
     print(fit_df)
 
-    # best topocentric burst arrival time
-    # at the highest frequency channel
-    start_mjd = Time(yobj.your_header.tstart, format="mjd", scale="utc", precision=9)
-    burst_offset = TimeDelta(
-        bin_burst * yobj.your_header.tsamp * args.tscrunch_factor, format="sec"
-    )
-    fit_offset = TimeDelta(1.0e-3 * fit_df["center"].iloc[0], format="sec")
-    mjd_topo = start_mjd + burst_offset + fit_offset
-    print(
-        "Topocentric burst arrival time at {0} MHz: MJD {1}".format(
-            yobj.your_header.fch1, mjd_topo
+    if args.smodel == "unscattered":
+        # best topocentric burst arrival time
+        # at the highest frequency channel
+        start_mjd = Time(
+            yobj.your_header.tstart, format="mjd", scale="utc", precision=9
         )
-    )
+        burst_offset = TimeDelta(
+            bin_burst * yobj.your_header.tsamp * args.tscrunch_factor, format="sec"
+        )
+        fit_offset = TimeDelta(1.0e-3 * fit_df["center"].iloc[0], format="sec")
+        mjd_topo = start_mjd + burst_offset + fit_offset
+        print(
+            "Topocentric burst arrival time at {0} MHz: MJD {1}".format(
+                yobj.your_header.fch1, mjd_topo
+            )
+        )
 
     if args.fit_scatindex and "taus" in fit_df.columns:
         fitresult = fit_powerlaw(
