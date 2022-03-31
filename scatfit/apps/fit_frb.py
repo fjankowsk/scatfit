@@ -503,18 +503,6 @@ def main():
     )
     print("IQRM channel mask: {}".format(np.where(mask)[0]))
 
-    cand = Candidate(
-        fp=args.filename,
-        dm=args.dm,
-        tcand=0.0,
-        width=2,
-        label=-1,
-        device=0,
-    )
-
-    cand.get_chunk()
-    data = cand.data
-
     print("Data shape: {0}".format(data.shape))
 
     # normalise the data
@@ -535,9 +523,17 @@ def main():
     # data[:, 1000:] = 0
     # data[:, 920:] = 0
 
+    # load into candidate object for processing
+    cand = Candidate(
+        fp=args.filename,
+        dm=args.dm,
+        tcand=0.0,
+        width=1,
+    )
+
     cand.data = data
     cand.dedisperse()
-    cand.dmtime(dmsteps=2048)
+    cand.dmtime(dmsteps=1024)
 
     # scrunch
     cand.decimate(
@@ -545,7 +541,7 @@ def main():
     )
 
     cand.decimate(
-        key="ft", axis=1, pad=True, decimate_factor=args.fscrunch_factor, mode="median"
+        key="ft", axis=1, pad=False, decimate_factor=args.fscrunch_factor, mode="median"
     )
 
     cand.decimate(
