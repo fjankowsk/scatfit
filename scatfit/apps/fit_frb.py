@@ -385,10 +385,10 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
         ]
     )
 
-    for iband in range(cand.dedispersed.T.shape[0]):
+    for iband in range(cand.dynspec.shape[0]):
         print("Running sub-band: {0}".format(iband))
 
-        sub_profile = cand.dedispersed.T[iband]
+        sub_profile = cand.dynspec[iband, :]
 
         # select only the central +- 200 ms around the frb for the fit
         mask = np.abs(plot_range) <= 200.0
@@ -413,8 +413,8 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
 
         idx_hi = iband * fscrunch_factor
         idx_lo = idx_hi + fscrunch_factor - 1
-        f_hi = cand.chan_freqs[idx_hi]
-        f_lo = cand.chan_freqs[idx_lo]
+        f_hi = cand.freqs[idx_hi]
+        f_lo = cand.freqs[idx_lo]
         cfreq = 0.5 * (f_hi + f_lo)
         chan_bw = np.abs(np.diff(cand.chan_freqs))[0]
 
@@ -505,14 +505,10 @@ def get_frb_data(filename, dm, fscrunch, tscrunch):
     # dedisperse
     cand.set_dm(dm)
 
-    # calculate noise standard deviation
-    data = cand.data
-    quantiles = np.quantile(data[~mask], q=[0.25, 0.75], axis=None)
-    noise_std = 0.7413 * np.abs(quantiles[1] - quantiles[0])
-
     dynspec = cand.scrunched_data(f=fscrunch, t=tscrunch) / fscrunch**0.5
+    cand.dynspec = dynspec
 
-    return dynspec, cand, mask, noise_std
+    return cand
 
 
 #
@@ -530,12 +526,12 @@ def main():
         plt.show()
         sys.exit(0)
 
-    dynspec, cand, _, _ = get_frb_data(
+    cand = get_frb_data(
         args.filename, args.dm, args.fscrunch_factor, args.tscrunch_factor
     )
 
     # band-integrated profile
-    profile = np.sum(dynspec, axis=0)
+    profile = np.sum(cand.dynspec, axis=0)
     profile = profile - np.mean(profile)
     profile = profile / np.max(profile)
 
@@ -558,9 +554,7 @@ def main():
     if args.smodel == "unscattered":
         # best topocentric burst arrival time
         # at the highest frequency channel
-        start_mjd = Time(
-            cand.tstart, format="mjd", scale="utc", precision=9
-        )
+        start_mjd = Time(cand._header.tstart, format="mjd", scale="utc", precision=9)
         burst_offset = TimeDelta(
             bin_burst * cand.tsamp * args.tscrunch_factor, format="sec"
         )
