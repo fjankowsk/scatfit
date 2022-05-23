@@ -112,6 +112,15 @@ def parse_args():
     )
 
     parser.add_argument(
+        "--snr",
+        dest="snr",
+        default=3.8,
+        metavar="snr",
+        type=float,
+        help="Only consider sub-bands above this S/N threshold.",
+    )
+
+    parser.add_argument(
         "--publish",
         dest="publish",
         action="store_true",
@@ -403,11 +412,10 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
         mask = np.abs(fit_range) > 30.0
         quantiles = np.quantile(sub_profile[mask], q=[0.25, 0.75], axis=None)
         std = 0.7413 * np.abs(quantiles[1] - quantiles[0])
-        snr = np.max(sub_profile) / std
+        snr = np.max(sub_profile[~mask]) / std
         print("S/N: {0:.2f}".format(snr))
 
-        # if not snr >= 4.0:
-        if not snr >= 3.7:
+        if not snr >= params["snr"]:
             print("Profile S/N too low: {0:.2f}".format(snr))
             continue
 
@@ -509,7 +517,12 @@ def main():
         bin_burst = np.argmax(profile)
     plot_range -= fact * bin_burst
 
-    params = {"fast": args.fast, "publish": args.publish, "zoom": args.zoom}
+    params = {
+        "fast": args.fast,
+        "publish": args.publish,
+        "snr": args.snr,
+        "zoom": args.zoom,
+    }
 
     # fit integrated profile
     fit_df = fit_profile(cand, plot_range, args.fscrunch_factor, args.smodel, params)
