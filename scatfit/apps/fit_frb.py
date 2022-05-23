@@ -551,7 +551,7 @@ def main():
     fit_df = fit_profile(cand, plot_range, args.fscrunch_factor, args.smodel, params)
     print(fit_df)
 
-    if args.smodel == "unscattered":
+    if args.smodel == "unscattered" and args.tscrunch == 1:
         # best topocentric burst arrival time
         # at the highest frequency channel
         start_mjd = Time(cand._header["tstart"], format="mjd", scale="utc", precision=9)
