@@ -36,7 +36,6 @@ setup(
         "astropy",
         "corner",
         "emcee",
-        "iqrm @ git+https://github.com/v-morello/iqrm.git@master",
         "lmfit",
         "matplotlib",
         "mtcutils @ git+https://bitbucket.org/vmorello/mtcutils.git@master",
@@ -44,7 +43,6 @@ setup(
         "pandas",
         "scipy",
         "tqdm",
-        "your",
     ],
     entry_points={
         "console_scripts": [

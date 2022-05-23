@@ -10,14 +10,11 @@ import sys
 
 from astropy.time import Time, TimeDelta
 import corner
-from iqrm import iqrm_mask
 from lmfit import Model
 import matplotlib.pyplot as plt
-from mtcutils.core import normalise, zdot
+from mtcutils import Candidate
 import numpy as np
 import pandas as pd
-import your
-from your.candidate import Candidate
 
 from scatfit.dm import get_dm_smearing
 import scatfit.plotting as plotting
@@ -478,6 +475,46 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
     return df
 
 
+def get_frb_data(filename, dm, fscrunch, tscrunch):
+    """
+    Load the FRB data from SIGPROC filterbank file.
+    """
+
+    cand = Candidate.from_filterbank(filename)
+    cand.normalise()
+
+    # calculates and applies both IQRM and ACC1 masks
+    mask = cand.apply_chanmask()
+    print(
+        "Channels masked based on stddev (via IQRM) and acc1: {} / {} ({:.2%})".format(
+            mask.sum(), cand.nchans, mask.sum() / cand.nchans
+        )
+    )
+
+    num_masked_chans = mask.sum()
+    print(
+        "Channels masked in total: {} / {} ({:.2%})".format(
+            num_masked_chans, cand.nchans, num_masked_chans / cand.nchans
+        )
+    )
+
+    # z-dot filter
+    print("Applying z-dot filter")
+    cand.zdot()
+
+    # dedisperse
+    cand.set_dm(dm)
+
+    # calculate noise standard deviation
+    data = cand.data
+    quantiles = np.quantile(data[~mask], q=[0.25, 0.75], axis=None)
+    noise_std = 0.7413 * np.abs(quantiles[1] - quantiles[0])
+
+    dynspec = cand.scrunched_data(f=fscrunch, t=tscrunch) / fscrunch**0.5
+
+    return dynspec, cand, mask, noise_std
+
+
 #
 # MAIN
 #
@@ -493,63 +530,12 @@ def main():
         plt.show()
         sys.exit(0)
 
-    yobj = your.Your(args.filename)
-    print(yobj.your_header)
-    data = yobj.get_data(nstart=0, nsamp=yobj.your_header.nspectra)
-
-    spectral_std = np.std(data, axis=0)
-    mask, _ = iqrm_mask(
-        spectral_std, radius=int(0.1 * yobj.your_header.nchans), threshold=3
-    )
-    print("IQRM channel mask: {}".format(np.where(mask)[0]))
-
-    print("Data shape: {0}".format(data.shape))
-
-    # normalise the data
-    data = data.astype(np.float32).T
-    data, _, _ = normalise(data)
-
-    # run zdot filter
-    # this acts like a zerodm filter
-    data = zdot(data)
-    data = data.T
-
-    print("Data shape: {0}".format(data.shape))
-
-    # apply iqrm mask
-    data[:, mask] = 0
-
-    # the bottom of the band is always bad
-    # data[:, 1000:] = 0
-    # data[:, 920:] = 0
-
-    # load into candidate object for processing
-    cand = Candidate(
-        fp=args.filename,
-        dm=args.dm,
-        tcand=0.0,
-        width=1,
-    )
-
-    cand.data = data
-    cand.dedisperse()
-    cand.dmtime(dmsteps=1024)
-
-    # scrunch
-    cand.decimate(
-        key="ft", axis=0, pad=True, decimate_factor=args.tscrunch_factor, mode="median"
-    )
-
-    cand.decimate(
-        key="ft", axis=1, pad=False, decimate_factor=args.fscrunch_factor, mode="median"
-    )
-
-    cand.decimate(
-        key="dmt", axis=1, pad=True, decimate_factor=args.tscrunch_factor, mode="median"
+    dynspec, cand, _, _ = get_frb_data(
+        args.filename, args.dm, args.fscrunch_factor, args.tscrunch_factor
     )
 
     # band-integrated profile
-    profile = np.sum(cand.dedispersed.T, axis=0)
+    profile = np.sum(dynspec, axis=0)
     profile = profile - np.mean(profile)
     profile = profile / np.max(profile)
 
@@ -573,16 +559,16 @@ def main():
         # best topocentric burst arrival time
         # at the highest frequency channel
         start_mjd = Time(
-            yobj.your_header.tstart, format="mjd", scale="utc", precision=9
+            cand.tstart, format="mjd", scale="utc", precision=9
         )
         burst_offset = TimeDelta(
-            bin_burst * yobj.your_header.tsamp * args.tscrunch_factor, format="sec"
+            bin_burst * cand.tsamp * args.tscrunch_factor, format="sec"
         )
         fit_offset = TimeDelta(1.0e-3 * fit_df["center"].iloc[0], format="sec")
         mjd_topo = start_mjd + burst_offset + fit_offset
         print(
             "Topocentric burst arrival time at {0} MHz: MJD {1}".format(
-                yobj.your_header.fch1, mjd_topo
+                cand.fch1, mjd_topo
             )
         )
 
