@@ -554,7 +554,7 @@ def main():
     if args.smodel == "unscattered":
         # best topocentric burst arrival time
         # at the highest frequency channel
-        start_mjd = Time(cand._header.tstart, format="mjd", scale="utc", precision=9)
+        start_mjd = Time(cand._header["tstart"], format="mjd", scale="utc", precision=9)
         burst_offset = TimeDelta(
             bin_burst * cand.tsamp * args.tscrunch_factor, format="sec"
         )
