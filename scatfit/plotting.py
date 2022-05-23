@@ -41,7 +41,7 @@ def plot_frb(cand, plot_range, profile):
         nrows=2,
         ncols=1,
         sharex="col",
-        gridspec_kw={"height_ratios": [1, 1], "hspace": 0},
+        gridspec_kw={"height_ratios": [0.5, 1], "hspace": 0},
     )
 
     ax1.step(
