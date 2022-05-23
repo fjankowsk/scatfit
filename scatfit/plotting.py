@@ -37,11 +37,11 @@ def plot_frb(cand, plot_range, profile):
     Plot the FRB data.
     """
 
-    fig, (ax1, ax2, ax3) = plt.subplots(
-        nrows=3,
+    fig, (ax1, ax2) = plt.subplots(
+        nrows=2,
         ncols=1,
         sharex="col",
-        gridspec_kw={"height_ratios": [1, 1, 0.6], "hspace": 0},
+        gridspec_kw={"height_ratios": [1, 1], "hspace": 0},
     )
 
     ax1.step(
@@ -58,18 +58,18 @@ def plot_frb(cand, plot_range, profile):
     ax1.tick_params(bottom=False)
 
     # plot dedispersed waterfall
-    freqs = cand.chan_freqs
+    freqs = cand.freqs
     chan_bw = np.diff(freqs)[0]
 
-    print(cand.dedispersed.shape)
+    print(cand.dynspec.shape)
     quantiles = np.quantile(
-        cand.dedispersed,
+        cand.dynspec,
         q=[0.05, 0.1, 0.25, 0.3, 0.4, 0.5, 0.75, 0.8, 0.95, 0.97, 0.98, 0.99],
     )
     print(quantiles)
 
     ax2.imshow(
-        cand.dedispersed.T,
+        cand.dynspec,
         aspect="auto",
         interpolation=None,
         extent=[
@@ -85,28 +85,6 @@ def plot_frb(cand, plot_range, profile):
 
     ax2.set_ylabel("Frequency\n(MHz)")
     ax2.tick_params(bottom=False)
-
-    # plot dmt plane
-    print(np.max(cand.dmt))
-    print(np.min(cand.dmt))
-    print(np.median(cand.dmt))
-
-    dmt = cand.dmt
-    dmt = dmt - np.median(dmt)
-
-    ax3.imshow(
-        dmt,
-        aspect="auto",
-        interpolation=None,
-        cmap="Greys",
-        vmax=0.4 * np.max(dmt),
-        extent=[plot_range[0], plot_range[-1], 2.0 * cand.dm, 0],
-    )
-
-    ax3.set_ylim(bottom=1.2 * cand.dm, top=0.8 * cand.dm)
-    ax3.set_ylabel("DM\n" + r"(pc cm$^{-3}$)")
-    ax3.set_xlabel("Time (ms)")
-    ax3.set_xlim(left=-70.0, right=70.0)
 
     # align ylabels horizontally
     fig.align_labels()
@@ -263,7 +241,7 @@ def plot_width_scaling(t_df, cand, fitresult):
 
     df = t_df.copy()
 
-    freqs = cand.chan_freqs
+    freqs = cand.freqs
     chan_bw = np.diff(freqs)[0]
 
     fig = plt.figure()

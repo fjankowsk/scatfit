@@ -416,7 +416,7 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
         f_hi = cand.freqs[idx_hi]
         f_lo = cand.freqs[idx_lo]
         cfreq = 0.5 * (f_hi + f_lo)
-        chan_bw = np.abs(np.diff(cand.chan_freqs))[0]
+        chan_bw = np.abs(np.diff(cand.freqs))[0]
 
         dm_smear = get_dm_smearing(
             cfreq - 0.5 * chan_bw, cfreq + 0.5 * chan_bw, cand.dm
