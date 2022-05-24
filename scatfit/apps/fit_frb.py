@@ -536,6 +536,7 @@ def main():
     plot_range -= fact * bin_burst
 
     params = {
+        "compare": args.compare,
         "fast": args.fast,
         "publish": args.publish,
         "snr": args.snr,
