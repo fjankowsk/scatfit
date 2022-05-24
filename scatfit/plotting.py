@@ -332,20 +332,7 @@ def plot_width_scaling(t_df, cand, fitresult):
         ls="dashed",
         lw=2.0,
         zorder=3,
-        label="smearing",
-    )
-
-    # instrumental smearing
-    instrumental_smear = np.full(len(plot_range), 0.30624)
-
-    ax.plot(
-        1e-3 * plot_range,
-        instrumental_smear,
-        color="grey",
-        ls="dotted",
-        lw=2.0,
-        zorder=3,
-        label=r"$t_\mathrm{samp}$",
+        label=r"$t_\mathrm{dm}$",
     )
 
     ax.grid()
