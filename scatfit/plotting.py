@@ -156,7 +156,7 @@ def plot_profile_models():
     fig.tight_layout()
 
 
-def plot_profile_fit(fit_range, sub_profile, fitresult, iband, params):
+def plot_profile_fit(fit_range, sub_profile, fitresult, iband, params, fitresult2=None):
     """
     Plot the profile fit.
     """
@@ -197,22 +197,16 @@ def plot_profile_fit(fit_range, sub_profile, fitresult, iband, params):
         zorder=8,
     )
 
-    # plot unscattered pulse
-    fit_params = fitresult.params.copy()
-
-    if "taus" in fit_params:
-        fit_params["taus"].set(value=0.0)
-
-    unscattered = fitresult.eval(params=fit_params, x=fit_range)
-
-    ax1.plot(
-        fit_range,
-        unscattered,
-        color="tab:orange",
-        ls="dotted",
-        lw=1.5,
-        zorder=6,
-    )
+    # plot second fit
+    if fitresult2 is not None:
+        ax1.plot(
+            fit_range,
+            fitresult2.best_fit,
+            color="tab:orange",
+            ls="dotted",
+            lw=2.0,
+            zorder=6,
+        )
 
     ax1.set_ylabel("Flux (a.u.)")
     if not params["publish"]:

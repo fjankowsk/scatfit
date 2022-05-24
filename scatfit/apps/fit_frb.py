@@ -47,6 +47,14 @@ def parse_args():
     )
 
     parser.add_argument(
+        "--compare",
+        dest="compare",
+        action="store_true",
+        default=False,
+        help="Fit an unscattered Gaussian model for comparison.",
+    )
+
+    parser.add_argument(
         "--binburst",
         dest="bin_burst",
         default=None,
@@ -438,7 +446,17 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
 
         fitresult = fit_profile_model(fit_range, sub_profile, dm_smear, smodel, params)
 
-        plotting.plot_profile_fit(fit_range, sub_profile, fitresult, iband, params)
+        # fit an unscattered model for comparison
+        if params["compare"]:
+            fitresult2 = fit_profile_model(
+                fit_range, sub_profile, dm_smear, "unscattered", params
+            )
+        else:
+            fitresult2 = None
+
+        plotting.plot_profile_fit(
+            fit_range, sub_profile, fitresult, iband, params, fitresult2
+        )
 
         # compute profile statistics
         widths_post = compute_post_widths(fit_range, fitresult)
