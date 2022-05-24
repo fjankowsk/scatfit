@@ -197,6 +197,23 @@ def plot_profile_fit(fit_range, sub_profile, fitresult, iband, params):
         zorder=8,
     )
 
+    # plot unscattered pulse
+    fit_params = fitresult.params.copy()
+
+    if "taus" in fit_params:
+        fit_params["taus"].set(value=0.0)
+
+    unscattered = fitresult.eval(params=fit_params, x=fit_range)
+
+    ax1.plot(
+        fit_range,
+        unscattered,
+        color="tab:orange",
+        ls="dotted",
+        lw=1.5,
+        zorder=6,
+    )
+
     ax1.set_ylabel("Flux (a.u.)")
     if not params["publish"]:
         ax1.set_title("Sub-band {0}".format(iband))
