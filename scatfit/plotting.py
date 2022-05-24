@@ -182,7 +182,7 @@ def plot_profile_fit(fit_range, sub_profile, fitresult, iband, params, fitresult
         ax1.plot(
             fit_range,
             fitresult.init_fit,
-            color="tab:blue",
+            color="tab:orange",
             ls="dotted",
             lw=1.5,
             zorder=6,
@@ -202,7 +202,7 @@ def plot_profile_fit(fit_range, sub_profile, fitresult, iband, params, fitresult
         ax1.plot(
             fit_range,
             fitresult2.best_fit,
-            color="tab:orange",
+            color="tab:blue",
             ls="dotted",
             lw=2.0,
             zorder=6,
