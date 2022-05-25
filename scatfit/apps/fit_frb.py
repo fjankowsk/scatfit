@@ -319,20 +319,21 @@ def fit_profile_model(fit_range, profile, dm_smear, smodel, params):
 
     var_names = fitresult_emcee.var_names
 
-    for key in var_names:
+    for idx, key in enumerate(var_names):
         if key in mapping:
-            var_names[key] = mapping[key]
+            var_names[idx] = mapping[key]
+
+    fig = plt.figure()
 
     corner.corner(
         fitresult_emcee.flatchain,
+        fig=fig,
         labels=var_names,
         truths=max_likelihood_values,
         quantiles=[0.16, 0.5, 0.84],
         show_titles=True,
         title_kwargs={"fontsize": 10},
     )
-
-    fig = plt.gcf()
 
     fig.tight_layout()
 
