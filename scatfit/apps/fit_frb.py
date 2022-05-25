@@ -326,6 +326,7 @@ def fit_profile_model(fit_range, profile, dm_smear, smodel, params):
     corner.corner(
         fitresult_emcee.flatchain,
         labels=var_names,
+        labelpad=0.125,
         truths=max_likelihood_values,
         quantiles=[0.16, 0.5, 0.84],
         show_titles=True,
@@ -333,8 +334,6 @@ def fit_profile_model(fit_range, profile, dm_smear, smodel, params):
     )
 
     fig = plt.gcf()
-
-    fig.tight_layout()
 
     fig.savefig("corner_{0}.pdf".format(smodel), bbox_inches="tight")
 
