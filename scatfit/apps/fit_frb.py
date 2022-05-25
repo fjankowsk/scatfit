@@ -323,17 +323,16 @@ def fit_profile_model(fit_range, profile, dm_smear, smodel, params):
         if key in mapping:
             var_names[idx] = mapping[key]
 
-    fig = plt.figure()
-
     corner.corner(
         fitresult_emcee.flatchain,
-        fig=fig,
         labels=var_names,
         truths=max_likelihood_values,
         quantiles=[0.16, 0.5, 0.84],
         show_titles=True,
         title_kwargs={"fontsize": 10},
     )
+
+    fig = plt.gcf()
 
     fig.tight_layout()
 
