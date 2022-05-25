@@ -315,14 +315,28 @@ def fit_profile_model(fit_range, profile, dm_smear, smodel, params):
     max_likelihood_idx = np.unravel_index(max_likelihood, fitresult_emcee.lnprob.shape)
     max_likelihood_values = fitresult_emcee.chain[max_likelihood_idx]
 
+    mapping = {"sigma": r"$\sigma$", "taus": r"$\tau_s$", "__lnsigma": "ln(noise)"}
+
+    var_names = fitresult_emcee.var_names
+
+    for key in var_names:
+        if key in mapping:
+            var_names[key] = mapping[key]
+
     corner.corner(
         fitresult_emcee.flatchain,
-        labels=fitresult_emcee.var_names,
+        labels=var_names,
         truths=max_likelihood_values,
         quantiles=[0.16, 0.5, 0.84],
         show_titles=True,
         title_kwargs={"fontsize": 10},
     )
+
+    fig = plt.gcf()
+
+    fig.tight_layout()
+
+    fig.savefig("corner_{0}.pdf".format(smodel), bbox_inches="tight")
 
     return fitresult_emcee
 
