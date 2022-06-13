@@ -52,7 +52,9 @@ def load_frb_data(filename, dm, fscrunch, tscrunch):
     # dedisperse
     cand.set_dm(dm)
 
-    dynspec = cand.scrunched_data(f=fscrunch, t=tscrunch) / fscrunch**0.5
+    dynspec = (
+        cand.scrunched_data(f=fscrunch, t=tscrunch, select="left") / fscrunch**0.5
+    )
     cand.dynspec = dynspec
 
     return cand
