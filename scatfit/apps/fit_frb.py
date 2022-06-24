@@ -178,7 +178,7 @@ def linear(x, x0, slope, intercept):
     return res
 
 
-def fit_powerlaw(x, y, err_y):
+def fit_powerlaw(x, y, err_y, params):
     """
     Fit a power law to data.
     """
@@ -220,19 +220,7 @@ def fit_powerlaw(x, y, err_y):
 
     print(fitresult_emcee.fit_report())
 
-    # get maximum likelihood values
-    max_likelihood = np.argmax(fitresult_emcee.lnprob)
-    max_likelihood_idx = np.unravel_index(max_likelihood, fitresult_emcee.lnprob.shape)
-    max_likelihood_values = fitresult_emcee.chain[max_likelihood_idx]
-
-    corner.corner(
-        fitresult_emcee.flatchain,
-        labels=fitresult_emcee.var_names,
-        truths=max_likelihood_values,
-        quantiles=[0.16, 0.5, 0.84],
-        show_titles=True,
-        title_kwargs={"fontsize": 10},
-    )
+    plotting.plot_corner(fitresult_emcee, "", False, params)
 
     return fitresult_emcee
 
@@ -310,32 +298,7 @@ def fit_profile_model(fit_range, profile, dm_smear, smodel, params):
 
     print(fitresult_emcee.fit_report())
 
-    # get maximum likelihood values
-    max_likelihood = np.argmax(fitresult_emcee.lnprob)
-    max_likelihood_idx = np.unravel_index(max_likelihood, fitresult_emcee.lnprob.shape)
-    max_likelihood_values = fitresult_emcee.chain[max_likelihood_idx]
-
-    mapping = {"sigma": r"$\sigma$", "taus": r"$\tau_s$", "__lnsigma": "ln(noise)"}
-
-    var_names = fitresult_emcee.var_names
-
-    for idx, key in enumerate(var_names):
-        if key in mapping:
-            var_names[idx] = mapping[key]
-
-    corner.corner(
-        fitresult_emcee.flatchain,
-        labels=var_names,
-        labelpad=0.125,
-        truths=max_likelihood_values,
-        quantiles=[0.16, 0.5, 0.84],
-        show_titles=True,
-        title_kwargs={"fontsize": 10},
-    )
-
-    fig = plt.gcf()
-
-    fig.savefig("corner_{0}.pdf".format(smodel), bbox_inches="tight")
+    plotting.plot_corner(fitresult_emcee, smodel, True, params)
 
     return fitresult_emcee
 
@@ -580,6 +543,7 @@ def main():
             1e-3 * fit_df["cfreq"].to_numpy(),
             fit_df["taus"].to_numpy(),
             fit_df["err_taus"].to_numpy(),
+            params,
         )
     else:
         fitresult = None

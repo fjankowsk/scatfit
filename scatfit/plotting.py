@@ -3,6 +3,7 @@
 #   2022 Fabian Jankowski
 #
 
+import corner
 import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FormatStrFormatter
@@ -361,3 +362,59 @@ def plot_width_scaling(t_df, cand, fitresult):
     fig.tight_layout()
 
     fig.savefig("width_scaling.pdf", bbox_inches="tight")
+
+
+def plot_corner(fitresult_emcee, smodel, output, params):
+    """
+    Make a corner plot.
+
+    Parameters
+    ----------
+    fitresult_emcee: ~lmfit.MinimizerResult
+        The minimizer result object from lmfit.
+    smodel: str
+        The name of the scattering model used.
+    output: bool
+        Whether to output the plot to a file.
+    params: dict
+        Additional plotting parameters.
+    """
+
+    # get maximum likelihood values
+    max_likelihood = np.argmax(fitresult_emcee.lnprob)
+    max_likelihood_idx = np.unravel_index(max_likelihood, fitresult_emcee.lnprob.shape)
+    max_likelihood_values = fitresult_emcee.chain[max_likelihood_idx]
+
+    # defaults
+    fontsize_before = matplotlib.rcParams["font.size"]
+    max_n_ticks = 5
+    show_titles = True
+    var_names = fitresult_emcee.var_names
+
+    if params["publish"]:
+        max_n_ticks = 4
+        matplotlib.rcParams["font.size"] = 20.0
+        show_titles = False
+
+        mapping = {"sigma": r"$\sigma$", "taus": r"$\tau_s$", "__lnsigma": "ln(noise)"}
+
+        for idx, key in enumerate(var_names):
+            if key in mapping:
+                var_names[idx] = mapping[key]
+
+    fig = corner.corner(
+        fitresult_emcee.flatchain,
+        labels=var_names,
+        labelpad=0.125,
+        max_n_ticks=max_n_ticks,
+        truths=max_likelihood_values,
+        quantiles=[0.16, 0.5, 0.84],
+        show_titles=show_titles,
+        title_kwargs={"fontsize": 10},
+    )
+
+    if output:
+        fig.savefig("corner_{0}.pdf".format(smodel), bbox_inches="tight")
+
+    # reset
+    matplotlib.rcParams["font.size"] = fontsize_before
