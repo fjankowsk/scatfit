@@ -387,13 +387,15 @@ def plot_corner(fitresult_emcee, smodel, output, params):
 
     # defaults
     fontsize_before = matplotlib.rcParams["font.size"]
+    labelpad = 0.125
     max_n_ticks = 5
     show_titles = True
     var_names = fitresult_emcee.var_names
 
     if params["publish"]:
         max_n_ticks = 4
-        matplotlib.rcParams["font.size"] = 20.0
+        matplotlib.rcParams["font.size"] = 26.0
+        labelpad = 0.2
         show_titles = False
 
         mapping = {"sigma": r"$\sigma$", "taus": r"$\tau_s$", "__lnsigma": "ln(noise)"}
@@ -405,7 +407,7 @@ def plot_corner(fitresult_emcee, smodel, output, params):
     fig = corner.corner(
         fitresult_emcee.flatchain,
         labels=var_names,
-        labelpad=0.125,
+        labelpad=labelpad,
         max_n_ticks=max_n_ticks,
         truths=max_likelihood_values,
         quantiles=[0.16, 0.5, 0.84],
