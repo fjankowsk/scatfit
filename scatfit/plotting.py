@@ -378,13 +378,13 @@ def plot_chains(fitresult_emcee):
     var_names = fitresult_emcee.var_names
     nvary = len(var_names)
 
-    fig, axes = plt.subplots(nvary, 1, sharex=True, figsize=(8, 9))
+    fig, axs = plt.subplots(nrows=nvary, ncols=1, sharex=True, figsize=(8, 9))
 
     for i, name in enumerate(var_names):
-        axes[i].plot(samples[i], color="black", alpha=0.3)
-        axes[i].set_ylabel(name)
+        axs[i].plot(samples.loc[:, i], color="black", alpha=0.3)
+        axs[i].set_ylabel(name)
 
-    axes[nvary - 1].set_xlabel("Step Number")
+    axs[nvary - 1].set_xlabel("Step Number")
 
     fig.tight_layout()
 
