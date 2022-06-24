@@ -398,7 +398,14 @@ def plot_corner(fitresult_emcee, smodel, output, params):
         labelpad = 0.2
         show_titles = False
 
-        mapping = {"sigma": r"$\sigma$", "taus": r"$\tau_s$", "__lnsigma": "ln(noise)"}
+        mapping = {
+            "fluence": "$F$",
+            "center": "$t_0$",
+            "sigma": r"$\sigma$",
+            "taus": r"$\tau_s$",
+            "dc": "$b$",
+            "__lnsigma": r"$\ln(\epsilon)$",
+        }
 
         for idx, key in enumerate(var_names):
             if key in mapping:
