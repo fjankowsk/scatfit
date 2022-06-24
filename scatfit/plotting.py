@@ -438,6 +438,7 @@ def plot_corner(fitresult_emcee, smodel, output, params):
 
     fig = corner.corner(
         fitresult_emcee.flatchain,
+        bins=50,
         labels=var_names,
         labelpad=labelpad,
         max_n_ticks=max_n_ticks,
