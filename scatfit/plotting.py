@@ -405,12 +405,16 @@ def plot_corner(fitresult_emcee, smodel, output, params):
         Additional plotting parameters.
     """
 
+    samples = fitresult_emcee.flatchain
+
     # get maximum likelihood values
     max_likelihood = np.argmax(fitresult_emcee.lnprob)
     max_likelihood_idx = np.unravel_index(max_likelihood, fitresult_emcee.lnprob.shape)
     max_likelihood_values = fitresult_emcee.chain[max_likelihood_idx]
 
     # defaults
+    bins = len(np.histogram_bin_edges(samples.iloc[:, 0], bins="auto")) - 1
+    print("Number of bins: {0}".format(bins))
     fontsize_before = matplotlib.rcParams["font.size"]
     labelpad = 0.125
     max_n_ticks = 5
@@ -437,8 +441,8 @@ def plot_corner(fitresult_emcee, smodel, output, params):
                 var_names[idx] = mapping[key]
 
     fig = corner.corner(
-        fitresult_emcee.flatchain,
-        bins=50,
+        samples,
+        bins=bins,
         labels=var_names,
         labelpad=labelpad,
         max_n_ticks=max_n_ticks,
