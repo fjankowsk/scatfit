@@ -394,8 +394,8 @@ def plot_corner(fitresult_emcee, smodel, output, params):
 
     if params["publish"]:
         max_n_ticks = 4
-        matplotlib.rcParams["font.size"] = 28.0
-        labelpad = 0.25
+        matplotlib.rcParams["font.size"] = 32.0
+        labelpad = 0.3
         show_titles = False
 
         mapping = {
