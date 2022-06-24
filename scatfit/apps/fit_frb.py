@@ -284,6 +284,7 @@ def fit_profile_model(fit_range, profile, dm_smear, smodel, params):
     if params["fast"]:
         emcee_kws["steps"] = 300
         emcee_kws["burn"] = 100
+        emcee_kws["thin"] = 2
 
     emcee_params = fitresult_ml.params.copy()
     emcee_params.add("__lnsigma", value=np.log(0.1), min=np.log(0.001), max=np.log(2.0))
