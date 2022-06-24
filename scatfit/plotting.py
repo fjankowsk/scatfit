@@ -381,7 +381,7 @@ def plot_chains(fitresult_emcee):
     fig, axs = plt.subplots(nrows=nvary, ncols=1, sharex=True, figsize=(8, 9))
 
     for i, name in enumerate(var_names):
-        axs[i].plot(samples.loc[:, i], color="black", alpha=0.3)
+        axs[i].plot(samples.iloc[:, i], color="black", alpha=0.5)
         axs[i].set_ylabel(name)
 
     axs[nvary - 1].set_xlabel("Step Number")
