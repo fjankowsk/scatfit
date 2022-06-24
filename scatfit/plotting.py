@@ -413,13 +413,15 @@ def plot_corner(fitresult_emcee, smodel, output, params):
     max_likelihood_values = fitresult_emcee.chain[max_likelihood_idx]
 
     # defaults
-    bins = len(np.histogram_bin_edges(samples.iloc[:, 0], bins="auto")) - 1
-    print("Number of bins: {0}".format(bins))
+    bins = 20
     fontsize_before = matplotlib.rcParams["font.size"]
     labelpad = 0.125
     max_n_ticks = 5
     show_titles = True
     var_names = fitresult_emcee.var_names
+
+    if not params["fast"]:
+        bins = 40
 
     if params["publish"]:
         max_n_ticks = 3
