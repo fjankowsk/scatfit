@@ -364,6 +364,31 @@ def plot_width_scaling(t_df, cand, fitresult):
     fig.savefig("width_scaling.pdf", bbox_inches="tight")
 
 
+def plot_chains(fitresult_emcee):
+    """
+    Plot the MCMC chains from an emcee sampling run.
+
+    Parameters
+    ----------
+    fitresult_emcee: ~lmfit.MinimizerResult
+        The minimizer result object from lmfit.
+    """
+
+    samples = fitresult_emcee.flatchain
+    var_names = fitresult_emcee.var_names
+    nvary = len(var_names)
+
+    fig, axes = plt.subplots(nvary, 1, sharex=True, figsize=(8, 9))
+
+    for i, name in enumerate(var_names):
+        axes[i].plot(samples[i], color="black", alpha=0.3)
+        axes[i].set_ylabel(name)
+
+    axes[nvary - 1].set_xlabel("Step Number")
+
+    fig.tight_layout()
+
+
 def plot_corner(fitresult_emcee, smodel, output, params):
     """
     Make a corner plot.

@@ -298,6 +298,7 @@ def fit_profile_model(fit_range, profile, dm_smear, smodel, params):
 
     print(fitresult_emcee.fit_report())
 
+    plotting.plot_chains(fitresult_emcee)
     plotting.plot_corner(fitresult_emcee, smodel, True, params)
 
     return fitresult_emcee
