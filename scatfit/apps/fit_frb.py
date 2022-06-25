@@ -228,7 +228,7 @@ def fit_powerlaw(x, y, err_y, params):
 
     tau_samples = 10 ** linear(
         1.0,
-        samples["x0"],
+        fitresult_emcee.best_values["x0"],
         samples["slope"],
         samples["intercept"],
     )
