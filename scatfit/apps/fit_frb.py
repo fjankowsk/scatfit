@@ -205,8 +205,8 @@ def fit_powerlaw(x, y, err_y, params):
 
     print(fitresult_ml.fit_report())
 
-    # 100 * (2000 - 700)/20 = 6.5k samples
-    emcee_kws = dict(steps=2000, burn=700, thin=20, is_weighted=True, progress=True)
+    # 100 * (2000 - 700)/10 = 13k samples
+    emcee_kws = dict(steps=2000, burn=700, thin=10, is_weighted=True, progress=True)
 
     emcee_params = fitresult_ml.params.copy()
 
