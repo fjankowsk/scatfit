@@ -220,8 +220,8 @@ def plot_profile_fit(
         )
 
     ax1.text(
-        x=0.05,
-        y=1 - 0.05,
+        x=0.025,
+        y=1 - 0.04,
         s=info_str,
         horizontalalignment="left",
         verticalalignment="top",
