@@ -308,7 +308,7 @@ def fit_profile_model(fit_range, profile, dm_smear, smodel, params):
     emcee_kws = dict(steps=5000, burn=1000, thin=10, is_weighted=False, progress=True)
 
     if params["fast"]:
-        # 100 * (300 - 200)/2 = 10k samples
+        # 100 * (300 - 100)/2 = 10k samples
         emcee_kws["steps"] = 300
         emcee_kws["burn"] = 100
         emcee_kws["thin"] = 2
