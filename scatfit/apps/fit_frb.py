@@ -435,7 +435,7 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
             fitresult2 = None
 
         plotting.plot_profile_fit(
-            fit_range, sub_profile, fitresult, iband, params, fitresult2
+            fit_range, sub_profile, fitresult, iband, cfreq, params, fitresult2
         )
 
         # compute profile statistics

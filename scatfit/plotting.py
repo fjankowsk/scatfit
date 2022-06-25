@@ -157,7 +157,9 @@ def plot_profile_models():
     fig.tight_layout()
 
 
-def plot_profile_fit(fit_range, sub_profile, fitresult, iband, params, fitresult2=None):
+def plot_profile_fit(
+    fit_range, sub_profile, fitresult, iband, cfreq, params, fitresult2=None
+):
     """
     Plot the profile fit.
     """
@@ -208,6 +210,24 @@ def plot_profile_fit(fit_range, sub_profile, fitresult, iband, params, fitresult
             lw=2.0,
             zorder=6,
         )
+
+    # show centre frequency and scattering time
+    info_str = "{0:.0f} MHz".format(cfreq)
+
+    if "taus" in fitresult.best_values:
+        info_str += "\n" + "${0:.1f} \pm {1:.1f}$ ms".format(
+            fitresult.best_values["taus"], fitresult.params["taus"].stderr
+        )
+
+    ax1.text(
+        x=0.01,
+        y=1 - 0.01,
+        s=info_str,
+        horizontalalignment="left",
+        verticalalignment="top",
+        transform=ax1.transAxes,
+        zorder=8,
+    )
 
     ax1.set_ylabel("Flux (a.u.)")
     if not params["publish"]:
