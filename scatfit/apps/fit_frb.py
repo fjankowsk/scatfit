@@ -227,7 +227,7 @@ def fit_powerlaw(x, y, err_y, params):
     samples = fitresult_emcee.flatchain
 
     tau_samples = 10 ** linear(
-        1.0,
+        np.log10(1.0),
         fitresult_emcee.best_values["x0"],
         samples["slope"],
         samples["intercept"],
@@ -242,7 +242,7 @@ def fit_powerlaw(x, y, err_y, params):
     tau_1ghz = {"value": quantiles[1], "error": error}
 
     print(
-        "Scattering time at 1 GHz: {0:.2f} +- {1:.2f}".format(
+        "Scattering time at 1 GHz: {0:.2f} +- {1:.2f} ms".format(
             tau_1ghz["value"], tau_1ghz["error"]
         )
     )
