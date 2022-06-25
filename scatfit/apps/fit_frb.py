@@ -205,6 +205,7 @@ def fit_powerlaw(x, y, err_y, params):
 
     print(fitresult_ml.fit_report())
 
+    # 100 * (2000 - 700)/20 = 6.5k samples
     emcee_kws = dict(steps=2000, burn=700, thin=20, is_weighted=True, progress=True)
 
     emcee_params = fitresult_ml.params.copy()
@@ -221,6 +222,30 @@ def fit_powerlaw(x, y, err_y, params):
     print(fitresult_emcee.fit_report())
 
     plotting.plot_corner(fitresult_emcee, "", False, params)
+
+    # estimate scattering time at 1 ghz from the mcmc samples
+    samples = fitresult_emcee.flatchain
+
+    tau_samples = 10 ** linear(
+        1.0,
+        samples["x0"],
+        samples["slope"],
+        samples["intercept"],
+    )
+
+    quantiles = np.quantile(tau_samples, q=[0.16, 0.5, 0.84])
+
+    error = np.maximum(
+        np.abs(quantiles[1] - quantiles[0]), np.abs(quantiles[2] - quantiles[1])
+    )
+
+    tau_1ghz = {"value": quantiles[1], "error": error}
+
+    print(
+        "Scattering time at 1 GHz: {0:.2f} +- {1:.2f}".format(
+            tau_1ghz["value"], tau_1ghz["error"]
+        )
+    )
 
     return fitresult_emcee
 
