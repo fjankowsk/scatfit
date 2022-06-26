@@ -384,6 +384,37 @@ def plot_width_scaling(t_df, cand, fitresult):
     fig.savefig("width_scaling.pdf", bbox_inches="tight")
 
 
+def plot_center_scaling(t_df):
+    """
+    Plot the scaling of fitted center with frequency.
+    """
+
+    df = t_df.copy()
+
+    fig = plt.figure()
+    ax = fig.add_subplot()
+
+    ax.errorbar(
+        x=1e-3 * df["cfreq"],
+        y=df["center"],
+        yerr=df["err_center"],
+        fmt="o",
+        color="black",
+        zorder=5,
+    )
+
+    ax.grid()
+    ax.set_xlabel("Frequency (GHz)")
+    ax.set_ylabel("Center (ms)")
+    # ax.set_xscale("log")
+
+    # sfor = FormatStrFormatter("%g")
+    # ax.xaxis.set_major_formatter(sfor)
+    # ax.xaxis.set_minor_formatter(sfor)
+
+    fig.tight_layout()
+
+
 def plot_chains(fitresult_emcee):
     """
     Plot the MCMC chains from an emcee sampling run.

@@ -396,6 +396,7 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
             "fluence",
             "err_fluence",
             "center",
+            "err_center",
             "sigma",
             "err_sigma",
             "weq",
@@ -473,6 +474,7 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
                 "fluence": fitresult.best_values["fluence"],
                 "err_fluence": fitresult.params["fluence"].stderr,
                 "center": fitresult.best_values["center"],
+                "err_center": fitresult.params["center"].stderr,
                 "sigma": fitresult.best_values["sigma"],
                 "err_sigma": fitresult.params["sigma"].stderr,
                 "weq": widths_post["weq"]["value"],
@@ -551,6 +553,10 @@ def main():
     # fit integrated profile
     fit_df = fit_profile(cand, plot_range, args.fscrunch_factor, args.smodel, params)
     print(fit_df)
+
+    # compute updated dm
+    if len(fit_df.index) >= 2:
+        plotting.plot_center_scaling(fit_df)
 
     if args.smodel == "unscattered" and args.tscrunch_factor == 1:
         # best topocentric burst arrival time
