@@ -258,9 +258,15 @@ def compute_updated_dm(t_df, dm, params):
 
     df = t_df.copy()
 
+    # x is in MHz^-2
     x = (df["cfreq"] ** -2 - df["cfreq"].iat[0] ** -2).to_numpy()
     y = (df["center"] - df["center"].iat[0]).to_numpy()
     err_y = df["err_center"].to_numpy()
+
+    # convert to seconds and divide by dispersion constant
+    # so the slope should be dm directly
+    y = 1e-3 * y / KDM
+    err_y = 1e-3 * err_y / KDM
 
     model = Model(linear)
 
@@ -297,8 +303,8 @@ def compute_updated_dm(t_df, dm, params):
 
     plotting.plot_corner(fitresult_emcee, "", False, params)
 
-    delta_dm = fitresult_emcee.best_values["slope"] / KDM
-    err_delta_dm = fitresult_emcee.params["slope"].stderr / KDM
+    delta_dm = fitresult_emcee.best_values["slope"]
+    err_delta_dm = fitresult_emcee.params["slope"].stderr
 
     updated_dm = {"value": dm + delta_dm, "error": err_delta_dm}
 
