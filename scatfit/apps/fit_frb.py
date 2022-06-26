@@ -264,9 +264,9 @@ def compute_updated_dm(t_df, dm, params):
 
     model = Model(linear)
 
-    model.set_param_hint("x0", value=np.log10(np.mean(x)), vary=False)
+    model.set_param_hint("x0", value=np.mean(x), vary=False)
     model.set_param_hint("slope", value=0.0)
-    model.set_param_hint("intercept", value=np.log10(np.mean(y)))
+    model.set_param_hint("intercept", value=np.mean(y))
 
     fitparams = model.make_params()
 
