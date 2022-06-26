@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from scatfit.dm import get_dm_smearing
+from scatfit.dm import KDM, get_dm_smearing
 import scatfit.plotting as plotting
 import scatfit.pulsemodels as pulsemodels
 import scatfit.sigproc as sigproc
@@ -250,7 +250,7 @@ def fit_powerlaw(x, y, err_y, params):
     return fitresult_emcee
 
 
-def compute_updated_dm(t_df, params):
+def compute_updated_dm(t_df, dm, params):
     """
     Compute an updated dispersion measure by fitting the
     center versus frequency curve.
@@ -258,12 +258,9 @@ def compute_updated_dm(t_df, params):
 
     df = t_df.copy()
 
-    x = df["freq"].to_numpy()
-    y = df["center"].to_numpy()
+    x = (df["cfreq"] ** -2 - df["cfreq"].iat[0] ** -2).to_numpy()
+    y = (df["center"] - df["center"].iat[0]).to_numpy()
     err_y = df["err_center"].to_numpy()
-
-    # convert to logscale
-    log_x = np.log10()
 
     model = Model(linear)
 
@@ -274,7 +271,7 @@ def compute_updated_dm(t_df, params):
     fitparams = model.make_params()
 
     fitresult_ml = model.fit(
-        data=y, x=log_x, weights=1.0 / err_y, params=fitparams, method="leastsq"
+        data=y, x=x, weights=1.0 / err_y, params=fitparams, method="leastsq"
     )
 
     if not fitresult_ml.success:
@@ -289,7 +286,7 @@ def compute_updated_dm(t_df, params):
 
     fitresult_emcee = model.fit(
         data=y,
-        x=log_x,
+        x=x,
         weights=1.0 / err_y,
         params=emcee_params,
         method="emcee",
@@ -299,6 +296,17 @@ def compute_updated_dm(t_df, params):
     print(fitresult_emcee.fit_report())
 
     plotting.plot_corner(fitresult_emcee, "", False, params)
+
+    delta_dm = fitresult_emcee.best_values["slope"] / KDM
+    err_delta_dm = fitresult_emcee.params["slope"].stderr / KDM
+
+    updated_dm = {"value": dm + delta_dm, "error": err_delta_dm}
+
+    print(
+        "Updated DM: {0:.3f} +- {1:.3f} pc cm^-3".format(
+            updated_dm["value"], updated_dm["error"]
+        )
+    )
 
 
 def fit_profile_model(fit_range, profile, dm_smear, smodel, params):
@@ -608,7 +616,7 @@ def main():
     # compute updated dm
     if len(fit_df.index) >= 2:
         plotting.plot_center_scaling(fit_df)
-        compute_updated_dm(fit_df, params)
+        compute_updated_dm(fit_df, args.dm, params)
 
     if args.smodel == "unscattered" and args.tscrunch_factor == 1:
         # best topocentric burst arrival time
