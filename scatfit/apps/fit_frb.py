@@ -264,7 +264,7 @@ def compute_updated_dm(t_df, dm, params):
     err_y = df["err_center"].to_numpy()
 
     # convert to seconds and divide by dispersion constant
-    # so the slope should be dm directly
+    # so the slope is delta dm in the right units
     y = 1e-3 * y / KDM
     err_y = 1e-3 * err_y / KDM
 
