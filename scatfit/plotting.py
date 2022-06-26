@@ -406,11 +406,11 @@ def plot_center_scaling(t_df):
     ax.grid()
     ax.set_xlabel("Frequency (GHz)")
     ax.set_ylabel("Center (ms)")
-    # ax.set_xscale("log")
+    ax.set_xscale("log")
 
-    # sfor = FormatStrFormatter("%g")
-    # ax.xaxis.set_major_formatter(sfor)
-    # ax.xaxis.set_minor_formatter(sfor)
+    sfor = FormatStrFormatter("%g")
+    ax.xaxis.set_major_formatter(sfor)
+    ax.xaxis.set_minor_formatter(sfor)
 
     fig.tight_layout()
 

@@ -250,6 +250,57 @@ def fit_powerlaw(x, y, err_y, params):
     return fitresult_emcee
 
 
+def compute_updated_dm(t_df, params):
+    """
+    Compute an updated dispersion measure by fitting the
+    center versus frequency curve.
+    """
+
+    df = t_df.copy()
+
+    x = df["freq"].to_numpy()
+    y = df["center"].to_numpy()
+    err_y = df["err_center"].to_numpy()
+
+    # convert to logscale
+    log_x = np.log10()
+
+    model = Model(linear)
+
+    model.set_param_hint("x0", value=np.log10(np.mean(x)), vary=False)
+    model.set_param_hint("slope", value=0.0)
+    model.set_param_hint("intercept", value=np.log10(np.mean(y)))
+
+    fitparams = model.make_params()
+
+    fitresult_ml = model.fit(
+        data=y, x=log_x, weights=1.0 / err_y, params=fitparams, method="leastsq"
+    )
+
+    if not fitresult_ml.success:
+        raise RuntimeError("Fit did not converge.")
+
+    print(fitresult_ml.fit_report())
+
+    # 100 * (2000 - 700)/10 = 13k samples
+    emcee_kws = dict(steps=2000, burn=700, thin=10, is_weighted=True, progress=True)
+
+    emcee_params = fitresult_ml.params.copy()
+
+    fitresult_emcee = model.fit(
+        data=y,
+        x=log_x,
+        weights=1.0 / err_y,
+        params=emcee_params,
+        method="emcee",
+        fit_kws=emcee_kws,
+    )
+
+    print(fitresult_emcee.fit_report())
+
+    plotting.plot_corner(fitresult_emcee, "", False, params)
+
+
 def fit_profile_model(fit_range, profile, dm_smear, smodel, params):
     """
     Fit a profile model to data.
@@ -557,6 +608,7 @@ def main():
     # compute updated dm
     if len(fit_df.index) >= 2:
         plotting.plot_center_scaling(fit_df)
+        compute_updated_dm(fit_df, params)
 
     if args.smodel == "unscattered" and args.tscrunch_factor == 1:
         # best topocentric burst arrival time
