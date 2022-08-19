@@ -26,7 +26,7 @@ setup(
     version=get_version(),
     author="Fabian Jankowski",
     author_email="fjankowsk at gmail.com",
-    description="Fast Radio Burst scattering fits.",
+    description="Scattering fits of time domain radio signals (Fast Radio Bursts or pulsars).",
     long_description=get_long_description(),
     long_description_content_type="text/markdown",
     url="https://bitbucket.org/jankowsk/scatfit",

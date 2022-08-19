@@ -1,6 +1,6 @@
-# Fast Radio Burst Scattering Fits #
+# Scatfit: Scattering fits of time domain radio signals (Fast Radio Bursts or pulsars) #
 
-This repository contains code to fit Fast Radio Burst profiles to measure scattering and other parameters. The code is mainly developed for Python 3, but Python 2 from version 2.7 onwards should work fine.
+This repository contains code to fit Fast Radio Burst or pulsar profiles to measure scattering and other parameters. The code is mainly developed for Python 3, but Python 2 from version 2.7 onwards should work fine.
 
 ## Author ##
 
@@ -9,6 +9,8 @@ The software is primarily developed and maintained by Fabian Jankowski. For more
 ## Citation ##
 
 If you make use of the software, please add a link to this repository and cite our upcoming paper. See the CITATION file.
+
+The code is also listed in the Astrophysics Source Code Library (ASCL): https://ascl.net/code/v/3366
 
 ## Installation ##
 
