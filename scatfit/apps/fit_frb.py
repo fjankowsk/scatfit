@@ -9,7 +9,6 @@ import inspect
 import sys
 
 from astropy.time import Time, TimeDelta
-import corner
 from lmfit import Model
 import matplotlib.pyplot as plt
 import numpy as np
