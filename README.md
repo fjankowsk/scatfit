@@ -52,3 +52,9 @@ optional arguments:
   -z start end, --zoom start end
                         Zoom into this time region. (default: None)
 ```
+
+## Profile scattering models ##
+
+Several profile scattering models, i.e. pulse broadening functions and instrumental contributions, are implemented and others can easily be added. The image below shows a selection of them.
+
+![Implemented profile scattering models](https://bitbucket.org/jankowsk/scatfit/raw/5c0365bcd887353ddc271212f685a8353f91c23e/docs/profile_models.png "Implemented profile scattering models")
