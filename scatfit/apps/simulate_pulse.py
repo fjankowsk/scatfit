@@ -1,8 +1,73 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from your import Your
+from your.formats.filwriter import make_sigproc_object
 
 from scatfit.dm import KDM
 import scatfit.pulsemodels as pulsemodels
+
+
+def plot_data(data, times, cfreqs):
+    fig = plt.figure()
+    ax = fig.add_subplot()
+
+    time_step = np.diff(times)[0]
+    freq_step = np.diff(cfreqs)[0]
+
+    ax.imshow(
+        data,
+        aspect="auto",
+        origin="upper",
+        extent=(
+            times[0] - 0.5 * time_step,
+            times[-1] + 0.5 * time_step,
+            cfreqs[-1] - 0.5 * freq_step,
+            cfreqs[0] + 0.5 * freq_step,
+        ),
+    )
+
+    ax.set_xlabel("Time (ms)")
+    ax.set_ylabel("Frequency (MHz)")
+
+    fig.tight_layout()
+
+
+def convert_to_integer(data, nbit=8):
+    """
+    Convert the float data to integers for storing in SIGPROC filterbank
+    files or PSRFITS ones.
+
+    Parameters
+    ----------
+    data: ~np.array of float
+        The input data.
+    nbit: int
+        The number of bits in the output data.
+
+    Returns
+    -------
+    data_int: ~np.array of int
+        The output data in integer form.
+    """
+
+    # normalise the data before integer conversion
+    # we follow the psrfits method here
+    # data_value =  zero_offset + (real_value - data_offset) / data_scale
+    zero_offset = 2 ** (nbit - 1) - 0.5
+    data_offset = np.mean(data)
+    scale = np.max(data)
+
+    print(zero_offset, data_offset, scale)
+    scaled_data = zero_offset + zero_offset * (data - data_offset) / scale
+
+    print(np.min(scaled_data), np.mean(scaled_data), np.max(scaled_data))
+
+    # convert to uint8
+    data_int = np.rint(scaled_data).astype(np.uint8)
+
+    print(np.min(data_int), np.mean(data_int), np.max(data_int))
+
+    return data_int
 
 
 #
@@ -25,7 +90,7 @@ def main():
     sigma_noise = 0.1
 
     # ms
-    times = np.linspace(-4000.0, 4000.0, num=4 * 1024)
+    times = np.linspace(-4000.0, 4000.0, num=10 * 1024)
     # mhz
     cfreqs = np.linspace(1600.0, 856.0, num=1024)
 
@@ -55,28 +120,45 @@ def main():
 
         ax.plot(times, (len(cfreqs) - i) + profile, color="black", lw=0.5)
 
-    fig = plt.figure()
-    ax = fig.add_subplot()
+    plot_data(data, times, cfreqs)
+
+    data = convert_to_integer(data)
+    print(data.shape)
+
+    plot_data(data, times, cfreqs)
 
     time_step = np.diff(times)[0]
     freq_step = np.diff(cfreqs)[0]
+    output_filename = "test_fake.fil"
 
-    ax.imshow(
-        data,
-        aspect="auto",
-        origin="upper",
-        extent=(
-            times[0] - 0.5 * time_step,
-            times[-1] + 0.5 * time_step,
-            cfreqs[-1] + 0.5 * freq_step,
-            cfreqs[0] - 0.5 * freq_step,
-        ),
+    sigproc_obj = make_sigproc_object(
+        rawdatafile=output_filename,
+        source_name="test",
+        nchans=len(cfreqs),
+        foff=freq_step,  # MHz
+        fch1=cfreqs[0] - 0.5 * freq_step,  # MHz
+        tsamp=time_step * 1e-3,  # seconds
+        tstart=60000.0,  # MJD
+        src_raj=112233.44,  # HHMMSS.SS
+        src_dej=112233.44,  # DDMMSS.SS
+        machine_id=0,
+        nbeams=0,
+        ibeam=0,
+        nbits=8,
+        nifs=1,
+        barycentric=0,
+        pulsarcentric=0,
+        telescope_id=6,
+        data_type=0,
+        az_start=-1,
+        za_start=-1,
     )
 
-    ax.set_xlabel("Time (ms)")
-    ax.set_ylabel("Frequency (MHz)")
+    sigproc_obj.write_header(output_filename)
+    sigproc_obj.append_spectra(data.T, output_filename)
 
-    fig.tight_layout()
+    your_obj = Your(output_filename)
+    print(your_obj.your_header)
 
     plt.show()
 
