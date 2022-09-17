@@ -7,12 +7,23 @@ from scatfit.dm import KDM
 import scatfit.pulsemodels as pulsemodels
 
 
-def plot_data(data, times, cfreqs):
+def plot_data(data, times, freqs):
+    """
+    Parameters
+    ----------
+    data: ~np.array
+        The input data.
+    times: ~np.array of float
+        The times of the bins.
+    freqs: ~np.array of float
+        The values of the high-frequency channel edges.
+    """
+
     fig = plt.figure()
     ax = fig.add_subplot()
 
     time_step = np.diff(times)[0]
-    freq_step = np.diff(cfreqs)[0]
+    freq_step = np.diff(freqs)[0]
 
     ax.imshow(
         data,
@@ -21,8 +32,8 @@ def plot_data(data, times, cfreqs):
         extent=(
             times[0] - 0.5 * time_step,
             times[-1] + 0.5 * time_step,
-            cfreqs[-1] - 0.5 * freq_step,
-            cfreqs[0] + 0.5 * freq_step,
+            freqs[-1],
+            freqs[0],
         ),
     )
 
@@ -90,25 +101,29 @@ def main():
     sigma_noise = 0.1
 
     # ms
-    times = np.linspace(-4000.0, 4000.0, num=10 * 1024)
+    times = np.linspace(-4000.0, 4000.0, num=25 * 1024)
     # mhz
-    cfreqs = np.linspace(1600.0, 856.0, num=1024)
+    fch1 = 1711.58203125
+    nchan = 1024
+    foff = -856.0 / float(nchan)
+    freqs = fch1 + np.arange(nchan) * foff
 
-    data = np.zeros(shape=(len(cfreqs), len(times)))
+    data = np.zeros(shape=(len(freqs), len(times)))
 
     fig = plt.figure()
     ax = fig.add_subplot()
 
     rng = np.random.default_rng(seed=42)
 
-    for i, ifreq in enumerate(cfreqs):
-        dm_shift = 1.0e3 * KDM * (ifreq**dm_index - cfreqs[0] ** dm_index) * dm
-        fluence = fluence_1ghz * (ifreq / 1000.0) ** spectral_index
+    for i, ifreq in enumerate(freqs):
+        cfreq = ifreq + 0.5 * foff
+        dm_shift = 1.0e3 * KDM * (ifreq**dm_index - freqs[0] ** dm_index) * dm
+        fluence = fluence_1ghz * (cfreq / 1000.0) ** spectral_index
         center = toa_highest_freq + dm_shift
-        taus = taus_1ghz * (ifreq / 1000.0) ** scatindex
+        taus = taus_1ghz * (cfreq / 1000.0) ** scatindex
         print(
             "Cfreq, fluence, center, taus: {0:.2f} MHz, {1:.2f} a.u., {2:.2f} ms, {3:.2f} ms".format(
-                ifreq, fluence, center, taus
+                cfreq, fluence, center, taus
             )
         )
         profile = pulsemodels.scattered_profile(times, fluence, center, sigma, taus, dc)
@@ -118,25 +133,24 @@ def main():
 
         data[i, :] = profile + noise
 
-        ax.plot(times, (len(cfreqs) - i) + profile, color="black", lw=0.5)
+        ax.plot(times, (len(freqs) - i) + profile, color="black", lw=0.5)
 
-    plot_data(data, times, cfreqs)
+    plot_data(data, times, freqs)
 
     data = convert_to_integer(data)
     print(data.shape)
 
-    plot_data(data, times, cfreqs)
+    plot_data(data, times, freqs)
 
     time_step = np.diff(times)[0]
-    freq_step = np.diff(cfreqs)[0]
     output_filename = "test_fake.fil"
 
     sigproc_obj = make_sigproc_object(
         rawdatafile=output_filename,
         source_name="test",
-        nchans=len(cfreqs),
-        foff=freq_step,  # MHz
-        fch1=cfreqs[0] - 0.5 * freq_step,  # MHz
+        nchans=nchan,
+        foff=foff,  # MHz
+        fch1=fch1,  # MHz
         tsamp=time_step * 1e-3,  # seconds
         tstart=60000.0,  # MJD
         src_raj=112233.44,  # HHMMSS.SS
