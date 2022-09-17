@@ -191,7 +191,8 @@ class Instrument(object):
         """
 
         # ms
-        self.times = np.linspace(-4000.0, 4000.0, num=25 * 1024)
+        self.tsamp = 0.30624
+        self.time_range = 7000.0
         # mhz
         self.fch1 = 1711.58203125
         self.bandwidth = -856.0
@@ -219,14 +220,23 @@ class Instrument(object):
         return foff
 
     @property
-    def tsamp(self):
+    def times(self):
         """
-        The sampling time in ms.
+        The bin times in ms.
         """
 
-        tsamp = np.diff(self.times)[0]
+        nsamp = np.ceil(self.time_range / self.tsamp) + 1
+        times = -0.5 * self.time_range + np.arange(nsamp) * self.tsamp
 
-        return tsamp
+        return times
+
+    @property
+    def nsamp(self):
+        """
+        The number of time samples.
+        """
+
+        return len(self.times)
 
 
 #
