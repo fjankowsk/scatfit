@@ -638,7 +638,7 @@ def main():
             )
         )
 
-    if args.fit_scatindex and "taus" in fit_df.columns:
+    if args.fit_scatindex and len(fit_df.index) >= 2 and "taus" in fit_df.columns:
         fitresult = fit_powerlaw(
             1e-3 * fit_df["cfreq"].to_numpy(),
             fit_df["taus"].to_numpy(),
