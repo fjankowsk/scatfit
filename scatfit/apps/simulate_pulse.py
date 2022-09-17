@@ -7,78 +7,219 @@ from scatfit.dm import KDM
 import scatfit.pulsemodels as pulsemodels
 
 
-def plot_data(data, times, freqs):
-    """
-    Parameters
-    ----------
-    data: ~np.array
-        The input data.
-    times: ~np.array of float
-        The times of the bins.
-    freqs: ~np.array of float
-        The values of the high-frequency channel edges.
-    """
+class Pulse(object):
+    def __init__(self, dm, sigma, taus_1ghz):
+        """
+        A pulse.
+        """
 
-    fig = plt.figure()
-    ax = fig.add_subplot()
+        self.dm = dm
+        self.dm_index = -2.0
+        self.scatindex = -4.0
+        self.spectral_index = -1.5
+        self.fluence_1ghz = 10.0
+        # ms
+        self.sigma = sigma
+        self.toa_highest_freq = 100.0
+        self.taus_1ghz = taus_1ghz
+        self.dc = 0.0
 
-    time_step = np.diff(times)[0]
-    freq_step = np.diff(freqs)[0]
+        # noise
+        self.sigma_noise = 0.1
 
-    ax.imshow(
-        data,
-        aspect="auto",
-        origin="upper",
-        extent=(
-            times[0] - 0.5 * time_step,
-            times[-1] + 0.5 * time_step,
-            freqs[-1],
-            freqs[0],
-        ),
-    )
+    def generate_data(self, instrument):
+        self.instrument = instrument
+        times = instrument.times
+        freqs = instrument.freqs
 
-    ax.set_xlabel("Time (ms)")
-    ax.set_ylabel("Frequency (MHz)")
+        data = np.zeros(shape=(len(freqs), len(times)))
 
-    fig.tight_layout()
+        fig = plt.figure()
+        ax = fig.add_subplot()
+
+        rng = np.random.default_rng(seed=42)
+
+        for i, ifreq in enumerate(freqs):
+            cfreq = ifreq + 0.5 * instrument.foff
+            dm_shift = (
+                1.0e3
+                * KDM
+                * (ifreq**self.dm_index - freqs[0] ** self.dm_index)
+                * self.dm
+            )
+            fluence = self.fluence_1ghz * (cfreq / 1000.0) ** self.spectral_index
+            center = self.toa_highest_freq + dm_shift
+            taus = self.taus_1ghz * (cfreq / 1000.0) ** self.scatindex
+            print(
+                "Cfreq, fluence, center, taus: {0:.2f} MHz, {1:.2f} a.u., {2:.2f} ms, {3:.2f} ms".format(
+                    cfreq, fluence, center, taus
+                )
+            )
+            profile = pulsemodels.scattered_profile(
+                times, fluence, center, self.sigma, taus, self.dc
+            )
+
+            # add some gaussian radiometer noise
+            noise = rng.normal(loc=0.0, scale=self.sigma_noise, size=len(times))
+
+            data[i, :] = profile + noise
+
+            ax.plot(times, (len(freqs) - i) + profile, color="black", lw=0.5)
+
+        self.data = data
+        self.times = times
+        self.freqs = freqs
+
+    def plot_data(self, data):
+        """
+        Parameters
+        ----------
+        data: ~np.array
+            The input data.
+        times: ~np.array of float
+            The times of the bins.
+        freqs: ~np.array of float
+            The values of the high-frequency channel edges.
+        """
+
+        fig = plt.figure()
+        ax = fig.add_subplot()
+
+        time_step = np.diff(self.times)[0]
+        freq_step = np.diff(self.freqs)[0]
+
+        ax.imshow(
+            data,
+            aspect="auto",
+            origin="upper",
+            extent=(
+                self.times[0] - 0.5 * time_step,
+                self.times[-1] + 0.5 * time_step,
+                self.freqs[-1] + freq_step,
+                self.freqs[0],
+            ),
+        )
+
+        ax.set_xlabel("Time (ms)")
+        ax.set_ylabel("Frequency (MHz)")
+
+        fig.tight_layout()
+
+    def convert_to_integer(self, data, nbit=8):
+        """
+        Convert the float data to integers for storing in SIGPROC filterbank
+        files or PSRFITS ones.
+
+        Parameters
+        ----------
+        data: ~np.array of float
+            The input data.
+        nbit: int
+            The number of bits in the output data.
+
+        Returns
+        -------
+        data_int: ~np.array of int
+            The output data in integer form.
+        """
+
+        # normalise the data before integer conversion
+        # we follow the psrfits method here
+        # data_value =  zero_offset + (real_value - data_offset) / data_scale
+        zero_offset = 2 ** (nbit - 1) - 0.5
+        data_offset = np.mean(data)
+        scale = np.max(data)
+
+        print(zero_offset, data_offset, scale)
+        scaled_data = zero_offset + zero_offset * (data - data_offset) / scale
+
+        print(np.min(scaled_data), np.mean(scaled_data), np.max(scaled_data))
+
+        # convert to uint8
+        data_int = np.rint(scaled_data).astype(np.uint8)
+
+        print(np.min(data_int), np.mean(data_int), np.max(data_int))
+
+        return data_int
+
+    def write_to_sigproc_file(self, filename):
+        # convert to integers
+        data_int = self.convert_to_integer(self.data)
+        print(data_int.shape)
+        self.plot_data(data_int)
+
+        sigproc_obj = make_sigproc_object(
+            rawdatafile=filename,
+            source_name="fake",
+            nchans=self.instrument.nchan,
+            foff=self.instrument.foff,  # MHz
+            fch1=self.instrument.fch1,  # MHz
+            tsamp=self.instrument.tsamp * 1e-3,  # seconds
+            tstart=60000.0,  # MJD
+            src_raj=112233.44,  # HHMMSS.SS
+            src_dej=112233.44,  # DDMMSS.SS
+            machine_id=0,
+            nbeams=0,
+            ibeam=0,
+            nbits=8,
+            nifs=1,
+            barycentric=0,
+            pulsarcentric=0,
+            telescope_id=6,
+            data_type=0,
+            az_start=-1,
+            za_start=-1,
+        )
+
+        sigproc_obj.write_header(filename)
+        sigproc_obj.append_spectra(data_int.T, filename)
+
+        your_obj = Your(filename)
+        print(your_obj.your_header)
 
 
-def convert_to_integer(data, nbit=8):
-    """
-    Convert the float data to integers for storing in SIGPROC filterbank
-    files or PSRFITS ones.
+class Instrument(object):
+    def __init__(self):
+        """
+        An observing instrument.
+        """
 
-    Parameters
-    ----------
-    data: ~np.array of float
-        The input data.
-    nbit: int
-        The number of bits in the output data.
+        # ms
+        self.times = np.linspace(-4000.0, 4000.0, num=25 * 1024)
+        # mhz
+        self.fch1 = 1711.58203125
+        self.bandwidth = -856.0
+        self.nchan = 1024
 
-    Returns
-    -------
-    data_int: ~np.array of int
-        The output data in integer form.
-    """
+    @property
+    def freqs(self):
+        """
+        The values of the high-frequency channel edges in MHz.
+        """
 
-    # normalise the data before integer conversion
-    # we follow the psrfits method here
-    # data_value =  zero_offset + (real_value - data_offset) / data_scale
-    zero_offset = 2 ** (nbit - 1) - 0.5
-    data_offset = np.mean(data)
-    scale = np.max(data)
+        freqs = self.fch1 + np.arange(self.nchan) * self.foff
 
-    print(zero_offset, data_offset, scale)
-    scaled_data = zero_offset + zero_offset * (data - data_offset) / scale
+        return freqs
 
-    print(np.min(scaled_data), np.mean(scaled_data), np.max(scaled_data))
+    @property
+    def foff(self):
+        """
+        The channel offset in MHz.
+        """
 
-    # convert to uint8
-    data_int = np.rint(scaled_data).astype(np.uint8)
+        foff = self.bandwidth / float(self.nchan)
 
-    print(np.min(data_int), np.mean(data_int), np.max(data_int))
+        return foff
 
-    return data_int
+    @property
+    def tsamp(self):
+        """
+        The sampling time in ms.
+        """
+
+        tsamp = np.diff(self.times)[0]
+
+        return tsamp
 
 
 #
@@ -87,92 +228,13 @@ def convert_to_integer(data, nbit=8):
 
 
 def main():
-    dm = 500.0
-    dm_index = -2.0
-    scatindex = -4.0
-    spectral_index = -1.5
-    fluence_1ghz = 10.0
-    # ms
-    toa_highest_freq = 100.0
-    taus_1ghz = 20.0
-    sigma = 2.5
-    dc = 0.0
-    # noise
-    sigma_noise = 0.1
+    pulse = Pulse(dm=500.0, sigma=2.5, taus_1ghz=20.0)
+    instrument = Instrument()
 
-    # ms
-    times = np.linspace(-4000.0, 4000.0, num=25 * 1024)
-    # mhz
-    fch1 = 1711.58203125
-    nchan = 1024
-    foff = -856.0 / float(nchan)
-    freqs = fch1 + np.arange(nchan) * foff
+    pulse.generate_data(instrument)
+    pulse.plot_data(pulse.data)
 
-    data = np.zeros(shape=(len(freqs), len(times)))
-
-    fig = plt.figure()
-    ax = fig.add_subplot()
-
-    rng = np.random.default_rng(seed=42)
-
-    for i, ifreq in enumerate(freqs):
-        cfreq = ifreq + 0.5 * foff
-        dm_shift = 1.0e3 * KDM * (ifreq**dm_index - freqs[0] ** dm_index) * dm
-        fluence = fluence_1ghz * (cfreq / 1000.0) ** spectral_index
-        center = toa_highest_freq + dm_shift
-        taus = taus_1ghz * (cfreq / 1000.0) ** scatindex
-        print(
-            "Cfreq, fluence, center, taus: {0:.2f} MHz, {1:.2f} a.u., {2:.2f} ms, {3:.2f} ms".format(
-                cfreq, fluence, center, taus
-            )
-        )
-        profile = pulsemodels.scattered_profile(times, fluence, center, sigma, taus, dc)
-
-        # add some gaussian radiometer noise
-        noise = rng.normal(loc=0.0, scale=sigma_noise, size=len(times))
-
-        data[i, :] = profile + noise
-
-        ax.plot(times, (len(freqs) - i) + profile, color="black", lw=0.5)
-
-    plot_data(data, times, freqs)
-
-    data = convert_to_integer(data)
-    print(data.shape)
-
-    plot_data(data, times, freqs)
-
-    time_step = np.diff(times)[0]
-    output_filename = "test_fake.fil"
-
-    sigproc_obj = make_sigproc_object(
-        rawdatafile=output_filename,
-        source_name="test",
-        nchans=nchan,
-        foff=foff,  # MHz
-        fch1=fch1,  # MHz
-        tsamp=time_step * 1e-3,  # seconds
-        tstart=60000.0,  # MJD
-        src_raj=112233.44,  # HHMMSS.SS
-        src_dej=112233.44,  # DDMMSS.SS
-        machine_id=0,
-        nbeams=0,
-        ibeam=0,
-        nbits=8,
-        nifs=1,
-        barycentric=0,
-        pulsarcentric=0,
-        telescope_id=6,
-        data_type=0,
-        az_start=-1,
-        za_start=-1,
-    )
-
-    sigproc_obj.write_header(output_filename)
-    sigproc_obj.append_spectra(data.T, output_filename)
-
-    your_obj = Your(output_filename)
-    print(your_obj.your_header)
+    pulse.write_to_sigproc_file("test_fake.fil")
 
     plt.show()
 
