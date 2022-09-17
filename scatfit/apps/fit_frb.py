@@ -6,6 +6,7 @@
 import argparse
 import copy
 import inspect
+import os.path
 import sys
 
 from astropy.time import Time, TimeDelta
@@ -586,6 +587,10 @@ def main():
         plotting.plot_profile_models()
         plt.show()
         sys.exit(0)
+
+    if not os.path.isfile(args.filename):
+        print("The file does not exist: {0}".format(args.filename))
+        sys.exit(1)
 
     cand = sigproc.load_frb_data(
         args.filename, args.dm, args.fscrunch_factor, args.tscrunch_factor
