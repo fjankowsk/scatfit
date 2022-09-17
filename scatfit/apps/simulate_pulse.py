@@ -1,3 +1,8 @@
+#
+#   Simulate scattered pulses.
+#   2022 Fabian Jankowski
+#
+
 import matplotlib.pyplot as plt
 import numpy as np
 from your import Your
