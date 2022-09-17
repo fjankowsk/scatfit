@@ -144,7 +144,8 @@ class Pulse(object):
 
     def write_to_sigproc_file(self, filename):
         # convert to integers
-        data_int = self.convert_to_integer(self.data)
+        nbit = self.instrument.nbit
+        data_int = self.convert_to_integer(self.data, nbit=nbit)
         print(data_int.shape)
         self.plot_data(data_int)
 
@@ -161,7 +162,7 @@ class Pulse(object):
             machine_id=0,
             nbeams=0,
             ibeam=0,
-            nbits=8,
+            nbits=nbit,
             nifs=1,
             barycentric=0,
             pulsarcentric=0,
@@ -190,6 +191,7 @@ class Instrument(object):
         self.fch1 = 1711.58203125
         self.bandwidth = -856.0
         self.nchan = 1024
+        self.nbit = 8
 
     @property
     def freqs(self):
