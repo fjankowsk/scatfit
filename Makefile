@@ -10,6 +10,7 @@ help:
 	@echo 'make black           reformat the code using black code formatter'
 	@echo 'make clean           remove temporary files'
 	@echo 'make install         install the module locally'
+	@echo 'make test            run the regression tests'
 
 black:
 	${BLK} *.py */*.py */*/*.py
@@ -26,4 +27,7 @@ clean:
 install:
 	${PIP} install .
 
-.PHONY: help black clean install
+test:
+	nose2
+
+.PHONY: help black clean install test

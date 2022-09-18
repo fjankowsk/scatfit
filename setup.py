@@ -49,6 +49,8 @@ setup(
             "scatfit-fitfrb = scatfit.apps.fit_frb:main",
         ],
     },
+    test_suite="nose2.collector.collector",
+    tests_require=["nose2"],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "License :: OSI Approved :: MIT License",
