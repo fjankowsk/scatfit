@@ -321,7 +321,10 @@ def pbf_isotropic(x, taus):
         The profile data.
     """
 
-    res = (1 / taus) * np.exp(-x / taus) * np.heaviside(x, 0.5)
+    res = np.zeros(len(x))
+
+    mask = x >= 0.0
+    res[mask] = (1 / taus) * np.exp(-x[mask] / taus)
 
     return res
 
