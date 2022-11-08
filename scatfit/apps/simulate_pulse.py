@@ -71,6 +71,11 @@ class Pulse(object):
 
             ax.plot(times, (len(freqs) - i) + profile, color="black", lw=0.5)
 
+        ax.set_xlabel("Time (ms)")
+        ax.set_ylabel("Offset")
+
+        fig.tight_layout()
+
         self.data = data
         self.times = times
         self.freqs = freqs
