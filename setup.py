@@ -43,10 +43,12 @@ setup(
         "pandas",
         "scipy",
         "tqdm",
+        "your",
     ],
     entry_points={
         "console_scripts": [
             "scatfit-fitfrb = scatfit.apps.fit_frb:main",
+            "scatfit-simpulse = scatfit.apps.simulate_pulse:main",
         ],
     },
     test_suite="nose2.collector.collector",
