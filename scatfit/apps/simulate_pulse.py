@@ -134,21 +134,36 @@ class Pulse(object):
         """
 
         # normalise the data before integer conversion
-        # we follow the psrfits method here
-        # data_value =  zero_offset + (real_value - data_offset) / data_scale
+        # we follow the psrfits convention here
+        # https://www.atnf.csiro.au/research/pulsar/psrfits_definition/PsrfitsDocumentation.html
+        # real_value = (data_value - zero_offset) * data_scale + data_offset
+        # => data_value = (real_value - data_offset) / data_scale + zero_offset
         zero_offset = 2 ** (nbit - 1) - 0.5
         data_offset = np.mean(data)
-        scale = np.max(data)
+        # add some extra dynamic range
+        data_scale = (np.max(data) - data_offset) / float(zero_offset - 0.5)
 
-        print(zero_offset, data_offset, scale)
-        scaled_data = zero_offset + zero_offset * (data - data_offset) / scale
+        print(
+            "Zero offset, data offset, data scale: {0}, {1}, {2}".format(
+                zero_offset, data_offset, data_scale
+            )
+        )
+        scaled_data = (data - data_offset) / data_scale + zero_offset
 
-        print(np.min(scaled_data), np.mean(scaled_data), np.max(scaled_data))
+        print(
+            "Scaled data: {0}, {1}, {2}".format(
+                np.min(scaled_data), np.mean(scaled_data), np.max(scaled_data)
+            )
+        )
 
         # convert to uint8
         data_int = np.rint(scaled_data).astype(np.uint8)
 
-        print(np.min(data_int), np.mean(data_int), np.max(data_int))
+        print(
+            "Integer data: {0}, {1}, {2}".format(
+                np.min(data_int), np.mean(data_int), np.max(data_int)
+            )
+        )
 
         return data_int
 
