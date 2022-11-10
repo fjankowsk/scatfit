@@ -8,7 +8,7 @@ from mtcutils import Candidate
 
 def load_frb_data(filename, dm, fscrunch, tscrunch):
     """
-    Load the FRB data from SIGPROC filterbank file.
+    Load the FRB data from a SIGPROC filterbank file.
 
     Parameters
     ----------
