@@ -112,21 +112,21 @@ def plot_profile_models():
 
     ax.plot(
         plot_range,
-        pulsemodels.scattered_profile(plot_range, 5.0, 0.0, 1.5, 2.5, 0.1),
+        pulsemodels.scattered_profile(plot_range, 5.0, 0.0, 1.5, 2.5, 0.0),
         lw=2,
         label="convolved",
     )
 
     ax.plot(
         plot_range,
-        pulsemodels.scattered_profile(plot_range, 5.0, 20.0, 1.5, 2.5, 0.1),
+        pulsemodels.scattered_profile(plot_range, 5.0, 20.0, 1.5, 2.5, 0.0),
         lw=2,
         label="convolved",
     )
 
     ax.plot(
         plot_range,
-        pulsemodels.scattered_gaussian_pulse(plot_range, 5.0, 0.0, 1.5, 2.5, 0.1),
+        pulsemodels.scattered_gaussian_pulse(plot_range, 5.0, 0.0, 1.5, 2.5, 0.0),
         lw=2,
         label="analytic",
     )
@@ -134,7 +134,7 @@ def plot_profile_models():
     ax.plot(
         plot_range,
         pulsemodels.gaussian_scattered_afb_instrumental(
-            plot_range, 5.0, 0.0, 1.5, 2.5, 0.306, 2.0, 0.1
+            plot_range, 5.0, 0.0, 1.5, 2.5, 0.306, 2.0, 0.0
         ),
         lw=2,
         label="afb",
@@ -143,7 +143,7 @@ def plot_profile_models():
     ax.plot(
         plot_range,
         pulsemodels.gaussian_scattered_dfb_instrumental(
-            plot_range, 5.0, 0.0, 1.5, 2.5, 4.0, 0.1
+            plot_range, 5.0, 0.0, 1.5, 2.5, 4.0, 0.0
         ),
         lw=2,
         label="dfb",
