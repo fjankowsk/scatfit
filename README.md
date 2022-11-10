@@ -57,4 +57,4 @@ optional arguments:
 
 Several profile scattering models, i.e. pulse broadening functions and instrumental contributions, are implemented and others can easily be added. The image below shows a selection of them.
 
-![Implemented profile scattering models](https://bitbucket.org/jankowsk/scatfit/raw/5c0365bcd887353ddc271212f685a8353f91c23e/docs/profile_models.png "Implemented profile scattering models")
+![Implemented profile scattering models](https://bitbucket.org/jankowsk/scatfit/raw/e46333daa69d7cf794664e6ee676de74e340e6ca/docs/profile_models.png "Implemented profile scattering models")
