@@ -45,19 +45,18 @@ class Pulse(object):
         rng = np.random.default_rng(seed=42)
 
         for i, ifreq in enumerate(freqs):
-            cfreq = ifreq + 0.5 * instrument.foff
             dm_shift = (
                 1.0e3
                 * KDM
                 * (ifreq**self.dm_index - freqs[0] ** self.dm_index)
                 * self.dm
             )
-            fluence = self.fluence_1ghz * (cfreq / 1000.0) ** self.spectral_index
+            fluence = self.fluence_1ghz * (ifreq / 1000.0) ** self.spectral_index
             center = self.toa_highest_freq + dm_shift
-            taus = self.taus_1ghz * (cfreq / 1000.0) ** self.scatindex
+            taus = self.taus_1ghz * (ifreq / 1000.0) ** self.scatindex
             print(
                 "Cfreq, fluence, center, taus: {0:.2f} MHz, {1:.2f} a.u., {2:.2f} ms, {3:.2f} ms".format(
-                    cfreq, fluence, center, taus
+                    ifreq, fluence, center, taus
                 )
             )
             profile = pulsemodels.scattered_profile(
@@ -105,8 +104,8 @@ class Pulse(object):
             extent=(
                 self.times[0] - 0.5 * time_step,
                 self.times[-1] + 0.5 * time_step,
-                self.freqs[-1] + freq_step,
-                self.freqs[0],
+                self.freqs[-1] + 0.5 * freq_step,
+                self.freqs[0] - 0.5 * freq_step,
             ),
         )
 
@@ -119,6 +118,8 @@ class Pulse(object):
         """
         Convert the float data to integers for storing in SIGPROC filterbank
         files or PSRFITS ones.
+
+        Note that SIGPROC does not implement scales and offset storage.
 
         Parameters
         ----------
@@ -176,10 +177,11 @@ class Pulse(object):
 
         sigproc_obj = make_sigproc_object(
             rawdatafile=filename,
-            source_name="fake",
-            nchans=self.instrument.nchan,
-            foff=self.instrument.foff,  # MHz
+            source_name="FAKE",
+            # this is the *centre* frequency of the first filterbank channel
             fch1=self.instrument.fch1,  # MHz
+            foff=self.instrument.foff,  # MHz
+            nchans=self.instrument.nchan,
             tsamp=self.instrument.tsamp * 1e-3,  # seconds
             tstart=60000.0,  # MJD
             src_raj=112233.44,  # HHMMSS.SS
@@ -214,7 +216,7 @@ class Instrument(object):
         self.tsamp = 0.30624
         self.time_range = 7000.0
         # mhz
-        self.fch1 = 1711.58203125
+        self.fch1 = 1711.58203125  # centre frequency of first channel
         self.bandwidth = -856.0
         self.nchan = 1024
         self.nbit = 8
@@ -222,7 +224,7 @@ class Instrument(object):
     @property
     def freqs(self):
         """
-        The values of the high-frequency channel edges in MHz.
+        The channel centre frequencies in MHz.
         """
 
         freqs = self.fch1 + np.arange(self.nchan) * self.foff
