@@ -14,9 +14,9 @@ The code is also listed in the Astrophysics Source Code Library (ASCL): https://
 
 ## Installation ##
 
-The easiest and recommended way to install the software is through `pip` directly from the bitbucket repository. For example, to install the master branch of the code, use the following command:
+The easiest and recommended way to install the software is through `pip` directly from its GitHub software repository. For example, to install the master branch of the code, use the following command:
 
-`pip3 install git+https://bitbucket.org/jankowsk/scatfit.git@master`
+`pip3 install git+https://github.com/fjankowsk/scatfit.git@master`
 
 This will automatically install all dependencies.
 
@@ -57,4 +57,4 @@ optional arguments:
 
 Several profile scattering models, i.e. pulse broadening functions and instrumental contributions, are implemented and others can easily be added. The image below shows a selection of them.
 
-![Implemented profile scattering models](https://bitbucket.org/jankowsk/scatfit/raw/e46333daa69d7cf794664e6ee676de74e340e6ca/docs/profile_models.png "Implemented profile scattering models")
+![Implemented profile scattering models](https://github.com/fjankowsk/scatfit/raw/master/docs/profile_models.png "Implemented profile scattering models")

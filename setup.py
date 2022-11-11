@@ -29,7 +29,7 @@ setup(
     description="Scattering fits of time domain radio signals (Fast Radio Bursts or pulsars).",
     long_description=get_long_description(),
     long_description_content_type="text/markdown",
-    url="https://bitbucket.org/jankowsk/scatfit",
+    url="https://github.com/fjankowsk/scatfit",
     license="MIT",
     packages=find_packages(),
     install_requires=[
