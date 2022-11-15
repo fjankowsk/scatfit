@@ -58,3 +58,13 @@ optional arguments:
 Several profile scattering models, i.e. pulse broadening functions and instrumental contributions, are implemented and others can easily be added. The image below shows a selection of them.
 
 ![Implemented profile scattering models](https://github.com/fjankowsk/scatfit/raw/master/docs/profile_models.png "Implemented profile scattering models")
+
+## Example output ##
+
+The images below show some example output from the program obtained when fitting simulated filterbank data.
+
+![Profile fit](https://github.com/fjankowsk/scatfit/raw/master/docs/profile_fit.png "Profile fit")
+
+![Width scaling](https://github.com/fjankowsk/scatfit/raw/master/docs/width_scaling.png "Width scaling")
+
+![Correlations](https://github.com/fjankowsk/scatfit/raw/master/docs/corner.png "Correlations")
