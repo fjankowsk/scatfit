@@ -245,7 +245,7 @@ def gaussian_fwtm(sigma):
         The Gaussian W10.
     """
 
-    res = 2.0 * np.sqrt(2.0 * np.log(10)) * sigma
+    res = 2.0 * np.sqrt(2.0 * np.log(10.0)) * sigma
 
     return res
 
@@ -268,7 +268,7 @@ def equivalent_width(x, amp):
     """
 
     mask = amp >= 0
-    fluxsum = np.sum(amp[mask]) * np.abs(np.diff(x))[0]
+    fluxsum = np.sum(amp[mask]) * np.abs(x[0] - x[1])
     weq = fluxsum / np.max(amp)
 
     return weq
@@ -299,7 +299,7 @@ def full_width_post(x, amp, level):
     if len(x[mask]) > 1:
         width = np.abs(np.max(x[mask]) - np.min(x[mask]))
     else:
-        width = np.diff(x)[0]
+        width = np.abs(x[0] - x[1])
 
     return width
 
