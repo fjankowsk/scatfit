@@ -9,7 +9,7 @@ import numpy as np
 
 
 def gaussian_normed(
-    x,
+    double[:] x,
     double fluence,
     double center,
     double sigma,
@@ -36,7 +36,7 @@ def gaussian_normed(
 
     cdef int i
     cdef int N = len(x)
-    res = np.zeros(N, dtype=np.float64)
+    res = np.zeros(N, dtype=np.double)
     cdef double[:] res_view = res
     cdef double A
 
@@ -49,7 +49,7 @@ def gaussian_normed(
 
 
 def scattered_gaussian_pulse(
-    x,
+    double[:] x,
     double fluence,
     double center,
     double sigma,
@@ -85,7 +85,7 @@ def scattered_gaussian_pulse(
     cdef int i
     cdef int N = len(x)
     cdef double A, B, C, D
-    res = np.zeros(N, dtype=np.float64)
+    res = np.zeros(N, dtype=np.double)
     cdef double[:] res_view = res
 
     if sigma / taus >= 10.0:
@@ -111,4 +111,4 @@ def scattered_gaussian_pulse(
 
             res_view[i] = dc + A * B * C * D
 
-    return res_view
+    return res
