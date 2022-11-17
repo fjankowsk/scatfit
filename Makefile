@@ -10,6 +10,7 @@ help:
 	@echo 'make black           reformat the code using black code formatter'
 	@echo 'make clean           remove temporary files'
 	@echo 'make install         install the module locally'
+	@echo 'make profile         profile the code'
 	@echo 'make test            run the regression tests'
 
 black:
@@ -27,7 +28,10 @@ clean:
 install:
 	${PIP} install .
 
+profile:
+	python3 -m cProfile -s tottime scatfit/apps/fit_frb.py extra/fake_burst_500_DM.fil 500.0 --smodel scattered_isotropic_bandintegrated --fscrunch 1024 --fast
+
 test:
 	nose2
 
-.PHONY: help black clean install test
+.PHONY: help black clean install profile test
