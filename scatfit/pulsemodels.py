@@ -412,22 +412,21 @@ def bandintegrated_model(x, fluence, center, sigma, taus, dc, f_lo, f_hi, nfreq)
     # use finer steps towards the low-frequency band edge
     cfreqs = np.geomspace(f_lo, f_hi, num=nfreq)
 
-    # print(cfreqs, band_cfreq)
+    taus_s = taus * np.power(cfreqs / band_cfreq, -4.0)
+    fluence_s = fluence * np.power(cfreqs / band_cfreq, -1.5)
 
     profiles = np.zeros(shape=(nfreq, len(x)))
 
-    for i, ifreq in enumerate(cfreqs):
-        taus_i = taus * (ifreq / band_cfreq) ** -4.0
-        fluence_i = fluence * (ifreq / band_cfreq) ** -1.5
+    for i in range(nfreq):
         profiles[i, :] = scattered_gaussian_pulse(
-            x, fluence_i, center, sigma, taus_i, 0.0
+            x, fluence_s[i], center, sigma, taus_s[i], 0.0
         )
 
     # sum, weighted by fluence above
     res = np.sum(profiles, axis=0)
 
     # normalise to match input fluence
-    tot_fluence = np.sum(res) * np.abs(np.diff(x))[0]
+    tot_fluence = np.sum(res) * np.abs(x[0] - x[1])
     res = dc + (fluence / tot_fluence) * res
 
     return res
