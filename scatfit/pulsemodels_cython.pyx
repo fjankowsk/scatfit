@@ -8,6 +8,8 @@ cimport libc.math as cmath
 import numpy as np
 
 
+@cython.boundscheck(False)
+@cython.wraparound(False)
 def gaussian_normed(
     double[:] x,
     double fluence,
@@ -48,6 +50,8 @@ def gaussian_normed(
     return res
 
 
+@cython.boundscheck(False)
+@cython.wraparound(False)
 def scattered_gaussian_pulse(
     double[:] x,
     double fluence,
@@ -85,12 +89,15 @@ def scattered_gaussian_pulse(
     cdef int i
     cdef int N = len(x)
     cdef double A, B, C, D
+    cdef double[:] gauss_tmp
     res = np.zeros(N, dtype=np.double)
     cdef double[:] res_view = res
 
     if sigma / taus >= 10.0:
+        gauss_tmp = gaussian_normed(x, fluence, center, sigma)
+
         for i in range(N):
-            res_view[i] = dc + gaussian_normed(x, fluence, center, sigma)[i]
+            res_view[i] = dc + gauss_tmp[i]
     else:
         A = 0.5 * (fluence / taus)
 
