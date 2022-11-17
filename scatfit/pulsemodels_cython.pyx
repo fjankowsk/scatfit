@@ -4,18 +4,16 @@
 #
 
 import cython
-import cython.cimports.libc.math as cmath
+cimport libc.math as cmath
 import numpy as np
 
 
-@cython.cfunc
-@cython.exceptval(check=True)
 def gaussian_normed(
-    x: cython.double[:],
-    fluence: cython.double,
-    center: cython.double,
-    sigma: cython.double,
-) -> cython.double[:]:
+    x,
+    double fluence,
+    double center,
+    double sigma,
+):
     """
     A normed Gaussian function.
 
@@ -36,11 +34,11 @@ def gaussian_normed(
         The profile data.
     """
 
-    i: cython.int
-    N: cython.int = len(x)
-    res = np.zeros(N, dtype=cython.double)
-    res_view: cython.double[:] = res
-    A: cython.double
+    cdef int i
+    cdef int N = len(x)
+    res = np.zeros(N, dtype=np.float64)
+    cdef double[:] res_view = res
+    cdef double A
 
     A = fluence / (sigma * cmath.sqrt(2.0 * cmath.M_PI))
 
@@ -50,16 +48,14 @@ def gaussian_normed(
     return res
 
 
-@cython.cfunc
-@cython.exceptval(check=True)
 def scattered_gaussian_pulse(
-    x: cython.double[:],
-    fluence: cython.double,
-    center: cython.double,
-    sigma: cython.double,
-    taus: cython.double,
-    dc: cython.double,
-) -> cython.double[:]:
+    x,
+    double fluence,
+    double center,
+    double sigma,
+    double taus,
+    double dc,
+):
     """
     A scattered Gaussian pulse. Analytical approach, assuming thin screen scattering.
 
@@ -86,14 +82,11 @@ def scattered_gaussian_pulse(
         The profile data.
     """
 
-    i: cython.int
-    N: cython.int = len(x)
-    A: cython.double
-    B: cython.double
-    C: cython.double
-    D: cython.double
-    res = np.zeros(N, dtype=cython.double)
-    res_view: cython.double[:] = res
+    cdef int i
+    cdef int N = len(x)
+    cdef double A, B, C, D
+    res = np.zeros(N, dtype=np.float64)
+    cdef double[:] res_view = res
 
     if sigma / taus >= 10.0:
         for i in range(N):
