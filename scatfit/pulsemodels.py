@@ -406,7 +406,11 @@ def bandintegrated_model(x, fluence, center, sigma, taus, dc, f_lo, f_hi, nfreq)
     """
 
     band_cfreq = 0.5 * (f_lo + f_hi)
-    cfreqs = np.linspace(f_lo, f_hi, num=nfreq)
+
+    # the low-frequency profiles dominate the total band-integrated
+    # profile because of the strong fluence power law scaling
+    # use finer steps towards the low-frequency band edge
+    cfreqs = np.geomspace(f_lo, f_hi, num=nfreq)
 
     # print(cfreqs, band_cfreq)
 
@@ -419,12 +423,11 @@ def bandintegrated_model(x, fluence, center, sigma, taus, dc, f_lo, f_hi, nfreq)
             x, fluence_i, center, sigma, taus_i, 0.0
         )
 
-    res = dc + np.sum(profiles, axis=0)
+    # sum, weighted by fluence above
+    res = np.sum(profiles, axis=0)
 
     # normalise to match input fluence
     tot_fluence = np.sum(res) * np.abs(np.diff(x))[0]
-    res = fluence * res / tot_fluence
-
-    # print(np.sum(res) * np.abs(np.diff(x))[0])
+    res = dc + (fluence / tot_fluence) * res
 
     return res
