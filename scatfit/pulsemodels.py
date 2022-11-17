@@ -361,3 +361,70 @@ def scattered_profile(x, fluence, center, sigma, taus, dc):
     scattered = dc + signal.oaconvolve(A, B, mode="same") / np.sum(B)
 
     return scattered
+
+
+def bandintegrated_model(x, fluence, center, sigma, taus, dc, f_lo, f_hi, nfreq):
+    """
+    A true frequency band-integrated profile model.
+
+    The total (sub-)band-integrated profile is the superposition (weighted sum or
+    weighted mean) of several profiles that evolve with frequency across the bandwidth
+    of the frequency (sub-)band, one for each frequency channel. Namely, the individual
+    profiles evolve with frequency (scattering, pulse width, fluence). For large
+    fractional bandwidths or at low frequencies (< 1 GHz), the profile evolution across
+    the band cannot be neglected, i.e. the narrow-band approximation fails.
+
+    We compute the frequency evolution across the band between `f_lo` and `f_hi` at
+    `nfreq` centre frequencies. The total profile is then the weighted sum over the
+    finite frequency grid. Ideally, one would use an infinitesimally narrow grid here.
+
+    Parameters
+    ----------
+    x: ~np.array
+        The running variable (time).
+    fluence: float
+        The fluence of the pulse, i.e. the area under it.
+    center: float
+        The mean of the Gaussian, i.e. its location.
+    sigma: float
+        The Gaussian standard deviation.
+    taus: float
+        The scattering time.
+    dc: float
+        The vertical offset of the profile from the baseline.
+    f_lo: float
+        The centre frequency of the lowest channel in the sub-band.
+    f_hi: float
+        The centre frequency of the highest channel in the sub-band.
+    nfreq: int
+        The number of centre frequencies to evaluate.
+
+    Returns
+    -------
+    res: ~np.array
+        The profile data.
+    """
+
+    band_cfreq = 0.5 * (f_lo + f_hi)
+    cfreqs = np.linspace(f_lo, f_hi, num=nfreq)
+
+    # print(cfreqs, band_cfreq)
+
+    profiles = np.zeros(shape=(nfreq, len(x)))
+
+    for i, ifreq in enumerate(cfreqs):
+        taus_i = taus * (ifreq / band_cfreq) ** -4.0
+        fluence_i = fluence * (ifreq / band_cfreq) ** -1.5
+        profiles[i, :] = scattered_gaussian_pulse(
+            x, fluence_i, center, sigma, taus_i, 0.0
+        )
+
+    res = dc + np.sum(profiles, axis=0)
+
+    # normalise to match input fluence
+    tot_fluence = np.sum(res) * np.abs(np.diff(x))[0]
+    res = fluence * res / tot_fluence
+
+    # print(np.sum(res) * np.abs(np.diff(x))[0])
+
+    return res

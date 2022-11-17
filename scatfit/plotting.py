@@ -133,6 +133,15 @@ def plot_profile_models():
 
     ax.plot(
         plot_range,
+        pulsemodels.bandintegrated_model(
+            plot_range, 5.0, 10.0, 1.5, 2.5, 0.0, 856.0, 1712.0, 21
+        ),
+        lw=2,
+        label="bandintegrated",
+    )
+
+    ax.plot(
+        plot_range,
         pulsemodels.gaussian_scattered_afb_instrumental(
             plot_range, 5.0, 0.0, 1.5, 2.5, 0.306, 2.0, 0.0
         ),

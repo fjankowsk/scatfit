@@ -104,6 +104,7 @@ def parse_args():
             "unscattered",
             "scattered_isotropic",
             "scattered_isotropic_convolving",
+            "scattered_isotropic_bandintegrated",
             "scattered_isotropic_afb_instrumental",
             "scattered_isotropic_dfb_instrumental",
         ],
@@ -315,7 +316,7 @@ def compute_updated_dm(t_df, dm, params):
     )
 
 
-def fit_profile_model(fit_range, profile, dm_smear, smodel, params):
+def fit_profile_model(fit_range, profile, smodel, params):
     """
     Fit a profile model to data.
     """
@@ -326,6 +327,8 @@ def fit_profile_model(fit_range, profile, dm_smear, smodel, params):
         scat_model = pulsemodels.scattered_gaussian_pulse
     elif smodel == "scattered_isotropic_convolving":
         scat_model = pulsemodels.scattered_profile
+    elif smodel == "scattered_isotropic_bandintegrated":
+        scat_model = pulsemodels.bandintegrated_model
     elif smodel == "scattered_isotropic_afb_instrumental":
         scat_model = pulsemodels.gaussian_scattered_afb_instrumental
     elif smodel == "scattered_isotropic_dfb_instrumental":
@@ -350,10 +353,19 @@ def fit_profile_model(fit_range, profile, dm_smear, smodel, params):
         model.set_param_hint("taui", value=0.30624, vary=False)
 
     if "taud" in arg_list:
-        model.set_param_hint("taud", value=dm_smear, vary=False)
+        model.set_param_hint("taud", value=params["dm_smear"], vary=False)
 
     if "dc" in arg_list:
         model.set_param_hint("dc", value=0.0, min=-0.3, max=0.3)
+
+    if "f_lo" in arg_list:
+        model.set_param_hint("f_lo", value=params["f_lo"], vary=False)
+
+    if "f_hi" in arg_list:
+        model.set_param_hint("f_hi", value=params["f_hi"], vary=False)
+
+    if "nfreq" in arg_list:
+        model.set_param_hint("nfreq", value=9, vary=False)
 
     fitparams = model.make_params()
 
@@ -515,12 +527,17 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
             )
         )
 
-        fitresult = fit_profile_model(fit_range, sub_profile, dm_smear, smodel, params)
+        params["f_lo"] = f_lo
+        params["f_hi"] = f_hi
+        params["cfreq"] = cfreq
+        params["dm_smear"] = dm_smear
+
+        fitresult = fit_profile_model(fit_range, sub_profile, smodel, params)
 
         # fit an unscattered model for comparison
         if params["compare"]:
             fitresult2 = fit_profile_model(
-                fit_range, sub_profile, dm_smear, "unscattered", params
+                fit_range, sub_profile, "unscattered", params
             )
         else:
             fitresult2 = None
