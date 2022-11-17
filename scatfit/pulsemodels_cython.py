@@ -45,7 +45,7 @@ def gaussian_normed(
     A = fluence / (sigma * cmath.sqrt(2.0 * cmath.M_PI))
 
     for i in range(N):
-        res_view[i] = A * cmath.exp(-0.5 * cmath.power((x[i] - center) / sigma, 2))
+        res_view[i] = A * cmath.exp(-0.5 * cmath.pow((x[i] - center) / sigma, 2))
 
     return res
 
@@ -96,15 +96,16 @@ def scattered_gaussian_pulse(
     res_view: cython.double[:] = res
 
     if sigma / taus >= 10.0:
-        res_view = dc + gaussian_normed(x, fluence, center, sigma)
+        for i in range(N):
+            res_view[i] = dc + gaussian_normed(x, fluence, center, sigma)[i]
     else:
         A = 0.5 * (fluence / taus)
 
-        B = cmath.exp(0.5 * cmath.power(sigma / taus, 2))
+        B = cmath.exp(0.5 * cmath.pow(sigma / taus, 2))
 
         for i in range(N):
             C = 1 + cmath.erf(
-                (x[i] - (center + cmath.power(sigma, 2) / taus))
+                (x[i] - (center + cmath.pow(sigma, 2) / taus))
                 / (sigma * cmath.sqrt(2.0))
             )
 
