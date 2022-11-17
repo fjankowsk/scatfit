@@ -144,7 +144,7 @@ def parse_args():
         type=float,
         nargs=2,
         metavar=("start", "end"),
-        default=None,
+        default=[-50.0, 50.0],
         help="Zoom into this time region.",
     )
 

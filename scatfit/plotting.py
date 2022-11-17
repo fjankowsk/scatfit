@@ -262,10 +262,7 @@ def plot_profile_fit(
     ax2.set_ylabel("Residual")
 
     # zoom in
-    if params["zoom"] is not None:
-        ax2.set_xlim(left=params["zoom"][0], right=params["zoom"][1])
-    else:
-        ax2.set_xlim(left=-50.0, right=50.0)
+    ax2.set_xlim(left=params["zoom"][0], right=params["zoom"][1])
 
     # align the labels of the subplots horizontally and vertically
     fig.align_labels()
