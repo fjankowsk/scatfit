@@ -365,7 +365,10 @@ def fit_profile_model(fit_range, profile, smodel, params):
         model.set_param_hint("f_hi", value=params["f_hi"], vary=False)
 
     if "nfreq" in arg_list:
-        model.set_param_hint("nfreq", value=9, vary=False)
+        if params["fast"]:
+            model.set_param_hint("nfreq", value=3, vary=False)
+        else:
+            model.set_param_hint("nfreq", value=9, vary=False)
 
     fitparams = model.make_params()
 
