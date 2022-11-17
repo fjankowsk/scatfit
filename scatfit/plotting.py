@@ -438,6 +438,9 @@ def plot_chains(fitresult_emcee):
 
     axs[nvary - 1].set_xlabel("Step Number")
 
+    # align the labels of the subplots vertically
+    fig.align_ylabels()
+
     fig.tight_layout()
 
 
