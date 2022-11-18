@@ -63,7 +63,8 @@ def scattered_gaussian_pulse(
     """
     A scattered Gaussian pulse. Analytical approach, assuming thin screen scattering.
 
-    This implements Equation 4 from McKinnon 2014.
+    We use a standard implementation of an exponentially modified gaussian here, see
+    https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.exponnorm.html
 
     Parameters
     ----------
@@ -88,36 +89,45 @@ def scattered_gaussian_pulse(
 
     cdef int i
     cdef int N = len(x)
-    cdef double A, B, C, arg_D, D, E, F
-    cdef double[:] gauss_tmp
+
+    # treat the following special cases
+    # 1) invK >> 1, i.e. sigma >> taus
+    # -> function becomes a regular gaussian
+
+    cdef double invsigma = 1.0 / sigma
+    cdef double K = taus * invsigma
+    cdef double invK = 1.0 / K
+
     res = np.zeros(N, dtype=np.double)
     cdef double[:] res_view = res
 
-    if sigma / taus >= 10.0:
-        gauss_tmp = gaussian_normed(x, fluence, center, sigma)
+    if invK >= 10.0:
+        cdef double[:] gauss = gaussian_normed(x, fluence, center, sigma)
 
         for i in range(N):
-            res_view[i] = dc + gauss_tmp[i]
+            res_view[i] = dc + gauss[i]
     else:
-        A = 0.5 * (fluence / taus)
-
-        B = cmath.exp(0.5 * cmath.pow(sigma / taus, 2))
-
-        E = center + cmath.pow(sigma, 2) / taus
-
-        F = sigma * cmath.sqrt(2.0)
+        cdef double y
+        cdef double argexp
+        cdef double exgaussian
 
         for i in range(N):
-            C = 1.0 + cmath.erf((x[i] - E) / F)
+            y = (x[i] - center) * invsigma
+            argexp = 0.5 * cmath.pow(invK, 2) - y * invK
 
-            arg_D = -(x[i] - center) / taus
+            # prevent numerical overflows
+            if argexp >= 300.0:
+                argexp = 0.0
 
-            if C == 0:
-                arg_D = 0.0
+            exgaussian = (
+                0.5
+                * invK
+                * invsigma
+                * cmath.exp(argexp)
+                * cmath.erfc(-(y - invK) / cmath.sqrt(2.0))
+            )
 
-            D = cmath.exp(arg_D)
-
-            res_view[i] = dc + A * B * C * D
+            res_view[i] = dc + fluence * exgaussian
 
     return res
 
