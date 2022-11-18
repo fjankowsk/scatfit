@@ -88,7 +88,7 @@ def scattered_gaussian_pulse(
 
     cdef int i
     cdef int N = len(x)
-    cdef double A, B, C, D
+    cdef double A, B, C, arg_D, D
     cdef double[:] gauss_tmp
     res = np.zeros(N, dtype=np.double)
     cdef double[:] res_view = res
