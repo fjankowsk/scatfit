@@ -38,11 +38,11 @@ def test_agreement_python_and_cython_models_scattered_pulse():
     python_model = pm_python.scattered_gaussian_pulse
     cython_model = pm_cython.scattered_gaussian_pulse
 
-    for fluence in np.geomspace(0.1, 1000.0, num=10):
-        for center in np.linspace(-100.0, 100.0, num=10):
-            for sigma in np.geomspace(2.0, 50.0, num=10):
-                for taus in np.geomspace(1.0, 50.0, num=10):
-                    for dc in np.linspace(-0.5, 0.5, num=10):
+    for fluence in np.geomspace(0.1, 1000.0, num=5):
+        for center in np.linspace(-100.0, 100.0, num=5):
+            for sigma in np.geomspace(2.0, 50.0, num=5):
+                for taus in np.geomspace(1.0, 50.0, num=5):
+                    for dc in np.linspace(-0.5, 0.5, num=3):
                         curve_python = python_model(
                             plot_range, fluence, center, sigma, taus, dc
                         )
@@ -51,17 +51,6 @@ def test_agreement_python_and_cython_models_scattered_pulse():
                         )
 
                         # ensure that curves differ little
-                        residual = np.abs(curve_python - curve_cython)
-                        print(
-                            fluence,
-                            center,
-                            sigma,
-                            taus,
-                            dc,
-                            np.min(residual),
-                            np.median(residual),
-                            np.max(residual),
-                        )
                         assert np.allclose(curve_python, curve_cython)
 
 
@@ -79,13 +68,13 @@ def test_agreement_python_and_cython_models_bandintegrated():
 
     f_lo = 856.0
     f_hi = 1712.0
-    nfreq = 21
+    nfreq = 9
 
-    for fluence in np.geomspace(0.1, 1000.0, num=10):
-        for center in np.linspace(-100.0, 100.0, num=10):
-            for sigma in np.geomspace(2.0, 50.0, num=10):
-                for taus in np.geomspace(1.0, 50.0, num=10):
-                    for dc in np.linspace(-0.5, 0.5, num=10):
+    for fluence in np.geomspace(0.1, 1000.0, num=5):
+        for center in np.linspace(-100.0, 100.0, num=5):
+            for sigma in np.geomspace(2.0, 50.0, num=5):
+                for taus in np.geomspace(1.0, 50.0, num=5):
+                    for dc in np.linspace(-0.5, 0.5, num=3):
                         curve_python = python_model(
                             plot_range,
                             fluence,
@@ -110,17 +99,6 @@ def test_agreement_python_and_cython_models_bandintegrated():
                         )
 
                         # ensure that curves differ little
-                        residual = np.abs(curve_python - curve_cython)
-                        print(
-                            fluence,
-                            center,
-                            sigma,
-                            taus,
-                            dc,
-                            np.min(residual),
-                            np.median(residual),
-                            np.max(residual),
-                        )
                         assert np.allclose(curve_python, curve_cython)
 
 
