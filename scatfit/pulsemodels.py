@@ -64,20 +64,27 @@ def scattered_gaussian_pulse(x, fluence, center, sigma, taus, dc):
         The profile data.
     """
 
+    # treat the following special cases
+    # 1) invK >> 1, i.e. sigma >> taus
+    # -> function becomes a regular gaussian
+
     invsigma = 1.0 / sigma
     K = taus * invsigma
     invK = 1.0 / K
     y = (x - center) * invsigma
 
-    exgaussian = (
-        0.5
-        * invK
-        * invsigma
-        * np.exp(0.5 * invK**2 - y * invK)
-        * special.erfc(-(y - invK) / np.sqrt(2.0))
-    )
+    if invK >= 10.0:
+        res = dc + gaussian_normed(x, fluence, center, sigma)
+    else:
+        exgaussian = (
+            0.5
+            * invK
+            * invsigma
+            * np.exp(0.5 * invK**2 - y * invK)
+            * special.erfc(-(y - invK) / np.sqrt(2.0))
+        )
 
-    res = dc + fluence * exgaussian
+        res = dc + fluence * exgaussian
 
     return res
 
