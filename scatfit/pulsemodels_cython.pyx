@@ -101,16 +101,18 @@ def scattered_gaussian_pulse(
     res = np.zeros(N, dtype=np.double)
     cdef double[:] res_view = res
 
+    cdef double[:] gauss
+
+    cdef double y
+    cdef double argexp
+    cdef double exgaussian
+
     if invK >= 10.0:
-        cdef double[:] gauss = gaussian_normed(x, fluence, center, sigma)
+        gauss = gaussian_normed(x, fluence, center, sigma)
 
         for i in range(N):
             res_view[i] = dc + gauss[i]
     else:
-        cdef double y
-        cdef double argexp
-        cdef double exgaussian
-
         for i in range(N):
             y = (x[i] - center) * invsigma
             argexp = 0.5 * cmath.pow(invK, 2) - y * invK
