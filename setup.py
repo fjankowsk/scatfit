@@ -1,5 +1,5 @@
 import os.path
-from setuptools import find_packages, setup
+from setuptools import Extension, find_packages, setup
 
 
 def get_version():
@@ -51,6 +51,15 @@ setup(
             "scatfit-simpulse = scatfit.apps.simulate_pulse:main",
         ],
     },
+    extras_require={
+        "develop": ["black", "Cython", "nose2"],
+    },
+    ext_modules=[
+        Extension(
+            name="scatfit.pulsemodels_cython",
+            sources=["scatfit/pulsemodels_cython.pyx"],
+        ),
+    ],
     test_suite="nose2.collector.collector",
     tests_require=["nose2"],
     classifiers=[
@@ -60,5 +69,5 @@ setup(
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
     ],
-    zip_safe=True,
+    zip_safe=False,
 )
