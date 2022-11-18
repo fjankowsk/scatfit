@@ -52,7 +52,11 @@ setup(
         ],
     },
     extras_require={
-        "develop": ["black", "Cython", "nose2"],
+        "develop": [
+            "black",
+            "Cython @ git+https://github.com/cython/cython.git@3.0.0a11",
+            "nose2",
+        ],
     },
     ext_modules=[
         Extension(
