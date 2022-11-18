@@ -77,11 +77,17 @@ def scattered_gaussian_pulse(x, fluence, center, sigma, taus, dc):
     if invK >= 10.0:
         res = dc + gaussian_normed(x, fluence, center, sigma)
     else:
+        argexp = 0.5 * invK**2 - y * invK
+
+        # prevent numerical overflows
+        mask = argexp >= 300.0
+        argexp[mask] = 0.0
+
         exgaussian = (
             0.5
             * invK
             * invsigma
-            * np.exp(0.5 * invK**2 - y * invK)
+            * np.exp(argexp)
             * special.erfc(-(y - invK) / np.sqrt(2.0))
         )
 
