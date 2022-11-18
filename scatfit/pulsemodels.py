@@ -71,7 +71,7 @@ def scattered_gaussian_pulse(x, fluence, center, sigma, taus, dc):
 
         B = np.exp(0.5 * np.power(sigma / taus, 2))
 
-        C = 1 + special.erf(
+        C = 1.0 + special.erf(
             (x - (center + np.power(sigma, 2) / taus)) / (sigma * np.sqrt(2.0))
         )
 

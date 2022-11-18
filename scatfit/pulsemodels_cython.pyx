@@ -88,7 +88,7 @@ def scattered_gaussian_pulse(
 
     cdef int i
     cdef int N = len(x)
-    cdef double A, B, C, arg_D, D
+    cdef double A, B, C, arg_D, D, E, F
     cdef double[:] gauss_tmp
     res = np.zeros(N, dtype=np.double)
     cdef double[:] res_view = res
@@ -103,11 +103,12 @@ def scattered_gaussian_pulse(
 
         B = cmath.exp(0.5 * cmath.pow(sigma / taus, 2))
 
+        E = center + cmath.pow(sigma, 2) / taus
+
+        F = sigma * cmath.sqrt(2.0)
+
         for i in range(N):
-            C = 1 + cmath.erf(
-                (x[i] - (center + cmath.pow(sigma, 2) / taus))
-                / (sigma * cmath.sqrt(2.0))
-            )
+            C = 1.0 + cmath.erf((x[i] - E) / F)
 
             arg_D = -(x[i] - center) / taus
 
