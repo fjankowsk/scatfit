@@ -41,7 +41,8 @@ def scattered_gaussian_pulse(x, fluence, center, sigma, taus, dc):
     """
     A scattered Gaussian pulse. Analytical approach, assuming thin screen scattering.
 
-    This implements Equation 4 from McKinnon 2014.
+    We use a standard implementation of an exponentially modified gaussian here, see
+    https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.exponnorm.html
 
     Parameters
     ----------
