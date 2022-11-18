@@ -64,18 +64,20 @@ def scattered_gaussian_pulse(x, fluence, center, sigma, taus, dc):
         The profile data.
     """
 
-    if sigma / taus >= 10.0:
+    invtaus = 1.0 / taus
+
+    if sigma * invtaus >= 10.0:
         res = dc + gaussian_normed(x, fluence, center, sigma)
     else:
-        A = 0.5 * (fluence / taus)
+        A = 0.5 * fluence * invtaus
 
-        B = np.exp(0.5 * np.power(sigma / taus, 2))
+        B = np.exp(0.5 * np.power(sigma * invtaus, 2))
 
         C = 1.0 + special.erf(
-            (x - (center + np.power(sigma, 2) / taus)) / (sigma * np.sqrt(2.0))
+            (x - (center + np.power(sigma, 2) * invtaus)) / (sigma * np.sqrt(2.0))
         )
 
-        arg_D = -(x - center) / taus
+        arg_D = -(x - center) * invtaus
 
         mask = C == 0
         arg_D[mask] = 0.0
@@ -323,8 +325,10 @@ def pbf_isotropic(x, taus):
 
     res = np.zeros(len(x))
 
+    invtaus = 1.0 / taus
+
     mask = x >= 0.0
-    res[mask] = (1 / taus) * np.exp(-x[mask] / taus)
+    res[mask] = invtaus * np.exp(-x[mask] * invtaus)
 
     return res
 
