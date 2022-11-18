@@ -48,7 +48,7 @@ def test_compare_models():
     Compare the models visually.
     """
 
-    plot_range = np.linspace(-400.0, 400.0, num=10000)
+    plot_range = np.linspace(-200.0, 200.0, num=20000)
 
     fluence = 10.0
     center = 0.0
@@ -60,7 +60,7 @@ def test_compare_models():
     # enable interactive mode
     plt.ion()
 
-    for sigma in np.geomspace(0.25, 50.0, num=10):
+    for sigma in np.geomspace(0.1, 50.0, num=10):
         for taus in np.geomspace(0.1, 50.0, num=10):
             print("Sigma, tau: {0:.2f}, {1:.2f}".format(sigma, taus))
 
