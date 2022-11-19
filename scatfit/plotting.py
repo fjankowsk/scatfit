@@ -98,7 +98,7 @@ def plot_profile_models():
     Plot and compare the profile scattering models.
     """
 
-    plot_range = np.linspace(-200.0, 200.0, num=2000)
+    plot_range = np.linspace(-200.0, 200.0, num=4000)
 
     fig = plt.figure()
     ax = fig.add_subplot(111)
