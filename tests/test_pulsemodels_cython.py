@@ -1,6 +1,6 @@
 import numpy as np
 
-import scatfit.pulsemodels as pm_python
+import scatfit.pulsemodels_python as pm_python
 import scatfit.pulsemodels_cython as pm_cython
 
 
