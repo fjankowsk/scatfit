@@ -38,14 +38,16 @@ def gaussian_normed(
 
     cdef int i
     cdef int N = len(x)
+
+    cdef double invsigma = 1.0 / sigma
+    cdef double invsqrt = 1.0 / cmath.sqrt(2.0 * cmath.M_PI)
+    cdef double A = fluence * invsigma * invsqrt
+
     res = np.zeros(N, dtype=np.double)
     cdef double[:] res_view = res
-    cdef double A
-
-    A = fluence / (sigma * cmath.sqrt(2.0 * cmath.M_PI))
 
     for i in range(N):
-        res_view[i] = A * cmath.exp(-0.5 * cmath.pow((x[i] - center) / sigma, 2))
+        res_view[i] = A * cmath.exp(-0.5 * cmath.pow((x[i] - center) * invsigma, 2))
 
     return res
 
@@ -63,7 +65,7 @@ def scattered_gaussian_pulse(
     """
     A scattered Gaussian pulse. Analytical approach, assuming thin screen scattering.
 
-    We use a standard implementation of an exponentially modified gaussian here, see
+    We use a standard implementation of an exponentially modified Gaussian here, see
     https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.exponnorm.html
 
     Parameters
@@ -101,6 +103,7 @@ def scattered_gaussian_pulse(
     res = np.zeros(N, dtype=np.double)
     cdef double[:] res_view = res
 
+    cdef double mu_gauss
     cdef double[:] gauss
 
     cdef double y
@@ -108,7 +111,8 @@ def scattered_gaussian_pulse(
     cdef double exgaussian
 
     if invK >= 10.0:
-        gauss = gaussian_normed(x, fluence, center, sigma)
+        mu_gauss = center + taus
+        gauss = gaussian_normed(x, fluence, mu_gauss, sigma)
 
         for i in range(N):
             res_view[i] = dc + gauss[i]
