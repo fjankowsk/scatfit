@@ -60,8 +60,8 @@ def test_agreement_analytical_and_full_convolution_model():
     full_model = pulsemodels.scattered_profile
     analytical_model = pulsemodels.scattered_gaussian_pulse
 
-    for fluence in np.geomspace(0.1, 1000.0, num=10):
-        for center in np.linspace(-100.0, 100.0, num=10):
+    for fluence in np.geomspace(0.1, 1000.0, num=5):
+        for center in np.linspace(-100.0, 100.0, num=5):
             for sigma in np.geomspace(2.0, 50.0, num=10):
                 for taus in np.geomspace(1.0, 50.0, num=10):
                     curve_full = full_model(
@@ -76,13 +76,15 @@ def test_agreement_analytical_and_full_convolution_model():
                     fluence_analytical = np.trapz(curve_analytical, x=plot_range)
 
                     rel_error = np.abs(fluence_analytical - fluence_full) / fluence_full
-                    # print(fluence_full, fluence_analytical, rel_error)
                     assert rel_error < 0.01
 
                     # ensure that curves differ little
-                    residual = curve_analytical - curve_full
-                    # print(np.max(residual))
-                    assert np.allclose(curve_analytical, curve_full)
+                    rel_residual = np.abs(curve_analytical - curve_full) / np.max(
+                        curve_full
+                    )
+                    assert np.median(rel_residual) < 1e-8
+                    assert np.mean(rel_residual) < 0.01
+                    assert np.all(rel_residual < 0.07)
 
 
 if __name__ == "__main__":
