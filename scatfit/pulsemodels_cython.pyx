@@ -200,14 +200,16 @@ def bandintegrated_model(
     # the low-frequency profiles dominate the total band-integrated
     # profile because of the strong fluence power law scaling
     # use finer steps towards the low-frequency band edge
-    cdef double[:] cfreqs = np.geomspace(f_lo, f_hi, num=nfreq)
+    cdef double delta = cmath.log10(f_hi) - cmath.log10(f_lo)
+    cdef double step = cmath.pow(10.0, delta / (nfreq - 1.0))
 
     profile = np.zeros(N, dtype=np.double)
     cdef double[:] profile_view = profile
 
     for i in range(nfreq):
-        taus_i = taus * cmath.pow(cfreqs[i] / band_cfreq, -4.0)
-        fluence_i = fluence * cmath.pow(cfreqs[i] / band_cfreq, -1.5)
+        cfreq_i = f_lo * cmath.pow(step, i)
+        taus_i = taus * cmath.pow(cfreq_i / band_cfreq, -4.0)
+        fluence_i = fluence * cmath.pow(cfreq_i / band_cfreq, -1.5)
 
         scatpulse_tmp = scattered_gaussian_pulse(x, fluence_i, center, sigma, taus_i, 0.0)
 
