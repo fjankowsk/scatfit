@@ -347,7 +347,7 @@ def fit_profile_model(fit_range, profile, smodel, params):
     arg_list = list(inspect.signature(scat_model).parameters.keys())
 
     if "taus" in arg_list:
-        model.set_param_hint("taus", value=1.5, min=0.0001)
+        model.set_param_hint("taus", value=1.5, min=0.1)
 
     if "taui" in arg_list:
         model.set_param_hint("taui", value=0.30624, vary=False)
