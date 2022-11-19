@@ -28,15 +28,18 @@ def plot_comparison(plot_range, curve1, curve2):
     ax1.tick_params(bottom=False)
 
     # residuals
-    residual = curve1 - curve2
+    rel_residual = (curve1 - curve2) / np.max(curve1)
 
-    ax2.step(plot_range, residual, where="mid", zorder=4)
+    ax2.step(plot_range, rel_residual, where="mid", zorder=4)
 
     ax2.grid()
     ax2.set_xlabel("Time (ms)")
-    ax2.set_ylabel("Residual")
+    ax2.set_ylabel("Relative residual")
 
     ax2.set_xlim(-5.0, 8.0)
+
+    # align the labels of the subplots vertically
+    fig.align_ylabels()
 
     fig.tight_layout()
 
@@ -48,7 +51,10 @@ def test_compare_models():
     Compare the models visually.
     """
 
-    plot_range = np.linspace(-200.0, 200.0, num=20000)
+    plot_range = np.arange(40000) * 0.025
+    plot_range -= plot_range[20000]
+
+    assert plot_range[20000] == 0
 
     fluence = 10.0
     center = 0.0
