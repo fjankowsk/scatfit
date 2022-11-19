@@ -75,7 +75,8 @@ def scattered_gaussian_pulse(x, fluence, center, sigma, taus, dc):
     y = (x - center) * invsigma
 
     if invK >= 10.0:
-        res = dc + gaussian_normed(x, fluence, center, sigma)
+        mu_gauss = center + taus
+        res = dc + gaussian_normed(x, fluence, mu_gauss, sigma)
     else:
         argexp = 0.5 * invK**2 - y * invK
 
@@ -313,22 +314,47 @@ def full_width_post(x, amp, level):
     return width
 
 
-def pbf_isotropic(x, taus):
+def pbf_isotropic(plot_range, taus):
     """
     A pulse broadening function for isotropic scattering.
 
     Parameters
     ----------
-    x: ~np.array
-        The running variable (time).
+    plot_range: ~np.array
+        The evaluation variable (time) in ms.
     taus: float
-        The scattering time.
+        The scattering time in ms.
 
     Returns
     -------
     res: ~np.array
         The profile data.
+
+    Raises
+    ------
+    RuntimeError
+        If the window array is too short to fit the vast
+        majority of the exponential sweep, i.e. taus is
+        too large for the given time span.
     """
+
+    N = len(plot_range)
+    tsamp = np.abs(plot_range[0] - plot_range[1])
+
+    x = np.arange(N) * tsamp
+    x -= x[N // 2]
+
+    assert x[N // 2] == 0
+
+    # ensure that we capture the vast majority of the sweep
+    # make the window array long enough
+    # exp(-t0 / taus) !<= 0.001
+    t0 = -taus * np.log(0.001)
+
+    if np.max(x) < t0:
+        raise RuntimeError(
+            "The window array is too short: {0}, {1}".format(np.max(x), t0)
+        )
 
     res = np.zeros(len(x))
 
