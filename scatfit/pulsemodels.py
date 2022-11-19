@@ -28,10 +28,14 @@ def gaussian_normed(x, fluence, center, sigma):
         The profile data.
     """
 
+    invsigma = 1.0 / sigma
+    invsqrt = 1.0 / np.sqrt(2.0 * np.pi)
+
     res = (
         fluence
-        / (sigma * np.sqrt(2.0 * np.pi))
-        * np.exp(-0.5 * np.power((x - center) / sigma, 2))
+        * invsigma
+        * invsqrt
+        * np.exp(-0.5 * np.power((x - center) * invsigma, 2))
     )
 
     return res
@@ -41,7 +45,7 @@ def scattered_gaussian_pulse(x, fluence, center, sigma, taus, dc):
     """
     A scattered Gaussian pulse. Analytical approach, assuming thin screen scattering.
 
-    We use a standard implementation of an exponentially modified gaussian here, see
+    We use a standard implementation of an exponentially modified Gaussian here, see
     https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.exponnorm.html
 
     Parameters
