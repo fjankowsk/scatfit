@@ -30,13 +30,9 @@ def gaussian_normed(x, fluence, center, sigma):
 
     invsigma = 1.0 / sigma
     invsqrt = 1.0 / np.sqrt(2.0 * np.pi)
+    A = fluence * invsigma * invsqrt
 
-    res = (
-        fluence
-        * invsigma
-        * invsqrt
-        * np.exp(-0.5 * np.power((x - center) * invsigma, 2))
-    )
+    res = A * np.exp(-0.5 * np.power((x - center) * invsigma, 2))
 
     return res
 
