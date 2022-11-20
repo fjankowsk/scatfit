@@ -25,7 +25,7 @@ This will automatically install all dependencies.
 ```
 $ scatfit-fitfrb -h
 usage: scatfit-fitfrb [-h] [--compare] [--binburst bin] [--fscrunch factor] [--tscrunch factor] [--fast] [--fitscatindex]
-                      [--smodel {unscattered,scattered_isotropic,scattered_isotropic_convolving,scattered_isotropic_bandintegrated,scattered_isotropic_afb_instrumental,scattered_isotropic_dfb_instrumental}]
+                      [--smodel {unscattered,scattered_isotropic_analytic,scattered_isotropic_convolving,scattered_isotropic_bandintegrated,scattered_isotropic_afb_instrumental,scattered_isotropic_dfb_instrumental}]
                       [--showmodels] [--snr snr] [--publish] [-z start end]
                       filename dm
 
@@ -43,8 +43,8 @@ options:
   --tscrunch factor     Integrate this many time samples. (default: 1)
   --fast                Enable fast processing. This reduces the number of MCMC steps drastically. (default: False)
   --fitscatindex        Fit the scattering times and determine the scattering index. (default: False)
-  --smodel {unscattered,scattered_isotropic,scattered_isotropic_convolving,scattered_isotropic_bandintegrated,scattered_isotropic_afb_instrumental,scattered_isotropic_dfb_instrumental}
-                        Use the specified scattering model. (default: scattered_isotropic_convolving)
+  --smodel {unscattered,scattered_isotropic_analytic,scattered_isotropic_convolving,scattered_isotropic_bandintegrated,scattered_isotropic_afb_instrumental,scattered_isotropic_dfb_instrumental}
+                        Use the specified scattering model. (default: scattered_isotropic_analytic)
   --showmodels          Show comparison plot of scattering models. (default: False)
   --snr snr             Only consider sub-bands above this S/N threshold. (default: 3.8)
   --publish             Output plots suitable for publication. (default: False)
