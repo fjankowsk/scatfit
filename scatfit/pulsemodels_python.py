@@ -143,8 +143,8 @@ def bandintegrated_model(x, fluence, center, sigma, taus, dc, f_lo, f_hi, nfreq)
     # use finer steps towards the low-frequency band edge
     cfreqs = np.geomspace(f_lo, f_hi, num=nfreq)
 
-    taus_s = taus * np.power(cfreqs / band_cfreq, -4.0)
     fluence_s = fluence * np.power(cfreqs / band_cfreq, -1.5)
+    taus_s = taus * np.power(cfreqs / band_cfreq, -4.0)
 
     profiles = np.zeros(shape=(nfreq, len(x)))
 
