@@ -3,7 +3,7 @@
 #   2022 Fabian Jankowski
 #
 
-import cython
+cimport cython
 cimport libc.math as cmath
 import numpy as np
 
@@ -37,7 +37,7 @@ def gaussian_normed(
     """
 
     cdef int i
-    cdef int N = len(x)
+    cdef int N = x.shape[0]
 
     cdef double invsigma = 1.0 / sigma
     cdef double invsqrt = 1.0 / cmath.sqrt(2.0 * cmath.M_PI)
@@ -90,7 +90,7 @@ def scattered_gaussian_pulse(
     """
 
     cdef int i
-    cdef int N = len(x)
+    cdef int N = x.shape[0]
 
     # treat the following special cases
     # 1) invK >> 1, i.e. sigma >> taus
@@ -99,6 +99,7 @@ def scattered_gaussian_pulse(
     cdef double invsigma = 1.0 / sigma
     cdef double K = taus * invsigma
     cdef double invK = 1.0 / K
+    cdef double invsqrt = 1.0 / cmath.sqrt(2.0)
 
     res = np.zeros(N, dtype=np.double)
     cdef double[:] res_view = res
@@ -130,7 +131,7 @@ def scattered_gaussian_pulse(
                 * invK
                 * invsigma
                 * cmath.exp(argexp)
-                * cmath.erfc(-(y - invK) / cmath.sqrt(2.0))
+                * cmath.erfc(-(y - invK) * invsqrt)
             )
 
             res_view[i] = dc + fluence * exgaussian
@@ -192,9 +193,14 @@ def bandintegrated_model(
         The profile data.
     """
 
-    cdef double band_cfreq = 0.5 * (f_lo + f_hi)
     cdef int i
-    cdef int N = len(x)
+    cdef int N = x.shape[0]
+
+    cdef double band_cfreq = 0.5 * (f_lo + f_hi)
+    cdef double invband_cfreq = 1.0 / band_cfreq
+    cdef double cfreq_i
+    cdef double taus_i
+    cdef double fluence_i
     cdef double[:] scatpulse_tmp
 
     # the low-frequency profiles dominate the total band-integrated
@@ -208,8 +214,8 @@ def bandintegrated_model(
 
     for i in range(nfreq):
         cfreq_i = f_lo * cmath.pow(step, i)
-        taus_i = taus * cmath.pow(cfreq_i / band_cfreq, -4.0)
-        fluence_i = fluence * cmath.pow(cfreq_i / band_cfreq, -1.5)
+        fluence_i = fluence * cmath.pow(cfreq_i * invband_cfreq, -1.5)
+        taus_i = taus * cmath.pow(cfreq_i * invband_cfreq, -4.0)
 
         scatpulse_tmp = scattered_gaussian_pulse(x, fluence_i, center, sigma, taus_i, 0.0)
 
@@ -223,8 +229,9 @@ def bandintegrated_model(
         tot_fluence = tot_fluence + profile_view[j]
 
     tot_fluence = tot_fluence * cmath.fabs(x[0] - x[1])
+    cdef double A = fluence / tot_fluence
 
     for j in range(N):
-        profile_view[j] = dc + (fluence / tot_fluence) * profile_view[j]
+        profile_view[j] = dc + A * profile_view[j]
 
     return profile
