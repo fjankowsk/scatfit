@@ -70,10 +70,10 @@ The images below show some example output from the program obtained when fitting
 
 ## FAQ ##
 
-* What scattering model should I use?
+### What scattering model should I use? ###
 
 The answer depends on the data set at hand. However, the following advice is generally accurate. For frequency (sub-)bands of small fractional bandwidth or at high frequencies, i.e. where the narrow bandwidth approximation roughly holds, it is OK to use the default `scattered_isotropic_analytic` model. At low frequencies (< 1 GHz) or for wide (sub-)bands, use the much more complex and, therefore, slower `scattered_isotropic_bandintegrated` model.
 
-* Why do I get the following warning: `Could not import Cython pulse model implementations. Falling back to the Python versions.`?
+### Why do I get the following warning: `Could not import Cython pulse model implementations. Falling back to the Python versions.`? ###
 
 This could happen if you run `scatfit` from its software repository git checkout, where the current working directory takes import preference. Install the software as above and run it as `$ scatfit-fitfrb` in a different path.
