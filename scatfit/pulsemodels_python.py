@@ -73,6 +73,7 @@ def scattered_gaussian_pulse(x, fluence, center, sigma, taus, dc):
     K = taus * invsigma
     invK = 1.0 / K
     y = (x - center) * invsigma
+    invsqrt = 1.0 / np.sqrt(2.0)
 
     if invK >= 10.0:
         mu_gauss = center + taus
@@ -85,11 +86,7 @@ def scattered_gaussian_pulse(x, fluence, center, sigma, taus, dc):
         argexp[mask] = 0.0
 
         exgaussian = (
-            0.5
-            * invK
-            * invsigma
-            * np.exp(argexp)
-            * special.erfc(-(y - invK) / np.sqrt(2.0))
+            0.5 * invK * invsigma * np.exp(argexp) * special.erfc(-(y - invK) * invsqrt)
         )
 
         res = dc + fluence * exgaussian
