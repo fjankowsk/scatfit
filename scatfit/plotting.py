@@ -98,7 +98,7 @@ def plot_profile_models():
     Plot and compare the profile scattering models.
     """
 
-    plot_range = np.linspace(-200.0, 200.0, num=4000)
+    plot_range = np.linspace(-200.0, 200.0, num=8000)
 
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -108,20 +108,7 @@ def plot_profile_models():
         pulsemodels.gaussian_normed(plot_range, 5.0, 10.0, 1.5),
         lw=2,
         label="unscattered",
-    )
-
-    ax.plot(
-        plot_range,
-        pulsemodels.scattered_profile(plot_range, 5.0, 0.0, 1.5, 2.5, 0.0),
-        lw=2,
-        label="convolved",
-    )
-
-    ax.plot(
-        plot_range,
-        pulsemodels.scattered_profile(plot_range, 5.0, 20.0, 1.5, 2.5, 0.0),
-        lw=2,
-        label="convolved",
+        zorder=4,
     )
 
     ax.plot(
@@ -129,6 +116,23 @@ def plot_profile_models():
         pulsemodels.scattered_gaussian_pulse(plot_range, 5.0, 0.0, 1.5, 2.5, 0.0),
         lw=2,
         label="analytic",
+        zorder=5,
+    )
+
+    ax.plot(
+        plot_range,
+        pulsemodels.scattered_profile(plot_range, 5.0, 0.0, 1.5, 2.5, 0.0),
+        lw=2,
+        label="convolving",
+        zorder=4,
+    )
+
+    ax.plot(
+        plot_range,
+        pulsemodels.scattered_profile(plot_range, 5.0, 20.0, 1.5, 2.5, 0.0),
+        lw=2,
+        label="convolving",
+        zorder=4,
     )
 
     ax.plot(
@@ -138,6 +142,7 @@ def plot_profile_models():
         ),
         lw=2,
         label="bandintegrated",
+        zorder=5,
     )
 
     ax.plot(
@@ -147,6 +152,7 @@ def plot_profile_models():
         ),
         lw=2,
         label="afb",
+        zorder=4,
     )
 
     ax.plot(
@@ -156,6 +162,7 @@ def plot_profile_models():
         ),
         lw=2,
         label="dfb",
+        zorder=4,
     )
 
     ax.grid()

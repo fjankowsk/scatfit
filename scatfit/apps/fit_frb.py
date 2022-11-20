@@ -102,13 +102,13 @@ def parse_args():
         dest="smodel",
         choices=[
             "unscattered",
-            "scattered_isotropic",
+            "scattered_isotropic_analytic",
             "scattered_isotropic_convolving",
             "scattered_isotropic_bandintegrated",
             "scattered_isotropic_afb_instrumental",
             "scattered_isotropic_dfb_instrumental",
         ],
-        default="scattered_isotropic_convolving",
+        default="scattered_isotropic_analytic",
         help="Use the specified scattering model.",
     )
 
@@ -323,7 +323,7 @@ def fit_profile_model(fit_range, profile, smodel, params):
 
     if smodel == "unscattered":
         scat_model = pulsemodels.gaussian_normed
-    elif smodel == "scattered_isotropic":
+    elif smodel == "scattered_isotropic_analytic":
         scat_model = pulsemodels.scattered_gaussian_pulse
     elif smodel == "scattered_isotropic_convolving":
         scat_model = pulsemodels.scattered_profile
