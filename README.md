@@ -77,3 +77,7 @@ The answer depends on the data set at hand. However, the following advice is gen
 ### Why do I get the following warning: `Could not import Cython pulse model implementations. Falling back to the Python versions.`? ###
 
 This could happen if you run `scatfit` from its software repository git checkout, where the current working directory takes import preference. Install the software as above and run it as `$ scatfit-fitfrb` in a different path.
+
+### What data formats are supported? ###
+
+`scatfit` supports loading data from `SIGPROC` filterbank files. Alternative loaders can be implemented relatively easily.
