@@ -224,6 +224,12 @@ def fit_powerlaw(x, y, err_y, params):
 
     plotting.plot_corner(fitresult_emcee, "", False, params)
 
+    print(
+        "Scattering index: {0:.2f} +- {1:.2f}".format(
+            fitresult_emcee.best_values["slope"], fitresult_emcee.params["slope"].stderr
+        )
+    )
+
     # estimate scattering time at 1 ghz from the mcmc samples
     samples = fitresult_emcee.flatchain
 
@@ -247,6 +253,9 @@ def fit_powerlaw(x, y, err_y, params):
             tau_1ghz["value"], tau_1ghz["error"]
         )
     )
+
+    # store the computed values in the result object
+    fitresult_emcee.tau_1ghz = tau_1ghz
 
     return fitresult_emcee
 
