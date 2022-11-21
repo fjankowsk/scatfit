@@ -62,12 +62,10 @@ def plot_frb(cand, plot_range, profile):
     freqs = cand.freqs
     chan_bw = np.diff(freqs)[0]
 
-    print(cand.dynspec.shape)
     quantiles = np.quantile(
         cand.dynspec,
         q=[0.05, 0.1, 0.25, 0.3, 0.4, 0.5, 0.75, 0.8, 0.95, 0.97, 0.98, 0.99],
     )
-    print(quantiles)
 
     ax2.imshow(
         cand.dynspec,
