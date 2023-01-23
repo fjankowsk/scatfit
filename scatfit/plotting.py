@@ -495,6 +495,7 @@ def plot_corner(fitresult_emcee, smodel, output, params):
     fontsize_before = matplotlib.rcParams["font.size"]
     labelpad = 0.125
     max_n_ticks = 5
+    plot_datapoints = True
     show_titles = True
     var_names = fitresult_emcee.var_names
 
@@ -502,9 +503,10 @@ def plot_corner(fitresult_emcee, smodel, output, params):
         bins = 40
 
     if params["publish"]:
+        labelpad = 0.475
         max_n_ticks = 3
         matplotlib.rcParams["font.size"] = 34.0
-        labelpad = 0.475
+        plot_datapoints = False
         show_titles = False
 
         mapping = {
@@ -527,6 +529,7 @@ def plot_corner(fitresult_emcee, smodel, output, params):
         labelpad=labelpad,
         max_n_ticks=max_n_ticks,
         truths=max_likelihood_values,
+        plot_datapoints=plot_datapoints,
         quantiles=[0.16, 0.5, 0.84],
         show_titles=show_titles,
         title_kwargs={"fontsize": 10},
