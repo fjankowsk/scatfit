@@ -497,6 +497,7 @@ def plot_corner(fitresult_emcee, smodel, output, params):
     max_n_ticks = 5
     plot_datapoints = True
     show_titles = True
+    smooth = False
     var_names = fitresult_emcee.var_names
 
     if not params["fast"]:
@@ -508,6 +509,7 @@ def plot_corner(fitresult_emcee, smodel, output, params):
         matplotlib.rcParams["font.size"] = 34.0
         plot_datapoints = False
         show_titles = False
+        smooth = True
 
         mapping = {
             "fluence": "$F$",
@@ -532,6 +534,7 @@ def plot_corner(fitresult_emcee, smodel, output, params):
         plot_datapoints=plot_datapoints,
         quantiles=[0.16, 0.5, 0.84],
         show_titles=show_titles,
+        smooth=smooth,
         title_kwargs={"fontsize": 10},
     )
 
