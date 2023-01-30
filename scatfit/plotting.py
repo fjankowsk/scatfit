@@ -493,6 +493,7 @@ def plot_corner(fitresult_emcee, smodel, output, params):
     # defaults
     bins = 20
     fontsize_before = matplotlib.rcParams["font.size"]
+    hist_kwargs = None
     labelpad = 0.125
     max_n_ticks = 5
     plot_datapoints = True
@@ -504,6 +505,7 @@ def plot_corner(fitresult_emcee, smodel, output, params):
         bins = 40
 
     if params["publish"]:
+        hist_kwargs = {"lw": 2.0}
         labelpad = 0.475
         max_n_ticks = 3
         matplotlib.rcParams["font.size"] = 34.0
@@ -527,6 +529,7 @@ def plot_corner(fitresult_emcee, smodel, output, params):
     fig = corner.corner(
         samples,
         bins=bins,
+        hist_kwargs=hist_kwargs,
         labels=var_names,
         labelpad=labelpad,
         max_n_ticks=max_n_ticks,
