@@ -507,7 +507,7 @@ def plot_corner(fitresult_emcee, smodel, output, params):
     if params["publish"]:
         hist_kwargs = {"lw": 2.0}
         labelpad = 0.475
-        max_n_ticks = 3
+        max_n_ticks = 2
         matplotlib.rcParams["font.size"] = 34.0
         plot_datapoints = False
         show_titles = False
