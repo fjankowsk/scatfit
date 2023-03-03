@@ -20,11 +20,11 @@ The easiest and recommended way to install the software is through `pip` directl
 
 This will automatically install all dependencies.
 
-You might want to verify that your installation works as expected by downloading a pre-generated `SIGPROC` filterbank file with synthetic data that comes bundled with `scatfit`:
+You might want to verify that your installation works as expected by downloading a pre-generated `SIGPROC` filterbank file with synthetic data that comes bundled with this repository:
 
 `wget https://github.com/fjankowsk/scatfit/raw/master/extra/fake_burst_500_DM.fil`
 
-Then run the main `scatfit` analysis on the filterbank data file like this:
+Then run the main analysis on the filterbank data file like this:
 
 `scatfit-fitfrb fake_burst_500_DM.fil 500.0 --fitscatindex --fast`
 
