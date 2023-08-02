@@ -25,7 +25,7 @@ setup(
     name="scatfit",
     version=get_version(),
     author="Fabian Jankowski",
-    author_email="fjankowsk at gmail.com",
+    author_email="fjankowsk@gmail.com",
     description="Scattering fits of time domain radio signals (Fast Radio Bursts or pulsars).",
     long_description=get_long_description(),
     long_description_content_type="text/markdown",
@@ -38,12 +38,16 @@ setup(
         "emcee",
         "lmfit",
         "matplotlib",
-        "mtcutils @ git+https://bitbucket.org/vmorello/mtcutils.git@master",
+        "mtcutils",
         "numpy",
         "pandas",
         "scipy",
         "tqdm",
         "your",
+    ],
+    dependency_links=[
+        "git+https://bitbucket.org/vmorello/mtcutils.git@master",
+        "git+https://github.com/cython/cython.git@3.0.0a11",
     ],
     entry_points={
         "console_scripts": [
@@ -54,7 +58,7 @@ setup(
     extras_require={
         "develop": [
             "black",
-            "Cython @ git+https://github.com/cython/cython.git@3.0.0a11",
+            "Cython",
             "nose2",
         ],
     },
