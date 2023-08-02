@@ -99,3 +99,7 @@ This could happen if you run `scatfit` from its software repository git checkout
 ### What data formats are supported? ###
 
 `scatfit` supports loading data from `SIGPROC` filterbank files. Alternative loaders can be implemented relatively easily.
+
+### Does it work on ARM-based Macs? ###
+
+Yes, `scatfit` works on ARM-based Macs with M1 or M2 processors. In fact, it runs blazing fast on them! The immense single-core performance results in a speedup of > 3x in comparison with similar x64-based systems, in my experience.
