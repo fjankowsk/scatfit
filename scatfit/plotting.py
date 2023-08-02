@@ -84,7 +84,12 @@ def plot_frb(cand, plot_range, profile, params):
         cmap="Greys",
         vmin=quantiles[0],
         vmax=quantiles[-4],
+        zorder=3,
     )
+
+    # highlight the data included in the fit
+    ax2.axvline(x=-1.0 * params["fitrange"], color="tab:red", zorder=4)
+    ax2.axvline(x=params["fitrange"], color="tab:red", zorder=4)
 
     ax2.set_ylabel("Frequency\n(MHz)")
     ax2.tick_params(bottom=False)
