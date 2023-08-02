@@ -220,6 +220,8 @@ class Instrument(object):
         self.bandwidth = -856.0
         self.nchan = 1024
         self.nbit = 8
+        # coherent dedispersion
+        self.coherent = False
 
     @property
     def freqs(self):
@@ -261,6 +263,46 @@ class Instrument(object):
         return len(self.times)
 
 
+class MeerKAT_Lband(Instrument):
+    def __init__(self):
+        """
+        MeerKAT L-band 1024 channel data.
+        """
+
+        super().__init__()
+
+        # ms
+        self.tsamp = 0.30624
+        self.time_range = 7000.0
+        # mhz
+        self.fch1 = 1711.58203125  # centre frequency of first channel
+        self.bandwidth = -856.0
+        self.nchan = 1024
+        self.nbit = 8
+        # coherent dedispersion
+        self.coherent = False
+
+
+class NenuFAR(Instrument):
+    def __init__(self):
+        """
+        NenuFAR central band 192 channel data.
+        """
+
+        super().__init__()
+
+        # ms
+        self.tsamp = 0.65536
+        self.time_range = 600000.0
+        # mhz
+        self.fch1 = 73.73046875  # centre frequency of first channel
+        self.bandwidth = -37.5
+        self.nchan = 192
+        self.nbit = 8
+        # coherent dedispersion
+        self.coherent = True
+
+
 #
 # MAIN
 #
@@ -268,12 +310,20 @@ class Instrument(object):
 
 def main():
     pulse = Pulse(dm=500.0, sigma=2.5, taus_1ghz=20.0)
-    instrument = Instrument()
+    instrument = MeerKAT_Lband()
 
     pulse.generate_data(instrument)
     pulse.plot_data(pulse.data)
 
-    pulse.write_to_sigproc_file("test_fake.fil")
+    pulse.write_to_sigproc_file("test_fake_meerkat.fil")
+
+    pulse = Pulse(dm=100.0, sigma=2.5, taus_1ghz=0.01)
+    instrument = NenuFAR()
+
+    pulse.generate_data(instrument)
+    pulse.plot_data(pulse.data)
+
+    pulse.write_to_sigproc_file("test_fake_nenufar.fil")
 
     plt.show()
 
