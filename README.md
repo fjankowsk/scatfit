@@ -6,9 +6,13 @@ This repository contains code to fit Fast Radio Burst or pulsar profiles to meas
 
 The software is primarily developed and maintained by Fabian Jankowski. For more information feel free to contact me via: fabian.jankowski at cnrs-orleans.fr.
 
+## Paper ##
+
+The corresponding paper (Jankowski et al. 2023, MNRAS) is available via this [NASA ADS link](https://ui.adsabs.harvard.edu/abs/2023MNRAS.524.4275J/abstract).
+
 ## Citation ##
 
-If you make use of the software, please add a link to this repository and cite our upcoming paper. See the CITATION file.
+If you make use of the software, please add a link to this repository and cite our corresponding paper. See above and the CITATION and CITATION.bib files.
 
 The code is also listed in the Astrophysics Source Code Library (ASCL): https://ascl.net/code/v/3366
 
@@ -18,7 +22,7 @@ The easiest and recommended way to install the software is through `pip` from th
 
 `pip3 install scatfit`
 
-This will install the latest release and all its dependencies. If you need a more recent version of the software, install it directly from its GitHub software repository. For example, to install the master branch of the code, use the following command:
+This will install the latest release and all its dependencies. If you need a more recent version of the software, install it directly from its GitHub software repository. For instance, to install the master branch of the code, use the following command:
 
 `pip3 install git+https://github.com/fjankowsk/scatfit.git@master`
 
