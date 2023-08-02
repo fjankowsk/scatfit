@@ -33,7 +33,7 @@ def use_custom_matplotlib_formatting():
     matplotlib.rcParams["ytick.minor.width"] = 1.5
 
 
-def plot_frb(cand, plot_range, profile):
+def plot_frb(cand, plot_range, profile, params):
     """
     Plot the FRB data.
     """
@@ -54,6 +54,10 @@ def plot_frb(cand, plot_range, profile):
         lw=1.0,
         zorder=3,
     )
+
+    # highlight the data included in the fit
+    ax1.axvline(x=-1.0 * params["fitrange"], color="tab:red", zorder=4)
+    ax1.axvline(x=params["fitrange"], color="tab:red", zorder=4)
 
     ax1.set_ylabel("Flux\n(a.u.)")
     ax1.tick_params(bottom=False)

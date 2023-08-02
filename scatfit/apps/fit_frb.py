@@ -90,6 +90,15 @@ def parse_args():
     )
 
     parser.add_argument(
+        "--fitrange",
+        dest="fitrange",
+        default=200.0,
+        metavar="value",
+        type=float,
+        help="Consider only the central +- 'value' milliseconds of data around the burst's peak in the fit. Increase this value for wide or highly-scattered bursts.",
+    )
+
+    parser.add_argument(
         "--fitscatindex",
         action="store_true",
         dest="fit_scatindex",
@@ -502,8 +511,9 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
 
         sub_profile = cand.dynspec[iband, :]
 
-        # select only the central +- 200 ms around the frb for the fit
-        mask = np.abs(plot_range) <= 200.0
+        # select only the central +- 'fitrange' milliseconds
+        # of data around the frb's peak for the fit
+        mask = np.abs(plot_range) <= params["fitrange"]
         fit_range = np.copy(plot_range[mask])
         sub_profile = sub_profile[mask]
 
@@ -643,6 +653,7 @@ def main():
     params = {
         "compare": args.compare,
         "fast": args.fast,
+        "fitrange": args.fitrange,
         "publish": args.publish,
         "snr": args.snr,
         "zoom": args.zoom,
@@ -684,7 +695,7 @@ def main():
 
     plotting.plot_width_scaling(fit_df, cand, fitresult)
 
-    plotting.plot_frb(cand, plot_range, profile)
+    plotting.plot_frb(cand, plot_range, profile, params)
 
     plt.show()
 
