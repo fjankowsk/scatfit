@@ -81,10 +81,14 @@ class Pulse(object):
 
         # oversample the pulse
         freqs = np.linspace(
-            instrument.freqs[0], instrument.freqs[-1], num=osfact * len(instrument.freqs)
+            instrument.freqs[0],
+            instrument.freqs[-1],
+            num=osfact * len(instrument.freqs),
         )
         times = np.linspace(
-            instrument.times[0], instrument.times[-1], num=osfact * len(instrument.times)
+            instrument.times[0],
+            instrument.times[-1],
+            num=osfact * len(instrument.times),
         )
         data_high = np.zeros(shape=(len(freqs), len(times)), dtype=np.float32)
 
@@ -118,14 +122,14 @@ class Pulse(object):
         times = np.copy(instrument.times)
         data_low = np.zeros(shape=(len(freqs), len(times)), dtype=np.float32)
 
-        assert data_high.shape[0] % fact == 0
-        assert data_high.shape[1] % fact == 0
+        assert data_high.shape[0] % osfact == 0
+        assert data_high.shape[1] % osfact == 0
 
         # this is incoherent dedispersion only
         # we need to straigthen the signal in each frequency channel for
         # coherent dedispersion
         data_low = block_reduce(
-            data_high, block_size=(fact, fact), func=np.mean, cval=0.0
+            data_high, block_size=(osfact, osfact), func=np.mean, cval=0.0
         )
 
         # free memory
