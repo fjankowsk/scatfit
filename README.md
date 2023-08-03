@@ -48,7 +48,8 @@ You should see several diagnostic windows open. The terminal output should show 
 
 ```
 $ scatfit-fitfrb -h
-usage: scatfit-fitfrb [-h] [--compare] [--binburst bin] [--fscrunch factor] [--tscrunch factor] [--fast] [--fitscatindex]
+usage: scatfit-fitfrb [-h] [--compare] [--binburst bin] [--fscrunch factor] [--tscrunch factor] [--fast]
+                      [--fitrange value] [--fitscatindex]
                       [--smodel {unscattered,scattered_isotropic_analytic,scattered_isotropic_convolving,scattered_isotropic_bandintegrated,scattered_isotropic_afb_instrumental,scattered_isotropic_dfb_instrumental}]
                       [--showmodels] [--snr snr] [--publish] [-z start end]
                       filename dm
@@ -66,6 +67,8 @@ options:
   --fscrunch factor     Integrate this many frequency channels. (default: 256)
   --tscrunch factor     Integrate this many time samples. (default: 1)
   --fast                Enable fast processing. This reduces the number of MCMC steps drastically. (default: False)
+  --fitrange value      Consider only the central +- 'value' milliseconds of data around the burst's peak in the fit.
+                        Increase this value for wide or highly-scattered bursts. (default: 200.0)
   --fitscatindex        Fit the scattering times and determine the scattering index. (default: False)
   --smodel {unscattered,scattered_isotropic_analytic,scattered_isotropic_convolving,scattered_isotropic_bandintegrated,scattered_isotropic_afb_instrumental,scattered_isotropic_dfb_instrumental}
                         Use the specified scattering model. (default: scattered_isotropic_analytic)
@@ -74,6 +77,16 @@ options:
   --publish             Output plots suitable for publication. (default: False)
   -z start end, --zoom start end
                         Zoom into this time region. (default: [-50.0, 50.0])
+```
+
+```
+$ scatfit-simpulse -h
+usage: scatfit-simpulse [-h]
+
+Simulate scattered pulses.
+
+options:
+  -h, --help  show this help message and exit
 ```
 
 ## Profile scattering models ##
