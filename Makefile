@@ -13,7 +13,8 @@ help:
 	@echo 'make clean           remove temporary files'
 	@echo 'make install         install the module locally'
 	@echo 'make profile         profile the code'
-	@echo 'make test            run the regression tests'
+	@echo 'make test            run the non-interactive regression tests'
+	@echo 'make testall         run all regression tests'
 	@echo 'make uninstall       uninstall the package'
 	@echo 'make upload          upload the distribution to PyPI'
 	@echo 'make uploadtest      upload the distribution to TestPyPI'
@@ -32,6 +33,7 @@ clean:
 	rm -rf ${BASEDIR}/build
 	rm -rf ${BASEDIR}/dist
 	rm -rf ${BASEDIR}/scatfit.egg-info
+	rm -rf ${BASEDIR}/tests/__pycache__
 
 install:
 	${MAKE} clean
@@ -43,7 +45,10 @@ profile:
 	python3 -m cProfile -s tottime scatfit/apps/fit_frb.py extra/fake_burst_500_DM.fil 500.0 --smodel scattered_isotropic_bandintegrated --fscrunch 1024 --fast
 
 test:
-	nose2
+	pytest --verbose -m 'not interactive'
+
+testall:
+	pytest --verbose -s
 
 uninstall:
 	${PIP} uninstall scatfit
@@ -58,4 +63,4 @@ uploadtest:
 	${MAKE} build
 	python3 -m twine upload --repository testpypi dist/*
 
-.PHONY: help black build clean install profile test uninstall upload uploadtest
+.PHONY: help black build clean install profile test testall uninstall upload uploadtest

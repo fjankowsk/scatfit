@@ -88,6 +88,6 @@ def test_agreement_analytical_and_full_convolution_model():
 
 
 if __name__ == "__main__":
-    import nose2
+    import pytest
 
-    nose2.main()
+    pytest.main([__file__])

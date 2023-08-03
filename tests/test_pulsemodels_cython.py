@@ -103,6 +103,6 @@ def test_agreement_python_and_cython_models_bandintegrated():
 
 
 if __name__ == "__main__":
-    import nose2
+    import pytest
 
-    nose2.main()
+    pytest.main([__file__])

@@ -1,5 +1,6 @@
-import numpy as np
+import pytest
 
+import numpy as np
 import matplotlib.pyplot as plt
 
 import scatfit.pulsemodels as pulsemodels
@@ -46,6 +47,7 @@ def plot_comparison(plot_range, curve1, curve2):
     return fig
 
 
+@pytest.mark.interactive
 def test_compare_models():
     """
     Compare the models visually.

@@ -56,7 +56,7 @@ setup(
         ],
     },
     extras_require={
-        "develop": ["black", "Cython", "nose2", "twine"],
+        "develop": ["black", "Cython", "pytest", "twine"],
     },
     ext_modules=[
         Extension(
@@ -64,8 +64,6 @@ setup(
             sources=["scatfit/pulsemodels_cython.pyx"],
         ),
     ],
-    test_suite="nose2.collector.collector",
-    tests_require=["nose2"],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "License :: OSI Approved :: MIT License",
