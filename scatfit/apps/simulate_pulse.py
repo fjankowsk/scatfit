@@ -53,7 +53,7 @@ class Pulse(object):
         # noise
         self.sigma_noise = 0.1
 
-    def generate_data(self, instrument, osfact=8):
+    def generate_data(self, instrument, osfact=32):
         """
         Generate data of a scattered Gaussian pulse in a dynamic
         spectrum.
@@ -380,7 +380,7 @@ def main():
     pulse = Pulse(dm=500.0, sigma=2.5, taus_1ghz=20.0)
     instrument = MeerKAT_Lband()
 
-    pulse.generate_data(instrument, osfact=32)
+    pulse.generate_data(instrument, osfact=64)
     pulse.plot_data(pulse.data)
 
     pulse.write_to_sigproc_file("test_fake_meerkat.fil")
