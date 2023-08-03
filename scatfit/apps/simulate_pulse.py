@@ -126,11 +126,20 @@ class Pulse(object):
         assert data_high.shape[0] % osfact == 0
         assert data_high.shape[1] % osfact == 0
 
-        # this is incoherent dedispersion only
-        # we need to straigthen the signal in each frequency channel for
-        # coherent dedispersion
-        data_low = decimate(data_high, osfact, ftype="fir", axis=1)
-        data_low = decimate(data_low, osfact, ftype="fir", axis=0)
+        # this is for incoherent dedispersion only. for coherent dedispersion, we need
+        # to straighten the signal in each frequency channel before decimating
+        # 1) freqs
+        # XXX: use a polyphase filterbank implementation here
+        data_low = decimate(data_high, osfact, ftype="fir", axis=0)
+
+        # 2) times - compute mean over samples
+        data_low = data_low.reshape(
+            data_low.shape[0], data_low.shape[1] // osfact, osfact
+        )
+        data_low = data_low.mean(axis=2)
+
+        assert data_low.shape[0] == len(instrument.freqs)
+        assert data_low.shape[1] == len(instrument.times)
 
         # free memory
         del data_high
@@ -386,7 +395,7 @@ def main():
     pulse = Pulse(dm=500.0, sigma=2.5, taus_1ghz=20.0)
     instrument = MeerKAT_Lband()
 
-    pulse.generate_data(instrument, osfact=10)
+    pulse.generate_data(instrument, osfact=8)
     pulse.plot_data(pulse.data)
 
     pulse.write_to_sigproc_file("test_fake_meerkat.fil")
