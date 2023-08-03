@@ -41,6 +41,7 @@ setup(
         "mtcutils",
         "numpy",
         "pandas",
+        "scikit-image",
         "scipy",
         "tqdm",
         "your",

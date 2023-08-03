@@ -1,6 +1,6 @@
 #
 #   Fit scattering models to FRB data.
-#   2022 Fabian Jankowski
+#   2022 - 2023 Fabian Jankowski
 #
 
 import argparse

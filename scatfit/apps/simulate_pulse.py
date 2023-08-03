@@ -1,11 +1,12 @@
 #
 #   Simulate scattered pulses.
-#   2022 Fabian Jankowski
+#   2022 - 2023 Fabian Jankowski
 #
 
 import argparse
 import matplotlib.pyplot as plt
 import numpy as np
+from skimage.measure import block_reduce
 from your import Your
 from your.formats.filwriter import make_sigproc_object
 
@@ -54,14 +55,32 @@ class Pulse(object):
         self.sigma_noise = 0.1
 
     def generate_data(self, instrument):
+        """
+        Generate data of a scattered Gaussian pulse in a dynamic
+        spectrum.
+
+        This works by oversampling the pulse's frequency - time
+        behaviour and matching it to the instrumental parameters
+        (time samples and frequency channels). We map a high-resolution
+        description of the dispersed and scattered pulse data onto the
+        2D array recorded by the instrument at lower resolution.
+
+        Coherent dedispersion and the lack thereof are reflected in the
+        mapping or transfer function between the high and low resolution
+        data.
+        """
+
         self.instrument = instrument
-        times = instrument.times
-        freqs = instrument.freqs
 
-        data = np.zeros(shape=(len(freqs), len(times)))
+        # oversample the pulse
+        original = {"nchan": instrument.nchan, "tsamp": instrument.tsamp}
+        fact = 2
+        instrument.nchan *= fact
+        instrument.tsamp /= float(fact)
 
-        fig = plt.figure()
-        ax = fig.add_subplot()
+        times = np.copy(instrument.times)
+        freqs = np.copy(instrument.freqs)
+        data_high = np.zeros(shape=(len(freqs), len(times)))
 
         rng = np.random.default_rng(seed=42)
 
@@ -86,17 +105,45 @@ class Pulse(object):
 
             # add some gaussian radiometer noise
             noise = rng.normal(loc=0.0, scale=self.sigma_noise, size=len(times))
+            data_high[i, :] = profile + noise
 
-            data[i, :] = profile + noise
+        # undo the oversampling
+        instrument.nchan = original["nchan"]
+        instrument.tsamp = original["tsamp"]
 
-            ax.plot(times, (len(freqs) - i) + profile, color="black", lw=0.5)
+        # match high-resolution data to instrument
+        times = np.copy(instrument.times)
+        freqs = np.copy(instrument.freqs)
+        data_low = np.zeros(shape=(len(freqs), len(times)))
+
+        # ok for channels, but times can be off by one sample
+        # this is because we hold the sampling time exact
+        # and not the number of samples
+        assert data_high.shape[0] % fact == 0
+
+        # this is incoherent dedispersion only
+        # we need to straigthen the signal in each frequency channel for
+        # coherent dedispersion
+        data_low = block_reduce(
+            data_high, block_size=(fact, fact), func=np.mean, cval=0.0
+        )
+
+        # free memory
+        del data_high
+
+        # plot
+        fig = plt.figure()
+        ax = fig.add_subplot()
+
+        for i, ifreq in enumerate(freqs):
+            ax.plot(times, (len(freqs) - i) + data_low[i, :], color="black", lw=0.5)
 
         ax.set_xlabel("Time (ms)")
         ax.set_ylabel("Offset")
 
         fig.tight_layout()
 
-        self.data = data
+        self.data = data_low
         self.times = times
         self.freqs = freqs
 
