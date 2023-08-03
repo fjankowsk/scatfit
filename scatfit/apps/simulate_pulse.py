@@ -387,7 +387,7 @@ def main():
     pulse = Pulse(dm=70.0, sigma=2.5, taus_1ghz=0.01)
     instrument = NenuFAR()
 
-    pulse.generate_data(instrument, osfact=8)
+    pulse.generate_data(instrument, osfact=32)
     pulse.plot_data(pulse.data)
 
     pulse.write_to_sigproc_file("test_fake_nenufar.fil")
