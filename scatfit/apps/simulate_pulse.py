@@ -82,73 +82,65 @@ class Pulse(object):
         self.instrument = instrument
 
         # oversample the pulse in the frequency domain
-        original = {"nchan": instrument.nchan}
-        instrument.nchan *= osfact
         freqs = np.copy(instrument.freqs)
-        instrument.nchan = original["nchan"]
-
         times = np.copy(instrument.times)
-        data_high = np.zeros(shape=(len(freqs), len(times)), dtype=np.float32)
+        foff = np.copy(instrument.foff)
+        data = np.zeros(shape=(len(freqs), len(times)), dtype=np.float64)
+        temp = np.zeros(shape=(osfact, len(times)), dtype=np.float64)
 
         rng = np.random.default_rng(seed=42)
 
         for i, ifreq in enumerate(freqs):
-            dm_shift = (
-                1.0e3
-                * KDM
-                * (ifreq**self.dm_index - freqs[0] ** self.dm_index)
-                * self.dm
+            top_freq = ifreq - 0.5 * foff
+            bot_freq = ifreq + 0.5 * foff
+            sub_foff = foff / float(osfact)
+            subfreqs = np.linspace(
+                top_freq + 0.5 * sub_foff, bot_freq - 0.5 * sub_foff, num=osfact
             )
-            fluence = self.fluence_1ghz * (ifreq / 1000.0) ** self.spectral_index
-            center = self.toa_highest_freq + dm_shift
-            taus = self.taus_1ghz * (ifreq / 1000.0) ** self.scatindex
-            print(
-                "Cfreq, fluence, center, taus: {0:.2f} MHz, {1:.2f} a.u., {2:.2f} ms, {3:.2f} ms".format(
-                    ifreq, fluence, center, taus
+
+            for j, jfreq in enumerate(subfreqs):
+                dm_shift = (
+                    1.0e3
+                    * KDM
+                    * (jfreq**self.dm_index - freqs[0] ** self.dm_index)
+                    * self.dm
                 )
-            )
-            profile = pulsemodels.scattered_profile(
-                times, fluence, center, self.sigma, taus, self.dc
-            )
+                fluence = self.fluence_1ghz * (jfreq / 1000.0) ** self.spectral_index
+                center = self.toa_highest_freq + dm_shift
+                taus = self.taus_1ghz * (jfreq / 1000.0) ** self.scatindex
+                print(
+                    "Cfreq, subfreq, fluence, center, taus: {0:.2f} MHz, {1:.2f} MHz, {2:.2f} a.u., {3:.2f} ms, {4:.2f} ms".format(
+                        ifreq, jfreq, fluence, center, taus
+                    )
+                )
+                temp[j, :] = pulsemodels.scattered_profile(
+                    times, fluence, center, self.sigma, taus, self.dc
+                )
+
+            # this is for incoherent dedispersion only. for coherent dedispersion, we need
+            # to straighten the signal in each frequency channel before averaging
+            mean_profile = np.mean(temp, axis=0)
 
             # add some gaussian radiometer noise
             noise = rng.normal(loc=0.0, scale=self.sigma_noise, size=len(times))
-            data_high[i, :] = profile + noise
+            data[i, :] = mean_profile + noise
 
-        # match high-resolution data to instrument
-        freqs = np.copy(instrument.freqs)
-        times = np.copy(instrument.times)
-        data_low = np.zeros(shape=(len(freqs), len(times)), dtype=np.float32)
-
-        assert data_high.shape[0] % osfact == 0
-
-        # this is for incoherent dedispersion only. for coherent dedispersion, we need
-        # to straighten the signal in each frequency channel before averaging
-        # XXX: use a polyphase filterbank implementation here
-        data_high = data_high.reshape(
-            data_high.shape[0] // osfact, osfact, data_high.shape[1]
-        )
-        data_low = data_high.mean(axis=1)
-
-        assert data_low.shape[0] == len(instrument.freqs)
-        assert data_low.shape[1] == len(instrument.times)
-
-        # free memory
-        del data_high
+        assert data.shape[0] == len(instrument.freqs)
+        assert data.shape[1] == len(instrument.times)
 
         # plot
         fig = plt.figure()
         ax = fig.add_subplot()
 
         for i, ifreq in enumerate(freqs):
-            ax.plot(times, (len(freqs) - i) + data_low[i, :], color="black", lw=0.5)
+            ax.plot(times, (len(freqs) - i) + data[i, :], color="black", lw=0.5)
 
         ax.set_xlabel("Time (ms)")
         ax.set_ylabel("Offset")
 
         fig.tight_layout()
 
-        self.data = data_low
+        self.data = data
         self.times = times
         self.freqs = freqs
 
