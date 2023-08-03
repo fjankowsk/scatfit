@@ -3,6 +3,7 @@
 #   2022 Fabian Jankowski
 #
 
+import argparse
 import matplotlib.pyplot as plt
 import numpy as np
 from your import Your
@@ -10,6 +11,26 @@ from your.formats.filwriter import make_sigproc_object
 
 from scatfit.dm import KDM
 import scatfit.pulsemodels as pulsemodels
+
+
+def parse_args():
+    """
+    Parse the commandline arguments.
+
+    Returns
+    -------
+    args: populated namespace
+        The commandline arguments.
+    """
+
+    parser = argparse.ArgumentParser(
+        description="Simulate scattered pulses.",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+
+    args = parser.parse_args()
+
+    return args
 
 
 class Pulse(object):
@@ -309,6 +330,8 @@ class NenuFAR(Instrument):
 
 
 def main():
+    parse_args()
+
     pulse = Pulse(dm=500.0, sigma=2.5, taus_1ghz=20.0)
     instrument = MeerKAT_Lband()
 
