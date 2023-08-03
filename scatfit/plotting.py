@@ -56,8 +56,8 @@ def plot_frb(cand, plot_range, profile, params):
     )
 
     # highlight the data included in the fit
-    ax1.axvline(x=-1.0 * params["fitrange"], color="tab:red", zorder=4)
-    ax1.axvline(x=params["fitrange"], color="tab:red", zorder=4)
+    for item in params["fitrange"]:
+        ax1.axvline(x=item, color="tab:red", zorder=4)
 
     ax1.set_ylabel("Flux\n(a.u.)")
     ax1.tick_params(bottom=False)
@@ -88,8 +88,8 @@ def plot_frb(cand, plot_range, profile, params):
     )
 
     # highlight the data included in the fit
-    ax2.axvline(x=-1.0 * params["fitrange"], color="tab:red", zorder=4)
-    ax2.axvline(x=params["fitrange"], color="tab:red", zorder=4)
+    for item in params["fitrange"]:
+        ax2.axvline(x=item, color="tab:red", zorder=4)
 
     ax2.set_ylabel("Frequency\n(MHz)")
     ax2.tick_params(bottom=False)

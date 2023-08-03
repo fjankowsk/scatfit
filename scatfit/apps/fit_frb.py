@@ -92,10 +92,11 @@ def parse_args():
     parser.add_argument(
         "--fitrange",
         dest="fitrange",
-        default=200.0,
-        metavar="value",
         type=float,
-        help="Consider only the central +- 'value' milliseconds of data around the burst's peak in the fit. Increase this value for wide or highly-scattered bursts.",
+        nargs=2,
+        metavar=("start", "end"),
+        default=[-200.0, 200.0],
+        help="Consider only this time range of data in the fit. Increase the region for wide or highly-scattered bursts. Ensure that most of the scattering tail is included in the fit.",
     )
 
     parser.add_argument(
@@ -160,6 +161,33 @@ def parse_args():
     args = parser.parse_args()
 
     return args
+
+
+def check_args(args):
+    """
+    Sanity check the commandline arguments.
+
+    Parameters
+    ----------
+    args: populated namespace
+        The commandline arguments.
+    """
+
+    # fitrange
+    if args.fitrange[0] < args.fitrange[1]:
+        pass
+    else:
+        print(
+            "Fit range is invalid: {0}, {1}".format(args.fitrange[0], args.fitrange[1])
+        )
+        sys.exit(1)
+
+    # zoom
+    if args.zoom[0] < args.zoom[1]:
+        pass
+    else:
+        print("Zoom range is invalid: {0}, {1}".format(args.zoom[0], args.zoom[1]))
+        sys.exit(1)
 
 
 def linear(x, x0, slope, intercept):
@@ -511,9 +539,10 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
 
         sub_profile = cand.dynspec[iband, :]
 
-        # select only the central +- 'fitrange' milliseconds
-        # of data around the frb's peak for the fit
-        mask = np.abs(plot_range) <= params["fitrange"]
+        # select only this time range of data for the fit
+        mask = (plot_range >= params["fitrange"][0]) & (
+            plot_range <= params["fitrange"][1]
+        )
         fit_range = np.copy(plot_range[mask])
         sub_profile = sub_profile[mask]
 
@@ -619,6 +648,9 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
 
 def main():
     args = parse_args()
+
+    # sanity check command line arguments
+    check_args(args)
 
     plotting.use_custom_matplotlib_formatting()
 
