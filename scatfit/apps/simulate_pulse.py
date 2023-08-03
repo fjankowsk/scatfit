@@ -65,16 +65,17 @@ class Pulse(object):
         2D array recorded by the instrument at lower resolution.
 
         Coherent dedispersion and the lack thereof are reflected in the
-        mapping or transfer function between the high and low resolution
+        mapping or transfer function between the high and low-resolution
         data.
 
-        Oversample only in the frequency domain, as the intrachannel
-        dispersive smearing is usually much greater than the sampling time.
+        Oversample only in the frequency domain, as the pulse width and
+        intrachannel dispersive smearing is usually much greater than the
+        sampling time.
 
         Parameters
         ----------
         instrument: Instrument
-            And Instrument instance.
+            An Instrument instance.
         osfact: int
             The oversampling factor to use for the high-resolution data.
         """
