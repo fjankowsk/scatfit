@@ -6,7 +6,7 @@
 import argparse
 import matplotlib.pyplot as plt
 import numpy as np
-from skimage.measure import block_reduce
+from scipy.signal import decimate
 from your import Your
 from your.formats.filwriter import make_sigproc_object
 
@@ -89,6 +89,7 @@ class Pulse(object):
             instrument.times[0],
             instrument.times[-1],
             num=osfact * len(instrument.times),
+            endpoint=False,
         )
         data_high = np.zeros(shape=(len(freqs), len(times)), dtype=np.float32)
 
@@ -128,9 +129,8 @@ class Pulse(object):
         # this is incoherent dedispersion only
         # we need to straigthen the signal in each frequency channel for
         # coherent dedispersion
-        data_low = block_reduce(
-            data_high, block_size=(osfact, osfact), func=np.mean, cval=0.0
-        )
+        data_low = decimate(data_high, osfact, ftype="fir", axis=1)
+        data_low = decimate(data_low, osfact, ftype="fir", axis=0)
 
         # free memory
         del data_high
