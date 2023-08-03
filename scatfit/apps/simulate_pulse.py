@@ -80,11 +80,11 @@ class Pulse(object):
         self.instrument = instrument
 
         # oversample the pulse
-        freqs = np.linspace(
-            instrument.freqs[0],
-            instrument.freqs[-1],
-            num=osfact * len(instrument.freqs),
-        )
+        original = {"nchan": instrument.nchan}
+        instrument.nchan *= osfact
+        freqs = np.copy(instrument.freqs)
+        instrument.nchan = original["nchan"]
+
         times = np.linspace(
             instrument.times[0],
             instrument.times[-1],
@@ -386,7 +386,7 @@ def main():
     pulse = Pulse(dm=500.0, sigma=2.5, taus_1ghz=20.0)
     instrument = MeerKAT_Lband()
 
-    pulse.generate_data(instrument, osfact=8)
+    pulse.generate_data(instrument, osfact=10)
     pulse.plot_data(pulse.data)
 
     pulse.write_to_sigproc_file("test_fake_meerkat.fil")
