@@ -56,7 +56,7 @@ setup(
         ],
     },
     extras_require={
-        "develop": ["black", "Cython", "pytest", "twine"],
+        "develop": ["black", "Cython", "pytest", "pytest-cov", "twine"],
     },
     ext_modules=[
         Extension(
