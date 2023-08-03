@@ -6,7 +6,6 @@
 import argparse
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.signal import decimate
 from your import Your
 from your.formats.filwriter import make_sigproc_object
 
@@ -54,7 +53,7 @@ class Pulse(object):
         # noise
         self.sigma_noise = 0.1
 
-    def generate_data(self, instrument, osfact=4):
+    def generate_data(self, instrument, osfact=8):
         """
         Generate data of a scattered Gaussian pulse in a dynamic
         spectrum.
@@ -69,6 +68,9 @@ class Pulse(object):
         mapping or transfer function between the high and low resolution
         data.
 
+        Oversample only in the frequency domain, as the intrachannel
+        dispersive smearing is usually much greater than the sampling time.
+
         Parameters
         ----------
         instrument: Instrument
@@ -79,18 +81,13 @@ class Pulse(object):
 
         self.instrument = instrument
 
-        # oversample the pulse
+        # oversample the pulse in the frequency domain
         original = {"nchan": instrument.nchan}
         instrument.nchan *= osfact
         freqs = np.copy(instrument.freqs)
         instrument.nchan = original["nchan"]
 
-        times = np.linspace(
-            instrument.times[0],
-            instrument.times[-1],
-            num=osfact * len(instrument.times),
-            endpoint=False,
-        )
+        times = np.copy(instrument.times)
         data_high = np.zeros(shape=(len(freqs), len(times)), dtype=np.float32)
 
         rng = np.random.default_rng(seed=42)
@@ -124,19 +121,14 @@ class Pulse(object):
         data_low = np.zeros(shape=(len(freqs), len(times)), dtype=np.float32)
 
         assert data_high.shape[0] % osfact == 0
-        assert data_high.shape[1] % osfact == 0
 
         # this is for incoherent dedispersion only. for coherent dedispersion, we need
-        # to straighten the signal in each frequency channel before decimating
-        # 1) freqs
+        # to straighten the signal in each frequency channel before averaging
         # XXX: use a polyphase filterbank implementation here
-        data_low = decimate(data_high, osfact, ftype="fir", axis=0)
-
-        # 2) times - compute mean over samples
-        data_low = data_low.reshape(
-            data_low.shape[0], data_low.shape[1] // osfact, osfact
+        data_high = data_high.reshape(
+            data_high.shape[0] // osfact, osfact, data_high.shape[1]
         )
-        data_low = data_low.mean(axis=2)
+        data_low = data_high.mean(axis=1)
 
         assert data_low.shape[0] == len(instrument.freqs)
         assert data_low.shape[1] == len(instrument.times)
@@ -395,7 +387,7 @@ def main():
     pulse = Pulse(dm=500.0, sigma=2.5, taus_1ghz=20.0)
     instrument = MeerKAT_Lband()
 
-    pulse.generate_data(instrument, osfact=8)
+    pulse.generate_data(instrument, osfact=32)
     pulse.plot_data(pulse.data)
 
     pulse.write_to_sigproc_file("test_fake_meerkat.fil")
@@ -403,7 +395,7 @@ def main():
     pulse = Pulse(dm=70.0, sigma=2.5, taus_1ghz=0.01)
     instrument = NenuFAR()
 
-    pulse.generate_data(instrument, osfact=4)
+    pulse.generate_data(instrument, osfact=8)
     pulse.plot_data(pulse.data)
 
     pulse.write_to_sigproc_file("test_fake_nenufar.fil")
