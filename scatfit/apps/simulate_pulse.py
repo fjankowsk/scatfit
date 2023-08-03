@@ -73,14 +73,14 @@ class Pulse(object):
         self.instrument = instrument
 
         # oversample the pulse
-        original = {"nchan": instrument.nchan, "tsamp": instrument.tsamp}
-        fact = 2
-        instrument.nchan *= fact
-        instrument.tsamp /= float(fact)
-
-        times = np.copy(instrument.times)
-        freqs = np.copy(instrument.freqs)
-        data_high = np.zeros(shape=(len(freqs), len(times)))
+        fact = 4
+        freqs = np.linspace(
+            instrument.freqs[0], instrument.freqs[-1], num=fact * len(instrument.freqs)
+        )
+        times = np.linspace(
+            instrument.times[0], instrument.times[-1], num=fact * len(instrument.times)
+        )
+        data_high = np.zeros(shape=(len(freqs), len(times)), dtype=np.float32)
 
         rng = np.random.default_rng(seed=42)
 
@@ -107,19 +107,13 @@ class Pulse(object):
             noise = rng.normal(loc=0.0, scale=self.sigma_noise, size=len(times))
             data_high[i, :] = profile + noise
 
-        # undo the oversampling
-        instrument.nchan = original["nchan"]
-        instrument.tsamp = original["tsamp"]
-
         # match high-resolution data to instrument
-        times = np.copy(instrument.times)
         freqs = np.copy(instrument.freqs)
-        data_low = np.zeros(shape=(len(freqs), len(times)))
+        times = np.copy(instrument.times)
+        data_low = np.zeros(shape=(len(freqs), len(times)), dtype=np.float32)
 
-        # ok for channels, but times can be off by one sample
-        # this is because we hold the sampling time exact
-        # and not the number of samples
         assert data_high.shape[0] % fact == 0
+        assert data_high.shape[1] % fact == 0
 
         # this is incoherent dedispersion only
         # we need to straigthen the signal in each frequency channel for
