@@ -51,7 +51,7 @@ testall:
 	pytest --verbose -s
 
 uninstall:
-	${PIP} uninstall scatfit
+	${PIP} uninstall --yes scatfit
 
 upload:
 	${MAKE} clean
