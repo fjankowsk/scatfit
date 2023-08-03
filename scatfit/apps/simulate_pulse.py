@@ -54,7 +54,7 @@ class Pulse(object):
         # noise
         self.sigma_noise = 0.1
 
-    def generate_data(self, instrument):
+    def generate_data(self, instrument, osfact=4):
         """
         Generate data of a scattered Gaussian pulse in a dynamic
         spectrum.
@@ -68,17 +68,23 @@ class Pulse(object):
         Coherent dedispersion and the lack thereof are reflected in the
         mapping or transfer function between the high and low resolution
         data.
+
+        Parameters
+        ----------
+        instrument: Instrument
+            And Instrument instance.
+        osfact: int
+            The oversampling factor to use for the high-resolution data.
         """
 
         self.instrument = instrument
 
         # oversample the pulse
-        fact = 4
         freqs = np.linspace(
-            instrument.freqs[0], instrument.freqs[-1], num=fact * len(instrument.freqs)
+            instrument.freqs[0], instrument.freqs[-1], num=osfact * len(instrument.freqs)
         )
         times = np.linspace(
-            instrument.times[0], instrument.times[-1], num=fact * len(instrument.times)
+            instrument.times[0], instrument.times[-1], num=osfact * len(instrument.times)
         )
         data_high = np.zeros(shape=(len(freqs), len(times)), dtype=np.float32)
 
@@ -355,7 +361,7 @@ class NenuFAR(Instrument):
 
         # ms
         self.tsamp = 0.65536
-        self.time_range = 600000.0
+        self.time_range = 400000.0
         # mhz
         self.fch1 = 73.73046875  # centre frequency of first channel
         self.bandwidth = -37.5
@@ -376,15 +382,15 @@ def main():
     pulse = Pulse(dm=500.0, sigma=2.5, taus_1ghz=20.0)
     instrument = MeerKAT_Lband()
 
-    pulse.generate_data(instrument)
+    pulse.generate_data(instrument, osfact=8)
     pulse.plot_data(pulse.data)
 
     pulse.write_to_sigproc_file("test_fake_meerkat.fil")
 
-    pulse = Pulse(dm=100.0, sigma=2.5, taus_1ghz=0.01)
+    pulse = Pulse(dm=70.0, sigma=2.5, taus_1ghz=0.01)
     instrument = NenuFAR()
 
-    pulse.generate_data(instrument)
+    pulse.generate_data(instrument, osfact=4)
     pulse.plot_data(pulse.data)
 
     pulse.write_to_sigproc_file("test_fake_nenufar.fil")
