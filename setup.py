@@ -56,11 +56,7 @@ setup(
         ],
     },
     extras_require={
-        "develop": [
-            "black",
-            "Cython",
-            "nose2",
-        ],
+        "develop": ["black", "Cython", "nose2", "twine"],
     },
     ext_modules=[
         Extension(
