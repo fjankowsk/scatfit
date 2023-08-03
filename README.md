@@ -26,11 +26,11 @@ The code is also listed in the Astrophysics Source Code Library (ASCL): https://
 
 The easiest and recommended way to install the software is through `pip` from the central PyPI index by running:
 
-`pip3 install scatfit`
+`pip install scatfit`
 
 This will install the latest release and all its dependencies. If you need a more recent version of the software, install it directly from its GitHub software repository. For instance, to install the master branch of the code, use the following command:
 
-`pip3 install git+https://github.com/fjankowsk/scatfit.git@master`
+`pip install git+https://github.com/fjankowsk/scatfit.git@master`
 
 This will also automatically install all dependencies.
 
