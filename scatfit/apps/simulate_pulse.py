@@ -120,6 +120,9 @@ class Pulse(object):
 
             # this is for incoherent dedispersion only. for coherent dedispersion, we need
             # to straighten the signal in each frequency channel before averaging
+            # XXX: for coherent dedispersion, create the data at zero dm, i.e.
+            # centre = 0 and the channel centre frequencies (do not oversample).
+            # then shift/roll the data by the appropriate amount to disperse the pulse.
             mean_profile = np.mean(temp, axis=0)
 
             # add some gaussian radiometer noise
