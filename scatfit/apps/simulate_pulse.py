@@ -129,34 +129,21 @@ class Pulse(object):
         assert data.shape[0] == len(instrument.freqs)
         assert data.shape[1] == len(instrument.times)
 
-        # plot
-        fig = plt.figure()
-        ax = fig.add_subplot()
-
-        for i, ifreq in enumerate(freqs):
-            ax.plot(times, (len(freqs) - i) + data[i, :], color="black", lw=0.5)
-
-        ax.set_xlabel("Time (ms)")
-        ax.set_ylabel("Offset")
-
-        fig.tight_layout()
-
         self.data = data
         self.times = times
         self.freqs = freqs
 
     def plot_data(self, data):
         """
+        Plot the data.
+
         Parameters
         ----------
         data: ~np.array
             The input data.
-        times: ~np.array of float
-            The times of the bins.
-        freqs: ~np.array of float
-            The values of the high-frequency channel edges.
         """
 
+        # waterfall plot
         fig = plt.figure()
         ax = fig.add_subplot()
 
@@ -177,6 +164,21 @@ class Pulse(object):
 
         ax.set_xlabel("Time (ms)")
         ax.set_ylabel("Frequency (MHz)")
+
+        fig.tight_layout()
+
+        # line plot
+        fig = plt.figure()
+        ax = fig.add_subplot()
+
+        freqs = np.copy(self.freqs)
+        times = np.copy(self.times)
+
+        for i in range(len(freqs)):
+            ax.plot(times, (len(freqs) - i) + data[i, :], color="black", lw=0.5)
+
+        ax.set_xlabel("Time (ms)")
+        ax.set_ylabel("Offset")
 
         fig.tight_layout()
 
