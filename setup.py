@@ -47,7 +47,6 @@ setup(
     ],
     dependency_links=[
         "git+https://bitbucket.org/vmorello/mtcutils.git@master",
-        "git+https://github.com/cython/cython.git@3.0.0a11",
     ],
     entry_points={
         "console_scripts": [
@@ -56,7 +55,7 @@ setup(
         ],
     },
     extras_require={
-        "develop": ["black", "Cython", "pytest", "pytest-cov", "twine"],
+        "develop": ["black", "Cython == 3.0.0a11", "pytest", "pytest-cov", "twine"],
     },
     ext_modules=[
         Extension(
