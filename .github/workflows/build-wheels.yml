@@ -5,7 +5,7 @@ on:
 
 jobs:
   Build-Wheels:
-    name: Build wheels on ${{ matrix.buildplat[0] }}
+    name: Build wheel ${{ matrix.python }}-${{ matrix.buildplat[1] }}
     runs-on: ${{ matrix.buildplat[0] }}
     strategy:
       # ensure that wheel builders fail independently
@@ -13,7 +13,6 @@ jobs:
       matrix:
         buildplat:
           - [ubuntu-20.04, manylinux_x86_64]
-          - [ubuntu-20.04, musllinux_x86_64]
         # python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
         python: ["cp37", "cp38", "cp39", "cp310", "cp311"]
 
