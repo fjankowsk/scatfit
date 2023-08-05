@@ -1,5 +1,5 @@
-name: Scatfit
-run-name: Build package and regression testing
+name: Install and test
+run-name: Install package and regression testing
 on:
   push:
     branches: [ master ]

@@ -1,0 +1,25 @@
+name: Upload wheels testpypi
+run-name: Upload platform wheels to test PyPI
+on:
+  workflow_call:
+
+jobs:
+  Upload-Wheels:
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://pypi.org/p/scatfit
+    permissions:
+      # IMPORTANT: this permission is mandatory for trusted publishing
+      id-token: write
+
+    steps:
+    - name: Download wheel artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: wheels
+        path: ./dist/
+    - name: Upload wheels to PyPI
+      uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
+      with:
+        repository-url: https://test.pypi.org/legacy/

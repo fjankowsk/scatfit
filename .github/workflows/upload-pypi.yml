@@ -1,0 +1,16 @@
+name: Build and upload
+run-name: Build platform wheels and upload them to PyPI
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  Build-and-Upload:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Build the platform wheels
+    uses: fjankowsk/scatfit/.github/workflows/build-wheels.yml@master
+
+    - name: Upload the platform wheels to test PyPI
+    uses: fjankowsk/scatfit/.github/workflows/upload-wheels-testpypi.yml@master
