@@ -55,7 +55,14 @@ setup(
         ],
     },
     extras_require={
-        "develop": ["black", "Cython >= 3.0.0", "pytest", "pytest-cov", "twine"],
+        "develop": [
+            "black",
+            "cibuildwheel",
+            "Cython >= 3.0.0",
+            "pytest",
+            "pytest-cov",
+            "twine",
+        ],
     },
     ext_modules=[
         Extension(

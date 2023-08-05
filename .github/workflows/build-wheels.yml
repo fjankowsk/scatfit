@@ -5,27 +5,28 @@ on:
 
 jobs:
   Build-Wheels:
-    runs-on: ubuntu-latest
+    name: Build wheels on ${{ matrix.buildplat[0] }}
+    runs-on: ${{ matrix.buildplat[0] }}
     strategy:
+      # ensure that wheel builders fail independently
+      fail-fast: false
       matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+        buildplat:
+          - [ubuntu-20.04, manylinux_x86_64]
+          - [ubuntu-20.04, musllinux_x86_64]
+        # python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+        python: ["cp37", "cp38", "cp39", "cp310", "cp311"]
 
     steps:
     - uses: actions/checkout@v3
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        python -m pip install --upgrade build setuptools wheel
-        python -m pip install git+https://bitbucket.org/vmorello/mtcutils.git@master
-        make install
+
     - name: Build wheels
-      run: python -m build --wheel --outdir dist
+      uses: pypa/cibuildwheel@v2.14.1
+      env:
+        CIBW_BUILD: ${{ matrix.python }}-${{ matrix.buildplat[1] }}
+
     - name: Upload wheel artifacts
       uses: actions/upload-artifact@v3
       with:
         name: wheels
-        path: ./dist/
+        path: ./wheelhouse/*.whl
