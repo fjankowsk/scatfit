@@ -59,6 +59,7 @@ setup(
             "black",
             "cibuildwheel",
             "Cython >= 3.0.0",
+            "myst-parser",
             "pytest",
             "pytest-cov",
             "sphinx",

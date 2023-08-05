@@ -10,6 +10,7 @@ Welcome to scatfit's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   README
    api
 
 
