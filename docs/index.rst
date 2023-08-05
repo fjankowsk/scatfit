@@ -11,6 +11,7 @@ Welcome to scatfit's documentation!
    :caption: Contents:
 
    README
+   FAQ
    api
 
 
