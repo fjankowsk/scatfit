@@ -30,8 +30,9 @@ jobs:
       run: python -m build --wheel --outdir dist
     - name: Upload wheel artifacts
       uses: actions/upload-artifact@v3
-        with:
-          path: ./dist/
+      with:
+        name: wheels
+        path: ./dist/
 
   Upload-Wheels:
     needs: Build-Wheels
@@ -46,8 +47,9 @@ jobs:
     steps:
     - name: Download wheel artifacts
       uses: actions/download-artifact@v3
-        with:
-          path: ./dist/
+      with:
+        name: wheels
+        path: ./dist/
     - name: Upload wheels to PyPI
       uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
       with:
