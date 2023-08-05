@@ -5,12 +5,9 @@ on:
     branches: [ master ]
 
 jobs:
-  Build-and-Upload:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Build the platform wheels
+  Build-workflow:
     uses: fjankowsk/scatfit/.github/workflows/build-wheels.yml@master
 
-    - name: Upload the platform wheels to test PyPI
+  Upload-workflow:
+    needs: Build-workflow
     uses: fjankowsk/scatfit/.github/workflows/upload-wheels-testpypi.yml@master
