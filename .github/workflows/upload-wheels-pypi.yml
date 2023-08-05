@@ -1,0 +1,55 @@
+name: Scatfit
+run-name: Build wheels and upload them to PyPI
+on:
+  push:
+    branches: [ master ]
+
+permissions:
+  contents: read
+
+jobs:
+  Build-Wheels:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install --upgrade build setuptools wheel
+        python -m pip install git+https://bitbucket.org/vmorello/mtcutils.git@master
+        make install
+    - name: Build wheels
+      run: python -m build --wheel --outdir dist
+    - name: Upload wheel artifacts
+      uses: actions/upload-artifact@v3
+        with:
+          name: wheels
+          path: ./dist/
+
+  Upload-Wheels:
+    needs: Build-Wheels
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://pypi.org/p/scatfit
+    permissions:
+      # IMPORTANT: this permission is mandatory for trusted publishing
+      id-token: write
+
+    steps:
+    - name: Download wheel artifacts
+      uses: actions/download-artifact@v3
+        with:
+          path: ./dist/
+    - name: Upload wheels to PyPI
+      uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
+      with:
+        repository-url: https://test.pypi.org/legacy/
