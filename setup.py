@@ -61,6 +61,7 @@ setup(
             "Cython >= 3.0.0",
             "pytest",
             "pytest-cov",
+            "sphinx",
             "twine",
         ],
     },
