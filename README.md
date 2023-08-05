@@ -20,7 +20,7 @@ The corresponding paper (Jankowski et al. 2023, MNRAS) is available via this [NA
 
 If you make use of the software, please add a link to this repository and cite our corresponding paper. See above and the CITATION and CITATION.bib files.
 
-The code is also listed in the Astrophysics Source Code Library (ASCL): https://ascl.net/code/v/3366
+The code is also listed in the [Astrophysics Source Code Library (ASCL)](https://ascl.net/code/v/3366).
 
 ## Installation ##
 
