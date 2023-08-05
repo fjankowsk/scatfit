@@ -10,4 +10,4 @@ jobs:
 
   Upload-workflow:
     needs: Build-workflow
-    uses: fjankowsk/scatfit/.github/workflows/upload-wheels-testpypi.yml@master
+    uses: fjankowsk/scatfit/.github/workflows/upload-wheels-pypi.yml@master
