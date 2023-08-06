@@ -4,3 +4,6 @@ __pycache__
 *.swp
 # macos preview directories
 .DS_Store
+
+# documentation build directory
+/docs/_build/
