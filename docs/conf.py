@@ -7,7 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "scatfit"
-copyright = "2023, Fabian Jankowski"
+copyright = "2022-2023, Fabian Jankowski"
 author = "Fabian Jankowski"
 release = "0.2.20"
 
@@ -21,9 +21,14 @@ extensions = [
     "myst_parser",
 ]
 
+myst_enable_extensions = ["dollarmath"]
+
 source_suffix = [".rst", ".md"]
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+
+language = "en"
+pygments_style = "sphinx"
 
 
 # -- Options for HTML output -------------------------------------------------
