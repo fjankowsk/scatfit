@@ -1,6 +1,7 @@
 # Scatfit: Scattering fits of time domain radio signals (Fast Radio Bursts or pulsars) #
 
 [![PyPI latest release](https://img.shields.io/pypi/v/scatfit.svg)](https://pypi.org/project/scatfit/)
+[![Documentation](https://readthedocs.org/projects/scatfit/badge/?version=latest)](https://scatfit.readthedocs.io/en/latest/)
 [![GitHub issues](https://img.shields.io/badge/issue_tracking-GitHub-blue.svg)](https://github.com/fjankowsk/scatfit/issues/)
 [![License - MIT](https://img.shields.io/pypi/l/scatfit.svg)](https://github.com/fjankowsk/scatfit/blob/master/LICENSE)
 [![Paper link](https://img.shields.io/badge/paper-10.1093/mnras/stad2041-blue.svg)](https://doi.org/10.1093/mnras/stad2041)
@@ -43,6 +44,10 @@ Then run the main analysis on the filterbank data file like this:
 `scatfit-fitfrb fake_burst_500_DM.fil 500.0 --fitscatindex --fscrunch 128 --fast`
 
 You should see several diagnostic windows open. The terminal output should show an updated DM close to 500 pc cm$^{-3}$, a scattering index near -4.0, and a scattering time at 1 GHz of about 20 ms.
+
+## Documentation ##
+
+Further documentation of the software is available on our dedicated [Read the docs website](https://scatfit.readthedocs.io/en/latest/).
 
 ## Usage ##
 
