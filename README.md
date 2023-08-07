@@ -51,7 +51,7 @@ Further documentation of the software is available on our dedicated [Read the do
 
 ## Usage ##
 
-```
+```console
 $ scatfit-fitfrb -h
 usage: scatfit-fitfrb [-h] [--compare] [--binburst bin] [--fscrunch factor] [--tscrunch factor] [--fast] [--fitrange start end]
                       [--fitscatindex]
@@ -84,7 +84,7 @@ options:
                         Zoom into this time region. (default: [-50.0, 50.0])
 ```
 
-```
+```console
 $ scatfit-simpulse -h
 usage: scatfit-simpulse [-h]
 

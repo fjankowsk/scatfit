@@ -63,10 +63,7 @@ setup(
             "pytest-cov",
             "twine",
         ],
-        "docs": [
-            "myst-parser",
-            "sphinx",
-        ],
+        "docs": ["myst-parser", "sphinx", "sphinx_rtd_theme"],
     },
     ext_modules=[
         Extension(

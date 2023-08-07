@@ -15,10 +15,11 @@ release = "0.2.20"
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
+    "myst_parser",
     "sphinx.ext.autodoc",
     "sphinx.ext.mathjax",
     "sphinx.ext.napoleon",
-    "myst_parser",
+    "sphinx_rtd_theme",
 ]
 
 myst_enable_extensions = ["dollarmath"]
@@ -34,5 +35,4 @@ pygments_style = "sphinx"
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = "alabaster"
-html_static_path = ["_static"]
+html_theme = "sphinx_rtd_theme"
