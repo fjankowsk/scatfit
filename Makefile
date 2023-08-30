@@ -11,7 +11,7 @@ help:
 	@echo 'make black           reformat the code using black code formatter'
 	@echo 'make build           generate distribution archives'
 	@echo 'make clean           remove temporary files'
-	@echo 'make install         install the module locally'
+	@echo 'make install         install the package locally'
 	@echo 'make profile         profile the code'
 	@echo 'make test            run the non-interactive regression tests'
 	@echo 'make testall         run all regression tests'
