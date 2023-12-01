@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import FormatStrFormatter
 import matplotlib.gridspec as gridspec
 import numpy as np
+from lmfit import Model
 
 from scatfit.dm import get_dm_smearing
 import scatfit.pulsemodels as pulsemodels
@@ -101,28 +102,29 @@ def plot_frb(cand, plot_range, profile, params):
     fig.tight_layout()
 
 # plot_frb_scat added by IPM
-def plot_frb_scat(cand, df, plot_range, model, cmap1="Greys", cmap2="YlGnBu"):
+def plot_frb_scat(cand, df, fitresults, smodel, plot_range, params,
+        cmap1="Greys", cmap2="YlGnBu"):
 
     # TODO: Include additional arguments in result to be ablo to plot all models
 
-    # if smodel == "unscattered":
-    #     scat_model = pulsemodels.gaussian_normed
-    # elif smodel == "scattered_isotropic_analytic":
-    #     scat_model = pulsemodels.scattered_gaussian_pulse
-    # elif smodel == "scattered_isotropic_convolving":
-    scat_model = pulsemodels.scattered_profile
-    # elif smodel == "scattered_isotropic_bandintegrated":
-    #     scat_model = pulsemodels.bandintegrated_model
-    # elif smodel == "scattered_isotropic_afb_instrumental":
-    #     scat_model = pulsemodels.gaussian_scattered_afb_instrumental
-    # elif smodel == "scattered_isotropic_dfb_instrumental":
-    #     scat_model = pulsemodels.gaussian_scattered_dfb_instrumental
-    # else:
-    #     raise NotImplementedError(
-    #         "Scattering model not implemented: {0}".format(smodel)
-    #     )
-    #
-    # model = Model(scat_model)
+    if smodel == "unscattered":
+        scat_model = pulsemodels.gaussian_normed
+    elif smodel == "scattered_isotropic_analytic":
+        scat_model = pulsemodels.scattered_gaussian_pulse
+    elif smodel == "scattered_isotropic_convolving":
+        scat_model = pulsemodels.scattered_profile
+    elif smodel == "scattered_isotropic_bandintegrated":
+        scat_model = pulsemodels.bandintegrated_model
+    elif smodel == "scattered_isotropic_afb_instrumental":
+        scat_model = pulsemodels.gaussian_scattered_afb_instrumental
+    elif smodel == "scattered_isotropic_dfb_instrumental":
+        scat_model = pulsemodels.gaussian_scattered_dfb_instrumental
+    else:
+        raise NotImplementedError(
+            "Scattering model not implemented: {0}".format(smodel)
+        )
+
+    model = Model(scat_model)
 
     # Setting up plot
     fig = plt.figure(figsize=(7,7))
@@ -133,27 +135,31 @@ def plot_frb_scat(cand, df, plot_range, model, cmap1="Greys", cmap2="YlGnBu"):
     cmap2 = matplotlib.cm.get_cmap(cmap2)
     color2 = [cmap2((ii+2)/(df.shape[0]+2)) for ii in range(df.shape[0])]
 
-
     axp = fig.add_subplot(gs[0])
     for iband, row in df.iterrows():
 
-        sub_profile = cand.dynspec[iband, :]
+        sub_profile = cand.dynspec[iband,:]
         sub_profile = sub_profile - np.mean(sub_profile)
         sub_profile = sub_profile / np.max(sub_profile)
 
-        sub_fit = scat_model(x=plot_range, fluence=row['fluence'],
-                center=row['center'], sigma=row['sigma'],
-                taus=row['taus'], dc=0)
+        # sub_fit = scat_model(x=plot_range, fluence=row['fluence'],
+        #         center=row['center'], sigma=row['sigma'],
+                # taus=row['taus'], dc=0)
 
-        axp.plot(plot_range, sub_profile-iband, color=color1[iband], lw=0.5, alpha=0.7)
-        axp.plot(plot_range, sub_fit-iband, color=color2[iband], ls='--')
+        fitresult = fitresults[iband]
+        axp.plot(plot_range,
+                model.eval(params=fitresult.params, x=plot_range)-iband,
+                color=color2[iband], lw=1.5, zorder=8)
+        axp.plot(plot_range, sub_profile-iband, color=color1[iband],
+                lw=0.5, alpha=0.7)
+        # axp.plot(plot_range, sub_fit-iband, color=color2[iband], lw=1.5)
 
     yloc = -df['band'].to_numpy()
     labels = [str(int(f)) for f in df['cfreq'].to_numpy()]
     print(yloc, labels)
     axp.set_yticks(yloc, labels=labels)
 
-    axp.set_xlim(plot_range[0], plot_range[-1])
+    axp.set_xlim(left=params["zoom"][0], right=params["zoom"][1])
     axp.set_ylabel('Frequency (MHz)')
     axp.set_xticklabels([])
 
@@ -179,6 +185,8 @@ def plot_frb_scat(cand, df, plot_range, model, cmap1="Greys", cmap2="YlGnBu"):
         vmin=np.percentile(cand.dynspec, 0.1),
         vmax=np.percentile(cand.dynspec, 99.9)
     )
+
+    axw.set_xlim(left=params["zoom"][0], right=params["zoom"][1])
 
     axw.set_xlabel('Time (ms)')
     axw.set_ylabel('Frequency (MHz)')
