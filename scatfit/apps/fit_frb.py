@@ -390,12 +390,14 @@ def fit_profile_model(fit_range, profile, smodel, params):
 
     model.set_param_hint("fluence", value=5.0, min=0.1)
     model.set_param_hint("center", value=0.0, min=-20.0, max=20.0)
-    model.set_param_hint("sigma", value=1.5, min=0.30624, max=20.0)
+    # model.set_param_hint("sigma", value=1.5, min=0.30624, max=20.0)
+    model.set_param_hint("sigma", value=1.5, min=7e-5, max=20.0)
 
     arg_list = list(inspect.signature(scat_model).parameters.keys())
 
     if "taus" in arg_list:
-        model.set_param_hint("taus", value=1.5, min=0.1)
+        # model.set_param_hint("taus", value=1.5, min=0.1)
+        model.set_param_hint("taus", value=1.5, min=5e-5)
 
     if "taui" in arg_list:
         model.set_param_hint("taui", value=0.30624, vary=False)
@@ -536,6 +538,7 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
         ]
     )
 
+    fitresults = []
     for iband in range(cand.dynspec.shape[0]):
         print("\nRunning sub-band: {0}".format(iband))
 
@@ -586,6 +589,7 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
         params["dm_smear"] = dm_smear
 
         fitresult = fit_profile_model(fit_range, sub_profile, smodel, params)
+        fitresults.append(fitresult)
 
         # fit an unscattered model for comparison
         if params["compare"]:
@@ -640,7 +644,7 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
     df["w10i"] = pulsemodels.gaussian_fwtm(df["sigma"])
     df["err_w10i"] = pulsemodels.gaussian_fwtm(df["err_sigma"])
 
-    return df
+    return df, fitresults
 
 
 #
@@ -700,7 +704,7 @@ def main():
     }
 
     # fit integrated profile
-    fit_df = fit_profile(cand, plot_range, args.fscrunch_factor,
+    fit_df, fit_results = fit_profile(cand, plot_range, args.fscrunch_factor,
             args.smodel, params)
     print("\nFit results")
     print(fit_df)
@@ -748,8 +752,8 @@ def main():
 
     plotting.plot_frb(cand, plot_range, profile, params)
 
-    plotting.plot_frb_scat(cand, fit_df, plot_range, args.smodel)
-
+    plotting.plot_frb_scat(cand, fit_df, fit_results, args.smodel,
+            plot_range, params)
     plt.show()
 
     print("All done.")
