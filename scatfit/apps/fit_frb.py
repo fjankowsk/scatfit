@@ -15,6 +15,7 @@ from lmfit import Model
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import mtcutils
 
 from scatfit.dm import KDM, get_dm_smearing
 import scatfit.plotting as plotting
@@ -159,6 +160,17 @@ def parse_args():
         default=[-50.0, 50.0],
         help="Zoom into this time region.",
     )
+# =============================================================================
+#     parser.add_argument(
+#         "-p",
+#         "--period",
+#         dest="period",
+#         type=float,
+#         nargs=1,
+#         default=False,
+#         help="Period in seconds if the archive is folded over a time less than the integration length.",
+#     )
+# =============================================================================
 
     args = parser.parse_args()
 
@@ -541,16 +553,16 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
     fitresults = []
     for iband in range(cand.dynspec.shape[0]):
         print("\nRunning sub-band: {0}".format(iband))
-
         sub_profile = cand.dynspec[iband, :]
-
+        
         # select only this time range of data for the fit
         mask = (plot_range >= params["fitrange"][0]) & (
             plot_range <= params["fitrange"][1]
         )
         fit_range = np.copy(plot_range[mask])
         sub_profile = sub_profile[mask]
-
+        print(np.mean(sub_profile))
+        print(np.max(sub_profile))
         # remove baseline and normalise
         sub_profile = sub_profile - np.mean(sub_profile)
         sub_profile = sub_profile / np.max(sub_profile)
@@ -570,8 +582,10 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
         idx_lo = idx_hi + fscrunch_factor - 1
         f_hi = cand.freqs[idx_hi]
         f_lo = cand.freqs[idx_lo]
+        print(f_hi, f_lo, "f_hi, f_lo")
         cfreq = 0.5 * (f_hi + f_lo)
         chan_bw = np.abs(np.diff(cand.freqs))[0]
+        print("Subband bandwidth = {}, cfreq = {}".format(chan_bw, cfreq))
 
         dm_smear = get_dm_smearing(
             cfreq - 0.5 * chan_bw, cfreq + 0.5 * chan_bw, cand.dm
@@ -683,8 +697,10 @@ def main():
     profile = np.sum(cand.dynspec, axis=0)
     profile = profile - np.mean(profile)
     profile = profile / np.max(profile)
-
-    fact = 1000 * cand.tsamp * args.tscrunch_factor
+    
+    tsamp = cand.tsamp
+    print("Period is {} s, number of samples is {} and profile bins are {} s wide".format(cand.period, cand.nsamp, tsamp))
+    fact = 1000 * tsamp * args.tscrunch_factor
     plot_range = np.linspace(0, fact * len(profile), num=len(profile))
 
     # centre on the burst
@@ -728,7 +744,7 @@ def main():
             start_mjd = Time(cand.tstart, format="mjd",
                     scale="utc", precision=9)
         burst_offset = TimeDelta(
-            bin_burst * cand.tsamp * args.tscrunch_factor, format="sec"
+            bin_burst * tsamp * args.tscrunch_factor, format="sec"
         )
         fit_offset = TimeDelta(1.0e-3 * fit_df["center"].iloc[0], format="sec")
         mjd_topo = start_mjd + burst_offset + fit_offset

@@ -101,7 +101,7 @@ def plot_frb(cand, plot_range, profile, params):
 
     fig.tight_layout()
 
-# plot_frb_scat added by IPM
+# plot_frb_scat added by IPM
 def plot_frb_scat(cand, df, fitresults, smodel, plot_range, params,
         cmap1="Greys", cmap2="YlGnBu"):
 
@@ -157,7 +157,8 @@ def plot_frb_scat(cand, df, fitresults, smodel, plot_range, params,
     yloc = -df['band'].to_numpy()
     labels = [str(int(f)) for f in df['cfreq'].to_numpy()]
     print(yloc, labels)
-    axp.set_yticks(yloc, labels=labels)
+    axp.set_yticks(yloc) # JDT edit for python versions 3.5+
+    axp.set_yticklabels(labels) # JDT edit for python versions 3.5+
 
     axp.set_xlim(left=params["zoom"][0], right=params["zoom"][1])
     axp.set_ylabel('Frequency (MHz)')

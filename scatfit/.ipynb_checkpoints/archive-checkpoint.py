@@ -58,7 +58,7 @@ class Candidate(object):
 
     @property
     def nsamp(self):
-        """ Number of samples of the profile """
+        """ Number of samples in the data """
         return self._arch.get_nbin()
 
     @property
@@ -67,21 +67,12 @@ class Candidate(object):
         return self._arch.get_nchan()
 
     @property
-    def nsubint(self):
-        """ Number of subintegrations of the archive """
-        return self._arch.get_nsubint()
-
-    @property
-    def period(self):
-        """ Topocentric folding period in seconds (from first subint) """
-        return self._arch[0].get_folding_period()
-
-    @property
     def tsamp(self):
-        """ Bin width of profile samples in seconds """
-        tsamp = self.period / self.nsamp
+        """ Sampling time in seconds """
+        int_length = self._arch.integration_length()
+        tsamp = int_length / self.nsamp
         return tsamp
-        
+
     @property
     def fcen(self):
         """ Central frequency in MHz"""
@@ -102,7 +93,7 @@ class Candidate(object):
         """
         Frequency offset between consecutive channels (MHz). Can be negative.
         """
-        return self.bw / self.nchans
+        return -np.abs(self.bw / self.nchans)
 
     @property
     def fchn(self):
@@ -115,7 +106,7 @@ class Candidate(object):
         Channel frequencies in MHz, in the same order as they appear in the
         data
         """
-        return self.fch1 - np.arange(self.nchans) * self.foff
+        return self.fch1 + np.arange(self.nchans) * self.foff
 
     @property
     def times(self):
@@ -321,8 +312,6 @@ def load_frb_data(filename, dm, fscrunch, tscrunch):
     """
 
     cand = Candidate(filename)
-    print(cand.fch1, cand.foff, cand.bw, cand.fcen, "cand.fch1, cand.foff, cand.bw, cand.fcen")
-    print(cand.freqs)
     cand.normalise()
 
     # calculates and applies both IQRM and ACC1 masks
