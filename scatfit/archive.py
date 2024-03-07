@@ -321,8 +321,6 @@ def load_frb_data(filename, dm, fscrunch, tscrunch):
     """
 
     cand = Candidate(filename)
-    print(cand.fch1, cand.foff, cand.bw, cand.fcen, "cand.fch1, cand.foff, cand.bw, cand.fcen")
-    print(cand.freqs)
     cand.normalise()
 
     # calculates and applies both IQRM and ACC1 masks

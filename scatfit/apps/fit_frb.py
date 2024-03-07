@@ -15,7 +15,6 @@ from lmfit import Model
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import mtcutils
 
 from scatfit.dm import KDM, get_dm_smearing
 import scatfit.plotting as plotting
@@ -160,17 +159,6 @@ def parse_args():
         default=[-50.0, 50.0],
         help="Zoom into this time region.",
     )
-# =============================================================================
-#     parser.add_argument(
-#         "-p",
-#         "--period",
-#         dest="period",
-#         type=float,
-#         nargs=1,
-#         default=False,
-#         help="Period in seconds if the archive is folded over a time less than the integration length.",
-#     )
-# =============================================================================
 
     args = parser.parse_args()
 
@@ -561,8 +549,6 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
         )
         fit_range = np.copy(plot_range[mask])
         sub_profile = sub_profile[mask]
-        print(np.mean(sub_profile))
-        print(np.max(sub_profile))
         # remove baseline and normalise
         sub_profile = sub_profile - np.mean(sub_profile)
         sub_profile = sub_profile / np.max(sub_profile)
@@ -582,7 +568,6 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
         idx_lo = idx_hi + fscrunch_factor - 1
         f_hi = cand.freqs[idx_hi]
         f_lo = cand.freqs[idx_lo]
-        print(f_hi, f_lo, "f_hi, f_lo")
         cfreq = 0.5 * (f_hi + f_lo)
         chan_bw = np.abs(np.diff(cand.freqs))[0]
         print("Subband bandwidth = {}, cfreq = {}".format(chan_bw, cfreq))
