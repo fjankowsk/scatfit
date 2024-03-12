@@ -38,13 +38,6 @@ def load_frb_data(filename, dm, fscrunch, tscrunch):
         )
     )
 
-    num_masked_chans = mask.sum()
-    print(
-        "Channels masked in total: {} / {} ({:.2%})".format(
-            num_masked_chans, cand.nchans, num_masked_chans / cand.nchans
-        )
-    )
-
     # z-dot filter
     print("Applying z-dot filter")
     cand.zdot()
@@ -52,9 +45,7 @@ def load_frb_data(filename, dm, fscrunch, tscrunch):
     # dedisperse
     cand.set_dm(dm)
 
-    dynspec = (
-        cand.scrunched_data(f=fscrunch, t=tscrunch, select="left") / fscrunch**0.5
-    )
+    dynspec = cand.scrunched_data(f=fscrunch, t=tscrunch, select="left") / fscrunch**0.5
     cand.dynspec = dynspec
 
     return cand
