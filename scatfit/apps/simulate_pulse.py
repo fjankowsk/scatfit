@@ -187,8 +187,8 @@ class Pulse(object):
 
     def convert_to_integer(self, data, nbit=8):
         """
-        Convert the float data to integers for storing in SIGPROC filterbank
-        files or PSRFITS ones.
+        Convert the float data to unsigned integers for storing in SIGPROC
+        filterbank files or PSRFITS ones.
 
         Note that SIGPROC does not implement scales and offset storage.
 
@@ -203,7 +203,19 @@ class Pulse(object):
         -------
         data_int: ~np.array of int
             The output data in integer form.
+
+        Raises
+        ------
+        NotImplementedError
+            If the requested bit depth is not supported.
         """
+
+        mapping = {8: np.uint8, 16: np.uint16, 32: np.uint32}
+
+        if nbit not in mapping:
+            raise NotImplementedError(
+                "Requested bit depth not implemented: {0}".format(nbit)
+            )
 
         # normalise the data before integer conversion
         # we follow the psrfits convention here
@@ -228,8 +240,11 @@ class Pulse(object):
             )
         )
 
-        # convert to uint8
-        data_int = np.rint(scaled_data).astype(np.uint8)
+        # convert to unsigned integer
+        int_type = mapping[nbit]
+        min_int = 0
+        max_int = 2**nbit - 1
+        data_int = np.clip(np.rint(scaled_data), min_int, max_int).astype(int_type)
 
         print(
             "Integer data: {0}, {1}, {2}".format(
