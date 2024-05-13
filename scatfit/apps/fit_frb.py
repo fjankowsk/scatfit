@@ -335,7 +335,8 @@ def compute_updated_dm(t_df, dm, params):
     print(fitresult_ml.fit_report())
 
     # 100 * (2000 - 700)/10 = 13k samples
-    emcee_kws = dict(steps=2000, burn=700, thin=10, is_weighted=True, progress=True)
+    emcee_kws = dict(steps=2000, burn=700, thin=10, is_weighted=True, 
+        progress=True)
 
     emcee_params = fitresult_ml.params.copy()
 
@@ -541,14 +542,16 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
     fitresults = []
     for iband in range(cand.dynspec.shape[0]):
         print("\nRunning sub-band: {0}".format(iband))
+
         sub_profile = cand.dynspec[iband, :]
-        
+
         # select only this time range of data for the fit
         mask = (plot_range >= params["fitrange"][0]) & (
             plot_range <= params["fitrange"][1]
         )
         fit_range = np.copy(plot_range[mask])
         sub_profile = sub_profile[mask]
+
         # remove baseline and normalise
         sub_profile = sub_profile - np.mean(sub_profile)
         sub_profile = sub_profile / np.max(sub_profile)
@@ -570,7 +573,6 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
         f_lo = cand.freqs[idx_lo]
         cfreq = 0.5 * (f_hi + f_lo)
         chan_bw = np.abs(np.diff(cand.freqs))[0]
-        print("Subband bandwidth = {}, cfreq = {}".format(chan_bw, cfreq))
 
         dm_smear = get_dm_smearing(
             cfreq - 0.5 * chan_bw, cfreq + 0.5 * chan_bw, cand.dm
@@ -682,10 +684,8 @@ def main():
     profile = np.sum(cand.dynspec, axis=0)
     profile = profile - np.mean(profile)
     profile = profile / np.max(profile)
-    
-    tsamp = cand.tsamp
-    print("Period is {} s, number of samples is {} and profile bins are {} s wide".format(cand.period, cand.nsamp, tsamp))
-    fact = 1000 * tsamp * args.tscrunch_factor
+
+    fact = 1000 * cand.tsamp * args.tscrunch_factor
     plot_range = np.linspace(0, fact * len(profile), num=len(profile))
 
     # centre on the burst
@@ -729,7 +729,7 @@ def main():
             start_mjd = Time(cand.tstart, format="mjd",
                     scale="utc", precision=9)
         burst_offset = TimeDelta(
-            bin_burst * tsamp * args.tscrunch_factor, format="sec"
+            bin_burst * cand.tsamp * args.tscrunch_factor, format="sec"
         )
         fit_offset = TimeDelta(1.0e-3 * fit_df["center"].iloc[0], format="sec")
         mjd_topo = start_mjd + burst_offset + fit_offset
@@ -754,7 +754,11 @@ def main():
     plotting.plot_frb(cand, plot_range, profile, params)
 
     plotting.plot_frb_scat(cand, fit_df, fit_results, args.smodel,
-            plot_range, params)
+            plot_range, params, dynspec=True)
+    
+    plotting.plot_frb_scat(cand, fit_df, fit_results, args.smodel,
+            plot_range, params, dynspec=False)
+
     plt.show()
 
     print("All done.")
