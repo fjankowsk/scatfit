@@ -4,6 +4,7 @@
 #
 
 from mtcutils import Candidate
+import numpy as np
 
 
 def load_frb_data(filename, dm, fscrunch, tscrunch):
@@ -56,5 +57,9 @@ def load_frb_data(filename, dm, fscrunch, tscrunch):
         cand.scrunched_data(f=fscrunch, t=tscrunch, select="left") / fscrunch**0.5
     )
     cand.dynspec = dynspec
+    times = np.arange(cand.nsamp//tscrunch) * cand.tsamp * tscrunch
+    cand.tval = times
+    freqs = cand.fch1 + np.arange(cand.nchans//fscrunch) * cand.foff * fscrunch
+    cand.fval = freqs
 
     return cand

@@ -101,9 +101,9 @@ def plot_frb(cand, plot_range, profile, params):
 
     fig.tight_layout()
 
-# plot_frb_scat added by IPM
+# plot_frb_scat added by IPM
 def plot_frb_scat(cand, df, fitresults, smodel, plot_range, params,
-        cmap1="Greys", cmap2="YlGnBu"):
+        cmap1="Greys", cmap2="YlGnBu", dynspec=True):
 
     # TODO: Include additional arguments in result to be ablo to plot all models
 
@@ -126,19 +126,24 @@ def plot_frb_scat(cand, df, fitresults, smodel, plot_range, params,
 
     model = Model(scat_model)
 
-    # Setting up plot
-    fig = plt.figure(figsize=(7,7))
-    gs = gridspec.GridSpec(2,1, hspace=0, height_ratios=[2,3])
-
     cmap1 = matplotlib.cm.get_cmap(cmap1)
     color1 = [cmap1((ii+2)/(df.shape[0]+2)) for ii in range(df.shape[0])]
     cmap2 = matplotlib.cm.get_cmap(cmap2)
     color2 = [cmap2((ii+2)/(df.shape[0]+2)) for ii in range(df.shape[0])]
 
+    # Setting up plot
+    if dynspec:
+        fig = plt.figure(figsize=(7,7))
+        gs = gridspec.GridSpec(2,1, hspace=0, height_ratios=[2,3])
+    else:
+        fig = plt.figure(figsize=(7,3))
+        gs = gridspec.GridSpec(1,1)        
+
     axp = fig.add_subplot(gs[0])
     for iband, row in df.iterrows():
 
-        sub_profile = cand.dynspec[iband,:]
+        band = int(row['band'])
+        sub_profile = cand.dynspec[band,:]
         sub_profile = sub_profile - np.mean(sub_profile)
         sub_profile = sub_profile / np.max(sub_profile)
 
@@ -148,59 +153,64 @@ def plot_frb_scat(cand, df, fitresults, smodel, plot_range, params,
 
         fitresult = fitresults[iband]
         axp.plot(plot_range,
-                model.eval(params=fitresult.params, x=plot_range)-iband,
+                model.eval(params=fitresult.params, x=plot_range)-band,
                 color=color2[iband], lw=1.5, zorder=8)
-        axp.plot(plot_range, sub_profile-iband, color=color1[iband],
+        axp.plot(plot_range, sub_profile-band, color=color1[iband],
                 lw=0.5, alpha=0.7)
         # axp.plot(plot_range, sub_fit-iband, color=color2[iband], lw=1.5)
 
     yloc = -df['band'].to_numpy()
     labels = [str(int(f)) for f in df['cfreq'].to_numpy()]
     print(yloc, labels)
-    axp.set_yticks(yloc) # JDT edit for python versions 3.5+
-    axp.set_yticklabels(labels) # JDT edit for python versions 3.5+
+    axp.set_yticks(yloc, labels=labels)
 
     axp.set_xlim(left=params["zoom"][0], right=params["zoom"][1])
     axp.set_ylabel('Frequency (MHz)')
-    axp.set_xticklabels([])
+    if not dynspec:
+        axp.set_xlabel('Time (ms)')
 
     axp.tick_params(axis='both', which='both', direction='in',
                    bottom=True, top=True, left=True, right=True)
 
-    axw = fig.add_subplot(gs[1])
+    if dynspec:
+        axp.set_xticklabels([])
+        axw = fig.add_subplot(gs[1])
 
-    freqs = cand.freqs
-    chan_bw = np.diff(freqs)[0]
+        freqs = cand.freqs
+        chan_bw = np.diff(freqs)[0]
 
-    axw.imshow(
-        cand.dynspec,
-        aspect="auto",
-        interpolation=None,
-        extent=[
-            plot_range[0],
-            plot_range[-1],
-            freqs[-1] - 0.5 * chan_bw,
-            freqs[0] + 0.5 * chan_bw,
-        ],
-        cmap=cmap2,
-        vmin=np.percentile(cand.dynspec, 0.1),
-        vmax=np.percentile(cand.dynspec, 99.9)
-    )
+        axw.imshow(
+            cand.dynspec,
+            aspect="auto",
+            interpolation=None,
+            extent=[
+                plot_range[0],
+                plot_range[-1],
+                freqs[-1] - 0.5 * chan_bw,
+                freqs[0] + 0.5 * chan_bw,
+            ],
+            cmap=cmap2,
+            vmin=np.percentile(cand.dynspec, 0.1),
+            vmax=np.percentile(cand.dynspec, 99.9)
+        )
 
-    axw.set_xlim(left=params["zoom"][0], right=params["zoom"][1])
+        axw.set_xlim(left=params["zoom"][0], right=params["zoom"][1])
 
-    axw.set_xlabel('Time (ms)')
-    axw.set_ylabel('Frequency (MHz)')
+        axw.set_xlabel('Time (ms)')
+        axw.set_ylabel('Frequency (MHz)')
 
-    axw.tick_params(axis='both', which='both', direction='in',
-                   bottom=True, top=True, left=True, right=True)
+        axw.tick_params(axis='both', which='both', direction='in',
+                    bottom=True, top=True, left=True, right=True)
 
     fig.align_labels()
 
     fig.tight_layout()
 
-    fig.savefig("scattering_fit_allbands.pdf".format(iband),
-            bbox_inches="tight", pad_inches=0.1)
+    if dynspec:
+        plt_out = "scattering_fit_allbands_dynspec.pdf".format(iband)
+    else:
+        plt_out = "scattering_fit_allbands.pdf".format(iband)
+    fig.savefig(plt_out, bbox_inches="tight", pad_inches=0.1)
 
 def plot_profile_models():
     """
