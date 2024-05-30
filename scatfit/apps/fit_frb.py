@@ -335,8 +335,7 @@ def compute_updated_dm(t_df, dm, params):
     print(fitresult_ml.fit_report())
 
     # 100 * (2000 - 700)/10 = 13k samples
-    emcee_kws = dict(steps=2000, burn=700, thin=10, is_weighted=True, 
-        progress=True)
+    emcee_kws = dict(steps=2000, burn=700, thin=10, is_weighted=True, progress=True)
 
     emcee_params = fitresult_ml.params.copy()
 
@@ -671,7 +670,7 @@ def main():
         sys.exit(1)
 
     # Checking if file is filterbank or archive
-    if args.filename.split('.')[-1] == 'fil':
+    if args.filename.split(".")[-1] == "fil":
         cand = sigproc.load_frb_data(
             args.filename, args.dm, args.fscrunch_factor, args.tscrunch_factor
         )
@@ -705,13 +704,14 @@ def main():
     }
 
     # fit integrated profile
-    fit_df, fit_results = fit_profile(cand, plot_range, args.fscrunch_factor,
-            args.smodel, params)
+    fit_df, fit_results = fit_profile(
+        cand, plot_range, args.fscrunch_factor, args.smodel, params
+    )
     print("\nFit results")
     print(fit_df)
 
     # Saving resut
-    fnout = 'scattering_fit_result.csv'
+    fnout = "scattering_fit_result.csv"
     fit_df.to_csv(fnout)
 
     # compute updated dm
@@ -723,11 +723,11 @@ def main():
         # best topocentric burst arrival time
         # at the highest frequency channel
         try:
-            start_mjd = Time(cand._header["tstart"], format="mjd",
-                    scale="utc", precision=9)
+            start_mjd = Time(
+                cand._header["tstart"], format="mjd", scale="utc", precision=9
+            )
         except AttributeError:
-            start_mjd = Time(cand.tstart, format="mjd",
-                    scale="utc", precision=9)
+            start_mjd = Time(cand.tstart, format="mjd", scale="utc", precision=9)
         burst_offset = TimeDelta(
             bin_burst * cand.tsamp * args.tscrunch_factor, format="sec"
         )
@@ -753,11 +753,13 @@ def main():
 
     plotting.plot_frb(cand, plot_range, profile, params)
 
-    plotting.plot_frb_scat(cand, fit_df, fit_results, args.smodel,
-            plot_range, params, dynspec=True)
-    
-    plotting.plot_frb_scat(cand, fit_df, fit_results, args.smodel,
-            plot_range, params, dynspec=False)
+    plotting.plot_frb_scat(
+        cand, fit_df, fit_results, args.smodel, plot_range, params, dynspec=True
+    )
+
+    plotting.plot_frb_scat(
+        cand, fit_df, fit_results, args.smodel, plot_range, params, dynspec=False
+    )
 
     plt.show()
 

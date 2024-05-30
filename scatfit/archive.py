@@ -8,8 +8,7 @@ import psrchive as pc
 import numpy as np
 
 from mtcutils.dedisp import dispersion_shifts, roll2d
-from mtcutils.core import scrunch, zdot, spectral_acc1, tukey_mask, \
-        tukey_mask_lowtailed
+from mtcutils.core import scrunch, zdot, spectral_acc1, tukey_mask, tukey_mask_lowtailed
 from iqrm import iqrm_mask
 
 
@@ -22,6 +21,7 @@ class Candidate(object):
     fname: str
         Path to file
     """
+
     def __init__(self, fname):
         self._fname = os.path.realpath(fname)
         self._arch = self._load_arch()
@@ -58,38 +58,38 @@ class Candidate(object):
 
     @property
     def nsamp(self):
-        """ Number of samples in the data """
+        """Number of samples in the data"""
         return self._arch.get_nbin()
 
     @property
     def nchans(self):
-        """ Number of channels in the data """
+        """Number of channels in the data"""
         return self._arch.get_nchan()
 
     @property
     def int_length(self):
-        """ Total integration time in seconds """
+        """Total integration time in seconds"""
         return self._arch.integration_length()
 
     @property
     def tsamp(self):
-        """ Sampling time in seconds """
+        """Sampling time in seconds"""
         tsamp = self.int_length / self.nsamp
         return tsamp
 
     @property
     def fcen(self):
-        """ Central frequency in MHz"""
+        """Central frequency in MHz"""
         return self._arch.get_centre_frequency()
 
     @property
     def bw(self):
-        """ Observing bandwidth in MHz """
+        """Observing bandwidth in MHz"""
         return self._arch.get_bandwidth()
 
     @property
     def fch1(self):
-        """ Frequency of the first channel (MHz) """
+        """Frequency of the first channel (MHz)"""
         return self.fcen + self.bw / 2
 
     @property
@@ -101,7 +101,7 @@ class Candidate(object):
 
     @property
     def fchn(self):
-        """ Frequency of the last channel (MHz) """
+        """Frequency of the last channel (MHz)"""
         return self.fcen - self.bw / 2
 
     @property
@@ -132,7 +132,7 @@ class Candidate(object):
 
     @property
     def bandpass_mean(self):
-        """ Mean of the data along the time axis, BEFORE normalisation """
+        """Mean of the data along the time axis, BEFORE normalisation"""
         return self._bpmean
 
     @property
@@ -152,7 +152,7 @@ class Candidate(object):
 
     @property
     def dm(self):
-        """ Current dispersion measure of the data in pc cm^{-3} """
+        """Current dispersion measure of the data in pc cm^{-3}"""
         return self._dm
 
     def normalise(self):
@@ -164,7 +164,7 @@ class Candidate(object):
             return
 
         m = self.bandpass_mean
-        s = self.bandpass_std.copy() # leave original bandpass_std untouched
+        s = self.bandpass_std.copy()  # leave original bandpass_std untouched
         s[s == 0] = 1.0
         self._data = (self._data - m.reshape(-1, 1)) / s.reshape(-1, 1)
         self._normalised = True
@@ -192,7 +192,9 @@ class Candidate(object):
         ValueError : if the data are not normalised yet
         """
         if not self._normalised:
-            raise ValueError("Refusing to apply zero-DM filter on non-normalised data, call normalise() first")
+            raise ValueError(
+                "Refusing to apply zero-DM filter on non-normalised data, call normalise() first"
+            )
 
         dm = self.dm
         self.set_dm(0.0)
@@ -211,7 +213,9 @@ class Candidate(object):
         ValueError : if the data are not normalised yet
         """
         if not self._normalised:
-            raise ValueError("Refusing to apply zero-DM filter on non-normalised data, call normalise() first")
+            raise ValueError(
+                "Refusing to apply zero-DM filter on non-normalised data, call normalise() first"
+            )
 
         dm = self.dm
         self.set_dm(0.0)
@@ -267,7 +271,7 @@ class Candidate(object):
         self._data[mask] = 0.0
         return mask
 
-    def scrunched_data(self, t=1, f=1, select='left'):
+    def scrunched_data(self, t=1, f=1, select="left"):
         """
         Returns a copy of the data scrunched in time and frequency
 
@@ -342,12 +346,12 @@ def load_frb_data(filename, dm, fscrunch, tscrunch):
     cand.set_dm(dm)
 
     dynspec = (
-        cand.scrunched_data(f=fscrunch, t=tscrunch, select="left") / fscrunch #**0.5
+        cand.scrunched_data(f=fscrunch, t=tscrunch, select="left") / fscrunch  # **0.5
     )
     cand.dynspec = dynspec
-    times = np.arange(cand.nsamp//tscrunch) * cand.tsamp * tscrunch
+    times = np.arange(cand.nsamp // tscrunch) * cand.tsamp * tscrunch
     cand.tval = times
-    freqs = cand.fch1 + np.arange(cand.nchans//fscrunch) * cand.foff * fscrunch
+    freqs = cand.fch1 + np.arange(cand.nchans // fscrunch) * cand.foff * fscrunch
     cand.fval = freqs
 
     return cand
