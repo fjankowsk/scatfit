@@ -1,6 +1,7 @@
 #
 #   Fit scattering models to FRB data.
 #   2022 - 2023 Fabian Jankowski
+#   2023 Ines Pastor-Marazuela
 #
 
 import argparse
@@ -19,6 +20,7 @@ from scatfit.dm import KDM, get_dm_smearing
 import scatfit.plotting as plotting
 import scatfit.pulsemodels as pulsemodels
 import scatfit.sigproc as sigproc
+import scatfit.archive as archive
 
 
 def parse_args():
@@ -95,7 +97,7 @@ def parse_args():
         type=float,
         nargs=2,
         metavar=("start", "end"),
-        default=[-200.0, 200.0],
+        default=[-150.0, 150.0],
         help="Consider only this time range of data in the fit. Increase the region for wide or highly-scattered bursts. Ensure that most of the scattering tail is included in the fit.",
     )
 
@@ -333,7 +335,8 @@ def compute_updated_dm(t_df, dm, params):
     print(fitresult_ml.fit_report())
 
     # 100 * (2000 - 700)/10 = 13k samples
-    emcee_kws = dict(steps=2000, burn=700, thin=10, is_weighted=True, progress=True)
+    emcee_kws = dict(steps=2000, burn=700, thin=10, is_weighted=True, 
+        progress=True)
 
     emcee_params = fitresult_ml.params.copy()
 
@@ -388,12 +391,14 @@ def fit_profile_model(fit_range, profile, smodel, params):
 
     model.set_param_hint("fluence", value=5.0, min=0.1)
     model.set_param_hint("center", value=0.0, min=-20.0, max=20.0)
-    model.set_param_hint("sigma", value=1.5, min=0.30624, max=20.0)
+    # model.set_param_hint("sigma", value=1.5, min=0.30624, max=20.0)
+    model.set_param_hint("sigma", value=1.5, min=7e-5, max=20.0)
 
     arg_list = list(inspect.signature(scat_model).parameters.keys())
 
     if "taus" in arg_list:
-        model.set_param_hint("taus", value=1.5, min=0.1)
+        # model.set_param_hint("taus", value=1.5, min=0.1)
+        model.set_param_hint("taus", value=1.5, min=5e-5)
 
     if "taui" in arg_list:
         model.set_param_hint("taui", value=0.30624, vary=False)
@@ -534,8 +539,9 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
         ]
     )
 
+    fitresults = []
     for iband in range(cand.dynspec.shape[0]):
-        print("Running sub-band: {0}".format(iband))
+        print("\nRunning sub-band: {0}".format(iband))
 
         sub_profile = cand.dynspec[iband, :]
 
@@ -584,6 +590,7 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
         params["dm_smear"] = dm_smear
 
         fitresult = fit_profile_model(fit_range, sub_profile, smodel, params)
+        fitresults.append(fitresult)
 
         # fit an unscattered model for comparison
         if params["compare"]:
@@ -638,7 +645,7 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
     df["w10i"] = pulsemodels.gaussian_fwtm(df["sigma"])
     df["err_w10i"] = pulsemodels.gaussian_fwtm(df["err_sigma"])
 
-    return df
+    return df, fitresults
 
 
 #
@@ -663,9 +670,15 @@ def main():
         print("The file does not exist: {0}".format(args.filename))
         sys.exit(1)
 
-    cand = sigproc.load_frb_data(
-        args.filename, args.dm, args.fscrunch_factor, args.tscrunch_factor
-    )
+    # Checking if file is filterbank or archive
+    if args.filename.split('.')[-1] == 'fil':
+        cand = sigproc.load_frb_data(
+            args.filename, args.dm, args.fscrunch_factor, args.tscrunch_factor
+        )
+    else:
+        cand = archive.load_frb_data(
+            args.filename, args.dm, args.fscrunch_factor, args.tscrunch_factor
+        )
 
     # band-integrated profile
     profile = np.sum(cand.dynspec, axis=0)
@@ -692,8 +705,14 @@ def main():
     }
 
     # fit integrated profile
-    fit_df = fit_profile(cand, plot_range, args.fscrunch_factor, args.smodel, params)
+    fit_df, fit_results = fit_profile(cand, plot_range, args.fscrunch_factor,
+            args.smodel, params)
+    print("\nFit results")
     print(fit_df)
+
+    # Saving resut
+    fnout = 'scattering_fit_result.csv'
+    fit_df.to_csv(fnout)
 
     # compute updated dm
     if len(fit_df.index) >= 2:
@@ -703,7 +722,12 @@ def main():
     if args.smodel == "unscattered" and args.tscrunch_factor == 1:
         # best topocentric burst arrival time
         # at the highest frequency channel
-        start_mjd = Time(cand._header["tstart"], format="mjd", scale="utc", precision=9)
+        try:
+            start_mjd = Time(cand._header["tstart"], format="mjd",
+                    scale="utc", precision=9)
+        except AttributeError:
+            start_mjd = Time(cand.tstart, format="mjd",
+                    scale="utc", precision=9)
         burst_offset = TimeDelta(
             bin_burst * cand.tsamp * args.tscrunch_factor, format="sec"
         )
@@ -728,6 +752,12 @@ def main():
     plotting.plot_width_scaling(fit_df, cand, fitresult)
 
     plotting.plot_frb(cand, plot_range, profile, params)
+
+    plotting.plot_frb_scat(cand, fit_df, fit_results, args.smodel,
+            plot_range, params, dynspec=True)
+    
+    plotting.plot_frb_scat(cand, fit_df, fit_results, args.smodel,
+            plot_range, params, dynspec=False)
 
     plt.show()
 
