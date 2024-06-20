@@ -1,6 +1,6 @@
 #
 #   Fit scattering models to FRB data.
-#   2022 - 2023 Fabian Jankowski
+#   2022 - 2024 Fabian Jankowski
 #   2023 Ines Pastor-Marazuela
 #
 
@@ -390,16 +390,19 @@ def fit_profile_model(fit_range, profile, smodel, params):
 
     model.set_param_hint("fluence", value=5.0, min=0.1)
     model.set_param_hint("center", value=0.0, min=-20.0, max=20.0)
+    # XXX: we should set the minimum based on the sampling time of the data
     # model.set_param_hint("sigma", value=1.5, min=0.30624, max=20.0)
-    model.set_param_hint("sigma", value=1.5, min=7e-5, max=20.0)
+    model.set_param_hint("sigma", value=1.5, min=7.0e-5, max=20.0)
 
     arg_list = list(inspect.signature(scat_model).parameters.keys())
 
     if "taus" in arg_list:
+        # XXX: same here
         # model.set_param_hint("taus", value=1.5, min=0.1)
-        model.set_param_hint("taus", value=1.5, min=5e-5)
+        model.set_param_hint("taus", value=1.5, min=5.0e-5)
 
     if "taui" in arg_list:
+        # XXX: same here
         model.set_param_hint("taui", value=0.30624, vary=False)
 
     if "taud" in arg_list:
@@ -556,6 +559,7 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
         sub_profile = sub_profile / np.max(sub_profile)
 
         # compute baseline statistics outside the central +- 30 ms
+        # XXX: we should adjust this based on the actual pulse width
         mask = np.abs(fit_range) > 30.0
         quantiles = np.quantile(sub_profile[mask], q=[0.25, 0.75], axis=None)
         std = 0.7413 * np.abs(quantiles[1] - quantiles[0])
@@ -669,7 +673,7 @@ def main():
         print("The file does not exist: {0}".format(args.filename))
         sys.exit(1)
 
-    # Checking if file is filterbank or archive
+    # check if the file is filterbank or archive
     if args.filename.split(".")[-1] == "fil":
         cand = sigproc.load_frb_data(
             args.filename, args.dm, args.fscrunch_factor, args.tscrunch_factor
