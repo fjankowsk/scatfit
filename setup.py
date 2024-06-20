@@ -38,15 +38,12 @@ setup(
         "emcee",
         "lmfit",
         "matplotlib",
-        "mtcutils",
+        "mtcutils @ git+https://bitbucket.org/vmorello/mtcutils.git@master",
         "numpy",
         "pandas",
         "scipy",
         "tqdm",
         "your",
-    ],
-    dependency_links=[
-        "git+https://bitbucket.org/vmorello/mtcutils.git@master",
     ],
     entry_points={
         "console_scripts": [
