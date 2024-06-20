@@ -26,7 +26,7 @@ ERROR: No matching distribution found for mtcutils (from scatfit==0.2.21)
 ```
 
 first install the `mtcutils` package manually like this:
-`$ pip3 install git+https://bitbucket.org/vmorello/mtcutils.git@master`
+`$ pip3 install git+https://bitbucket.org/jankowsk/mtcutils.git@master`
 
 before installing `scatfit`. Then
 `$ pip3 install scatfit`
