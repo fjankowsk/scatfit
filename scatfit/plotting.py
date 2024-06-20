@@ -141,7 +141,7 @@ def plot_frb_scat(
     cmap2 = matplotlib.cm.get_cmap(cmap2)
     color2 = [cmap2((ii + 2) / (df.shape[0] + 2)) for ii in range(df.shape[0])]
 
-    # Setting up plot
+    # setting up plot
     if dynspec:
         fig = plt.figure(figsize=(7, 7))
         gs = gridspec.GridSpec(2, 1, hspace=0, height_ratios=[2, 3])
@@ -151,15 +151,11 @@ def plot_frb_scat(
 
     axp = fig.add_subplot(gs[0])
     for iband, row in df.iterrows():
-
         band = int(row["band"])
+
         sub_profile = cand.dynspec[band, :]
         sub_profile = sub_profile - np.mean(sub_profile)
         sub_profile = sub_profile / np.max(sub_profile)
-
-        # sub_fit = scat_model(x=plot_range, fluence=row['fluence'],
-        #         center=row['center'], sigma=row['sigma'],
-        # taus=row['taus'], dc=0)
 
         fitresult = fitresults[iband]
         axp.plot(
@@ -170,11 +166,9 @@ def plot_frb_scat(
             zorder=8,
         )
         axp.plot(plot_range, sub_profile - band, color=color1[iband], lw=0.5, alpha=0.7)
-        # axp.plot(plot_range, sub_fit-iband, color=color2[iband], lw=1.5)
 
     yloc = -df["band"].to_numpy()
     labels = [str(int(f)) for f in df["cfreq"].to_numpy()]
-    print(yloc, labels)
     axp.set_yticks(yloc, labels=labels)
 
     axp.set_xlim(left=params["zoom"][0], right=params["zoom"][1])
@@ -234,10 +228,11 @@ def plot_frb_scat(
     fig.tight_layout()
 
     if dynspec:
-        plt_out = "scattering_fit_allbands_dynspec.pdf".format(iband)
+        filename = "scattering_fit_allbands_dynspec.pdf"
     else:
-        plt_out = "scattering_fit_allbands.pdf".format(iband)
-    fig.savefig(plt_out, bbox_inches="tight", pad_inches=0.1)
+        filename = "scattering_fit_allbands.pdf"
+
+    fig.savefig(filename, bbox_inches="tight", pad_inches=0.1)
 
 
 def plot_profile_models():
