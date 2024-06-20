@@ -1,20 +1,19 @@
 #
-#   Functions to read psrchive file.
+#   Functions to read a PSRCHIVE file.
 #   2023 Ines Pastor-Marazuela
+#   2024 Fabian Jankowski
 #
 
 import numpy as np
 import os.path
-import sys
 
 try:
-    import psrchive as pc
+    import psrchive as ps
 except ModuleNotFoundError:
     print("Could not import PSRCHIVE python bindings.")
-    sys.exit(1)
 
 from mtcutils.dedisp import dispersion_shifts, roll2d
-from mtcutils.core import scrunch, zdot, spectral_acc1, tukey_mask, tukey_mask_lowtailed
+from mtcutils.core import scrunch, zdot, spectral_acc1, tukey_mask
 from iqrm import iqrm_mask
 
 
@@ -48,7 +47,7 @@ class Candidate(object):
         self._dispersion_shifts = np.zeros(self.nchans, dtype=int)
 
     def _load_arch(self):
-        arch = pc.Archive_load(self._fname)
+        arch = ps.Archive_load(self._fname)
         arch.remove_baseline()
         return arch
 
