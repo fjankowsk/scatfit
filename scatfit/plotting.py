@@ -136,9 +136,9 @@ def plot_frb_scat(
 
     model = Model(scat_model)
 
-    cmap1 = matplotlib.cm.get_cmap(cmap1)
+    cmap1 = plt.get_cmap(cmap1)
     color1 = [cmap1((ii + 2) / (df.shape[0] + 2)) for ii in range(df.shape[0])]
-    cmap2 = matplotlib.cm.get_cmap(cmap2)
+    cmap2 = plt.get_cmap(cmap2)
     color2 = [cmap2((ii + 2) / (df.shape[0] + 2)) for ii in range(df.shape[0])]
 
     # setting up plot
