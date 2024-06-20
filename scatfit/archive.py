@@ -3,9 +3,15 @@
 #   2023 Ines Pastor-Marazuela
 #
 
-import os
-import psrchive as pc
 import numpy as np
+import os.path
+import sys
+
+try:
+    import psrchive as pc
+except ModuleNotFoundError:
+    print("Could not import PSRCHIVE python bindings.")
+    sys.exit(1)
 
 from mtcutils.dedisp import dispersion_shifts, roll2d
 from mtcutils.core import scrunch, zdot, spectral_acc1, tukey_mask, tukey_mask_lowtailed
