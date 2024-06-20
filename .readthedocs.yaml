@@ -16,7 +16,7 @@ build:
     # golang: "1.19"
   jobs:
     pre_install:
-      - pip install git+https://bitbucket.org/vmorello/mtcutils.git@master
+      - pip install git+https://bitbucket.org/jankowsk/mtcutils.git@master
 
 # Build documentation in the "docs/" directory with Sphinx
 sphinx:
