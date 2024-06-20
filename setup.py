@@ -38,7 +38,7 @@ setup(
         "emcee",
         "lmfit",
         "matplotlib",
-        "mtcutils @ git+https://bitbucket.org/vmorello/mtcutils.git@master",
+        "mtcutils @ git+https://bitbucket.org/jankowsk/mtcutils.git@master",
         "numpy",
         "pandas",
         "scipy",
