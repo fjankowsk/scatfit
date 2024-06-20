@@ -5,6 +5,12 @@ API reference
 Modules
 =======
 
+archive
+-------
+
+.. automodule:: scatfit.archive
+    :members:
+
 plotting
 --------
 
