@@ -15,3 +15,20 @@ This could happen if you run `scatfit` from its software repository git checkout
 ## Does it work on ARM-based Macs? ##
 
 Yes, `scatfit` works on ARM-based Macs with M1 or M2 processors. In fact, it runs blazing fast on them! The immense single-core performance results in a speedup of > 3x in comparison with similar x64-based systems, in my experience.
+
+## I get a mtcutils dependency error when trying to install the software ##
+
+If you encounter a dependency error like the following,
+
+```bash
+ERROR: Could not find a version that satisfies the requirement mtcutils (from scatfit==0.2.21) (from versions: none)
+ERROR: No matching distribution found for mtcutils (from scatfit==0.2.21)
+```
+
+first install the `mtcutils` package manually like this:
+`$ pip3 install git+https://bitbucket.org/vmorello/mtcutils.git@master`
+
+before installing `scatfit`. Then
+`$ pip3 install scatfit`
+
+should work fine. Maybe replace `pip3` by `pip` depending on your Python installation.
