@@ -1,6 +1,6 @@
 BLK         =   black
 MAKE        =   make
-PIP         =   pip
+PIP         =   pip3
 
 BASEDIR     =   $(CURDIR)
 SRCDIR      =   ${BASEDIR}/scatfit
