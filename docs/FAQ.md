@@ -16,7 +16,7 @@ This could happen if you run `scatfit` from its software repository git checkout
 
 Yes, `scatfit` works on ARM-based Macs with M1 or M2 processors. In fact, it runs blazing fast on them! The immense single-core performance results in a speedup of > 3x in comparison with similar x64-based systems, in my experience.
 
-## I get a mtcutils dependency error when trying to install the software ##
+## I get a mtcutils dependency error when trying to install the software. ##
 
 If you encounter a dependency error like the following,
 
