@@ -43,4 +43,6 @@ To measure the scattering-corrected DM reliably, one must run `scatfit` iterativ
 
 In other words, start by giving the initial DM (e.g. S/N-optimizing DM) in the first `scatfit` call. Copy the output scattering-corrected DM and run `scatfit` again with the output DM as input. Repeat this process until the difference between input DM and output scattering-corrected DM is less than the reported DM uncertainty or a pre-determined value.
 
+If you have access to the voltage data of the burst, you should also iterate on the coherent DM at the same time as the post-detection DM. You ideally want to coherently dedisperse, optimise the DM, coherently dedisperse the data again with the new output DM, and repeat the process several times until convergence.
+
 The leading edge of the burst profile should be as sharp as possible (in the absence of DM-smearing), and the tail well-described by the scattering model. Three to four iterations should be enough to reach a stable scattering-corrected DM if the initial DM was already close to the corrected value. Something must be wrong if the DM does not stabilise after 5-6 iterations.
