@@ -143,13 +143,16 @@ def plot_frb_scat(
 
     # setting up plot
     if dynspec:
-        fig = plt.figure(figsize=(7, 7))
-        gs = gridspec.GridSpec(2, 1, hspace=0, height_ratios=[2, 3])
+        fig, axes = plt.subplots(
+            figsize=(7, 7),
+            nrows=2,
+            ncols=1,
+            sharex=True,
+            gridspec_kw={"height_ratios": [2, 3], "hspace": 0},
+        )
     else:
-        fig = plt.figure(figsize=(7, 3))
-        gs = gridspec.GridSpec(1, 1)
+        fig, axes = plt.subplots(figsize=(7, 3), nrows=1, ncols=1)
 
-    axp = fig.add_subplot(gs[0])
     for iband, row in df.iterrows():
         band = int(row["band"])
 
@@ -158,25 +161,27 @@ def plot_frb_scat(
         sub_profile = sub_profile / np.max(sub_profile)
 
         fitresult = fitresults[iband]
-        axp.plot(
+        axes[0].plot(
             plot_range,
             model.eval(params=fitresult.params, x=plot_range) - band,
             color=color2[iband],
             lw=1.5,
             zorder=8,
         )
-        axp.plot(plot_range, sub_profile - band, color=color1[iband], lw=0.5, alpha=0.7)
+        axes[0].plot(
+            plot_range, sub_profile - band, color=color1[iband], lw=0.5, alpha=0.7
+        )
 
     yloc = -df["band"].to_numpy()
     labels = [str(int(f)) for f in df["cfreq"].to_numpy()]
-    axp.set_yticks(yloc, labels=labels)
+    axes[0].set_yticks(yloc, labels=labels)
 
-    axp.set_xlim(left=params["zoom"][0], right=params["zoom"][1])
-    axp.set_ylabel("Frequency (MHz)")
+    axes[0].set_xlim(left=params["zoom"][0], right=params["zoom"][1])
+    axes[0].set_ylabel("Frequency (MHz)")
     if not dynspec:
-        axp.set_xlabel("Time (ms)")
+        axes[0].set_xlabel("Time (ms)")
 
-    axp.tick_params(
+    axes[0].tick_params(
         axis="both",
         which="both",
         direction="in",
@@ -187,13 +192,12 @@ def plot_frb_scat(
     )
 
     if dynspec:
-        axp.set_xticklabels([])
-        axw = fig.add_subplot(gs[1])
+        axes[0].set_xticklabels([])
 
         freqs = cand.freqs
         chan_bw = np.diff(freqs)[0]
 
-        axw.imshow(
+        axes[1].imshow(
             cand.dynspec,
             aspect="auto",
             interpolation=None,
@@ -208,12 +212,12 @@ def plot_frb_scat(
             vmax=np.percentile(cand.dynspec, 99.9),
         )
 
-        axw.set_xlim(left=params["zoom"][0], right=params["zoom"][1])
+        axes[1].set_xlim(left=params["zoom"][0], right=params["zoom"][1])
 
-        axw.set_xlabel("Time (ms)")
-        axw.set_ylabel("Frequency (MHz)")
+        axes[1].set_xlabel("Time (ms)")
+        axes[1].set_ylabel("Frequency (MHz)")
 
-        axw.tick_params(
+        axes[1].tick_params(
             axis="both",
             which="both",
             direction="in",
