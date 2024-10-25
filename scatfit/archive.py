@@ -73,19 +73,18 @@ class Candidate(object):
 
     @property
     def nsubint(self):
-        """ Number of subintegrations of the archive """
+        """Number of subintegrations of the archive"""
         return self._arch.get_nsubint()
 
     @property
     def period(self):
-        """ Topocentric folding period in seconds (from first subint) """
+        """Topocentric folding period in seconds (from first subint)"""
         return self._arch[0].get_folding_period()
 
     @property
     def tsamp(self):
-        """ Bin width of profile samples in seconds """
-        tsamp = self.period / self.nsamp
-        return tsamp
+        """Bin width of profile samples in seconds"""
+        return self.period / self.nsamp
 
     @property
     def fcen(self):
@@ -104,9 +103,7 @@ class Candidate(object):
 
     @property
     def foff(self):
-        """
-        Frequency offset between consecutive channels (MHz). Can be negative.
-        """
+        """Frequency offset between consecutive channels (MHz). Can be negative."""
         return self.bw / self.nchans
 
     @property
@@ -116,24 +113,17 @@ class Candidate(object):
 
     @property
     def freqs(self):
-        """
-        Channel frequencies in MHz, in the same order as they appear in the
-        data
-        """
+        """Channel frequencies in MHz, in the same order as they appear in the data"""
         return self.fch1 + np.arange(self.nchans) * self.foff
 
     @property
     def times(self):
-        """
-        Time offset of all samples from the start of the data, in seconds
-        """
+        """Time offset of all samples from the start of the data, in seconds"""
         return np.arange(self.nsamp) * self.tsamp
 
     @property
     def tstart(self):
-        """
-        Start MJD of first time sample at the top frequency channel
-        """
+        """Start MJD of first time sample at the top frequency channel"""
         return self._arch.get_Integration(0).get_start_time().in_days()
 
     @property
@@ -147,17 +137,12 @@ class Candidate(object):
 
     @property
     def bandpass_std(self):
-        """
-        Standard deviation of the data along the time axis, BEFORE normalisation
-        """
+        """Standard deviation of the data along the time axis, BEFORE normalisation"""
         return self._bpstd
 
     @property
     def bandpass_acc1(self):
-        """
-        Autocorrelation coefficient with a lag of 1 time sample along
-        the time axis
-        """
+        """Autocorrelation coefficient with a lag of 1 time sample along the time axis"""
         return self._bpacc1
 
     @property
@@ -348,7 +333,7 @@ def load_frb_data(filename, dm, fscrunch, tscrunch):
     )
 
     # z-dot filter
-    print("Applying z-dot filter if DM>20 pc cm^-3")
+    print("Applying z-dot filter if DM > 20 pc cm^-3.")
     if dm > 20:
         cand.zdot()
 
