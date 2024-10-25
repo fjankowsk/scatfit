@@ -72,14 +72,19 @@ class Candidate(object):
         return self._arch.get_nchan()
 
     @property
-    def int_length(self):
-        """Total integration time in seconds"""
-        return self._arch.integration_length()
+    def nsubint(self):
+        """ Number of subintegrations of the archive """
+        return self._arch.get_nsubint()
+
+    @property
+    def period(self):
+        """ Topocentric folding period in seconds (from first subint) """
+        return self._arch[0].get_folding_period()
 
     @property
     def tsamp(self):
-        """Sampling time in seconds"""
-        tsamp = self.int_length / self.nsamp
+        """ Bin width of profile samples in seconds """
+        tsamp = self.period / self.nsamp
         return tsamp
 
     @property
@@ -102,7 +107,7 @@ class Candidate(object):
         """
         Frequency offset between consecutive channels (MHz). Can be negative.
         """
-        return -np.abs(self.bw / self.nchans)
+        return self.bw / self.nchans
 
     @property
     def fchn(self):
