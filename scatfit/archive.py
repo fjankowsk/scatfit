@@ -57,8 +57,15 @@ class Candidate(object):
         # if self._arch.get_npol() == 4:
         if len(data.shape) == 3:
             data = data[0]
-        # Arranging frequencies in correct order
-        data = np.flip(data, axis=0)
+
+        self._freqs = self._arch.get_frequencies()
+
+        # treat lower sideband order
+        if self.freqs[0] == np.min(self.freqs):
+            print("Lower sideband order detected, flipping the band.")
+            self._freqs = np.flip(self._freqs)
+            data = np.flip(data, axis=0)
+
         return data
 
     @property
@@ -99,7 +106,7 @@ class Candidate(object):
     @property
     def fch1(self):
         """Frequency of the first channel (MHz)"""
-        return self.fcen + self.bw / 2
+        return self.freqs[0]
 
     @property
     def foff(self):
@@ -109,12 +116,12 @@ class Candidate(object):
     @property
     def fchn(self):
         """Frequency of the last channel (MHz)"""
-        return self.fcen - self.bw / 2
+        return self.freqs[-1]
 
     @property
     def freqs(self):
         """Channel frequencies in MHz, in the same order as they appear in the data"""
-        return self.fch1 + np.arange(self.nchans) * self.foff
+        return self._freqs
 
     @property
     def times(self):
@@ -344,7 +351,7 @@ def load_frb_data(filename, dm, fscrunch, tscrunch):
     cand.dynspec = dynspec
     times = np.arange(cand.nsamp // tscrunch) * cand.tsamp * tscrunch
     cand.tval = times
-    freqs = cand.fch1 + np.arange(cand.nchans // fscrunch) * cand.foff * fscrunch
+    freqs = cand.freqs.reshape(cand.freqs.shape[0] // fscrunch, fscrunch).mean(axis=1)
     cand.fval = freqs
 
     return cand
