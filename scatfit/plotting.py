@@ -508,10 +508,15 @@ def plot_width_scaling(t_df, cand, fitresult):
             label=r"$\tau_\mathrm{s}$ fit",
         )
 
-        # show scattering time at 1 ghz and scattering index
-        info_str = "${0:.1f} \pm {1:.1f}$ ms".format(
-            fitresult.tau_1ghz["value"], fitresult.tau_1ghz["error"]
-        )
+        # show scattering time at 1 ghz or 100 mhz and scattering index
+        if df["cfreq"].mean() < 400:
+            info_str = "${0:.1f} \pm {1:.1f}$ ms".format(
+                fitresult.tau_100mhz["value"], fitresult.tau_100mhz["error"]
+            )
+        else:
+            info_str = "${0:.1f} \pm {1:.1f}$ ms".format(
+                fitresult.tau_1ghz["value"], fitresult.tau_1ghz["error"]
+            )
         info_str += "\n" + "${0:.1f} \pm {1:.1f}$".format(
             fitresult.best_values["slope"], fitresult.params["slope"].stderr
         )
