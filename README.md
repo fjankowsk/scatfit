@@ -109,3 +109,16 @@ The images below show some example output from the program obtained when fitting
 ![Width scaling](https://github.com/fjankowsk/scatfit/raw/master/docs/width_scaling.png "Width scaling")
 
 ![Correlations](https://github.com/fjankowsk/scatfit/raw/master/docs/corner.png "Correlations")
+
+## Data verification ##
+
+We have verified the `scatfit` software with simulated and real FRB and pulsar data from the following radio telescopes.
+
+*MeerKAT*
+
+* TUSE total intensity
+* TUSE high time-resolution voltage buffer data full polarisation
+
+*NenuFAR*
+
+* Folded dispersion-corrected data
