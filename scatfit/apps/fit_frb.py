@@ -269,32 +269,38 @@ def fit_powerlaw(x, y, err_y, params):
         )
     )
 
-    # estimate scattering time at 1 ghz from the mcmc samples
+    # estimate scattering time at 1 ghz and 100 MHz from the mcmc samples
     samples = fitresult_emcee.flatchain
 
-    tau_samples = 10 ** linear(
-        np.log10(1.0),
-        fitresult_emcee.best_values["x0"],
-        samples["slope"],
-        samples["intercept"],
-    )
+    tau_rfreqs = []
 
-    quantiles = np.quantile(tau_samples, q=[0.16, 0.5, 0.84])
-
-    error = np.maximum(
-        np.abs(quantiles[1] - quantiles[0]), np.abs(quantiles[2] - quantiles[1])
-    )
-
-    tau_1ghz = {"value": quantiles[1], "error": error}
-
-    print(
-        "Scattering time at 1 GHz: {0:.2f} +- {1:.2f} ms".format(
-            tau_1ghz["value"], tau_1ghz["error"]
+    for rfreq in [1.0, 0.1]:
+        tau_samples = 10 ** linear(
+            np.log10(rfreq),
+            fitresult_emcee.best_values["x0"],
+            samples["slope"],
+            samples["intercept"],
         )
-    )
+
+        quantiles = np.quantile(tau_samples, q=[0.16, 0.5, 0.84])
+
+        error = np.maximum(
+            np.abs(quantiles[1] - quantiles[0]), np.abs(quantiles[2] - quantiles[1])
+        )
+
+        tau_rfreq = {"rfreq": rfreq, "value": quantiles[1], "error": error}
+
+        print(
+            "Scattering time at {0} GHz: {1:.2f} +- {2:.2f} ms".format(
+                tau_rfreq["rfreq"], tau_rfreq["value"], tau_rfreq["error"]
+            )
+        )
+
+        tau_rfreqs.append(tau_rfreq)
 
     # store the computed values in the result object
-    fitresult_emcee.tau_1ghz = tau_1ghz
+    fitresult_emcee.tau_1ghz = tau_rfreqs[0]
+    fitresult_emcee.tau_100mhz = tau_rfreqs[1]
 
     return fitresult_emcee
 
