@@ -1,13 +1,12 @@
 #
 #   Plotting functions.
-#   2022 Fabian Jankowski
+#   2022 - 2024 Fabian Jankowski
 #
 
 import corner
 import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FormatStrFormatter
-import matplotlib.gridspec as gridspec
 import numpy as np
 from lmfit import Model
 
@@ -143,7 +142,7 @@ def plot_frb_scat(
 
     # setting up plot
     if dynspec:
-        fig, axes = plt.subplots(
+        fig, axs = plt.subplots(
             figsize=(7, 7),
             nrows=2,
             ncols=1,
@@ -151,7 +150,8 @@ def plot_frb_scat(
             gridspec_kw={"height_ratios": [2, 3], "hspace": 0},
         )
     else:
-        fig, axes = plt.subplots(figsize=(7, 3), nrows=1, ncols=1)
+        fig, axs = plt.subplots(figsize=(7, 3), nrows=1, ncols=1)
+        axs = [axs]
 
     for iband, row in df.iterrows():
         band = int(row["band"])
@@ -161,27 +161,27 @@ def plot_frb_scat(
         sub_profile = sub_profile / np.max(sub_profile)
 
         fitresult = fitresults[iband]
-        axes[0].plot(
+        axs[0].plot(
             plot_range,
             model.eval(params=fitresult.params, x=plot_range) - band,
             color=color2[iband],
             lw=1.5,
             zorder=8,
         )
-        axes[0].plot(
+        axs[0].plot(
             plot_range, sub_profile - band, color=color1[iband], lw=0.5, alpha=0.7
         )
 
     yloc = -df["band"].to_numpy()
     labels = [str(int(f)) for f in df["cfreq"].to_numpy()]
-    axes[0].set_yticks(yloc, labels=labels)
+    axs[0].set_yticks(yloc, labels=labels)
 
-    axes[0].set_xlim(left=params["zoom"][0], right=params["zoom"][1])
-    axes[0].set_ylabel("Frequency (MHz)")
+    axs[0].set_xlim(left=params["zoom"][0], right=params["zoom"][1])
+    axs[0].set_ylabel("Frequency (MHz)")
     if not dynspec:
-        axes[0].set_xlabel("Time (ms)")
+        axs[0].set_xlabel("Time (ms)")
 
-    axes[0].tick_params(
+    axs[0].tick_params(
         axis="both",
         which="both",
         direction="in",
@@ -192,12 +192,12 @@ def plot_frb_scat(
     )
 
     if dynspec:
-        axes[0].set_xticklabels([])
+        axs[0].set_xticklabels([])
 
         freqs = cand.freqs
         chan_bw = np.diff(freqs)[0]
 
-        axes[1].imshow(
+        axs[1].imshow(
             cand.dynspec,
             aspect="auto",
             interpolation=None,
@@ -212,12 +212,12 @@ def plot_frb_scat(
             vmax=np.percentile(cand.dynspec, 99.9),
         )
 
-        axes[1].set_xlim(left=params["zoom"][0], right=params["zoom"][1])
+        axs[1].set_xlim(left=params["zoom"][0], right=params["zoom"][1])
 
-        axes[1].set_xlabel("Time (ms)")
-        axes[1].set_ylabel("Frequency (MHz)")
+        axs[1].set_xlabel("Time (ms)")
+        axs[1].set_ylabel("Frequency (MHz)")
 
-        axes[1].tick_params(
+        axs[1].tick_params(
             axis="both",
             which="both",
             direction="in",
