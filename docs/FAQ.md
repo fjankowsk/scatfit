@@ -2,10 +2,10 @@
 
 ## How do I fit FRB data? ##
 
-`scatfit` reads FRB data from `SIGPROC` filterbank files and various data formats supported by `PSRCHIVE`, including PSRFITS and Timer. The data must be a single dynamic spectrum stream with frequency and time dimension, typically at zero-DM, i.e. *not* dedispersed. `scatfit` includes various methods to RFI clean the data. Thus, it can be used directly on the raw input data, assuming that you already know the rough *DM* and location of the FRB. A typical command line run looks like this:  
+`scatfit` reads FRB data from `SIGPROC` filterbank files and various data formats supported by `PSRCHIVE`, including PSRFITS and Timer. The data must be a single dynamic spectrum stream with frequency and time dimension, typically at zero-DM, i.e. *not* dedispersed. `scatfit` includes various methods to RFI clean the data. Thus, it can be used directly on the raw input data, assuming that you already know the rough *DM* and location of the FRB. A typical command line run looks like this:  
 `$ scatfit-fitfrb filename.fil 503.6 --fscrunch 256 --fitscatindex --snr 5.0`
 
-Tweak the sub-band *S/N* threshold as required for your data. If `scatfit` does not find the burst location automatically, you can set it manually using the *binburst* commandline option. Run `scatfit` several times while changing the input DM to the best-determined one reported in the `scatfit` output until the DM converges (no significant DM change). Use the converged best-determined DM as input for a final `scatfit` run with the large MCMC chains, i.e. without the *fast* option.
+Tweak the sub-band *S/N* threshold as required for your data. If `scatfit` does not find the burst location automatically, you can set it manually using the *binburst* command line option. Run `scatfit` several times while changing the input DM to the best-determined one reported in the `scatfit` output until the DM converges (no significant DM change). Use the converged best-determined DM as input for a final `scatfit` run with the large MCMC chains, i.e. without the *fast* option.
 
 ## How do I fit folded pulsar profile data? ##
 
