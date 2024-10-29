@@ -52,11 +52,16 @@ class Candidate(object):
         return arch
 
     def _load_data(self):
-        data = np.squeeze(self._arch.get_data())
-        # in case of having Stokes IQUV data
-        # if self._arch.get_npol() == 4:
-        if len(data.shape) == 3:
+        # treat full-stokes data
+        if self.npol > 1:
+            if self.state != "Stokes":
+                self._arch.convert_state("Stokes")
+                assert self.state == "Stokes"
+            data = np.squeeze(self._arch.get_data())
             data = data[0]
+        # total intensity
+        else:
+            data = np.squeeze(self._arch.get_data())
 
         self._freqs = self._arch.get_frequencies()
 
@@ -79,6 +84,11 @@ class Candidate(object):
         return self._arch.get_nchan()
 
     @property
+    def npol(self):
+        """Number of polarisations of the data"""
+        return self._arch.get_npol()
+
+    @property
     def nsubint(self):
         """Number of subintegrations of the archive"""
         return self._arch.get_nsubint()
@@ -87,6 +97,11 @@ class Candidate(object):
     def period(self):
         """Topocentric folding period in seconds (from first subint)"""
         return self._arch[0].get_folding_period()
+
+    @property
+    def state(self):
+        """The polarisation state of the data"""
+        return self._arch.get_state()
 
     @property
     def tsamp(self):
