@@ -29,7 +29,7 @@ The easiest and recommended way to install the software is via the Python comman
 
 `pip install git+https://github.com/fjankowsk/scatfit.git@master`
 
-This will automatically install all dependencies.
+This will automatically install all dependencies. Depending on your Python installation, you might want to replace `pip` with `pip3` in the above command.
 
 Please verify that your installation works as expected by downloading a pre-generated `SIGPROC` filterbank file with synthetic data that comes bundled with the GitHub repository:
 
