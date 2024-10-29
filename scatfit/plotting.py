@@ -101,7 +101,6 @@ def plot_frb(cand, plot_range, profile, params):
     fig.tight_layout()
 
 
-# plot_frb_scat added by IPM
 def plot_frb_scat(
     cand,
     df,
@@ -115,7 +114,6 @@ def plot_frb_scat(
 ):
 
     # TODO: Include additional arguments in result to be ablo to plot all models
-
     if smodel == "unscattered":
         scat_model = pulsemodels.gaussian_normed
     elif smodel == "scattered_isotropic_analytic":
@@ -192,7 +190,8 @@ def plot_frb_scat(
     )
 
     if dynspec:
-        axs[0].set_xticklabels([])
+        # remove bottom labels (numbers)
+        axs[0].tick_params(axis="x", which="both", labelbottom=False)
 
         freqs = cand.freqs
         chan_bw = np.diff(freqs)[0]
@@ -213,7 +212,6 @@ def plot_frb_scat(
         )
 
         axs[1].set_xlim(left=params["zoom"][0], right=params["zoom"][1])
-
         axs[1].set_xlabel("Time (ms)")
         axs[1].set_ylabel("Frequency (MHz)")
 
