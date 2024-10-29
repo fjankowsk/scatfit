@@ -48,15 +48,22 @@ class Candidate(object):
 
     def _load_arch(self):
         arch = ps.Archive_load(self._fname)
-        arch.remove_baseline()
         return arch
 
     def _load_data(self):
+        self._arch.remove_baseline()
+
+        # treat already dedispersed data
+        if self.dedispersed:
+            self._arch.dededisperse()
+            print("Dededispersed the data.")
+
         # treat full-stokes data
         if self.npol > 1:
             if self.state != "Stokes":
                 self._arch.convert_state("Stokes")
                 assert self.state == "Stokes"
+                print("Converted the data to Stokes polarisation order.")
             data = np.squeeze(self._arch.get_data())
             data = data[0]
         # total intensity
@@ -67,11 +74,16 @@ class Candidate(object):
 
         # treat lower sideband order
         if self.freqs[0] == np.min(self.freqs):
-            print("Lower sideband order detected, flipping the band.")
             self._freqs = np.flip(self._freqs)
             data = np.flip(data, axis=0)
+            print("Lower sideband order detected, flipped the band.")
 
         return data
+
+    @property
+    def dedispersed(self):
+        """Are the data dedispersed?"""
+        return self._arch.get_dedispersed()
 
     @property
     def nsamp(self):
