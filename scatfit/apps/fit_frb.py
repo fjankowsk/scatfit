@@ -690,11 +690,19 @@ def main():
     # check if the file is filterbank or archive
     if os.path.splitext(args.filename)[1] == ".fil":
         cand = sigproc.load_frb_data(
-            args.filename, args.dm, args.fscrunch_factor, args.tscrunch_factor, args
+            args.filename,
+            args.dm,
+            args.fscrunch_factor,
+            args.tscrunch_factor,
+            args.norfi,
         )
     else:
         cand = archive.load_frb_data(
-            args.filename, args.dm, args.fscrunch_factor, args.tscrunch_factor, args
+            args.filename,
+            args.dm,
+            args.fscrunch_factor,
+            args.tscrunch_factor,
+            args.norfi,
         )
 
     # band-integrated profile

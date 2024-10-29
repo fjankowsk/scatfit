@@ -300,7 +300,7 @@ class Candidate(object):
         return scrunch(self._data, t=t, f=f, select=select)
 
 
-def load_frb_data(filename, dm, fscrunch, tscrunch, params):
+def load_frb_data(filename, dm, fscrunch, tscrunch, norfi):
     """
     Load the FRB data from a psrchive file.
 
@@ -314,8 +314,8 @@ def load_frb_data(filename, dm, fscrunch, tscrunch, params):
         The number of frequency channels to sum.
     tscrunch: int
         The number of time samples to sum.
-    params: dict
-        Additional parameters.
+    norfi: bool
+        Do not perform RFI excision.
 
     Returns
     -------
@@ -326,7 +326,8 @@ def load_frb_data(filename, dm, fscrunch, tscrunch, params):
     cand = Candidate(filename)
     cand.normalise()
 
-    if "norfi" in params and not params["norfi"]:
+    # XXX: move the rfi excision methods outside the specific data loader
+    if not norfi:
         # calculates and applies both IQRM and ACC1 masks
         mask = cand.apply_chanmask()
         print(
