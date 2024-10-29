@@ -25,15 +25,11 @@ The code is also listed in the [Astrophysics Source Code Library (ASCL)](https:/
 
 ## Installation ##
 
-The easiest and recommended way to install the software is through `pip` from the central PyPI index by running:
-
-`pip install scatfit`
-
-This will install the latest release and all its dependencies. If you need a more recent version of the software, install it directly from its GitHub software repository. For instance, to install the master branch of the code, use the following command:
+The easiest and recommended way to install the software is via the Python command `pip` directly from the `scatfit` GitHub software repository. For instance, to install the master branch of the code, use the following command:
 
 `pip install git+https://github.com/fjankowsk/scatfit.git@master`
 
-This will also automatically install all dependencies.
+This will automatically install all dependencies.
 
 Please verify that your installation works as expected by downloading a pre-generated `SIGPROC` filterbank file with synthetic data that comes bundled with the GitHub repository:
 
