@@ -7,7 +7,7 @@ from mtcutils import Candidate
 import numpy as np
 
 
-def load_frb_data(filename, dm, fscrunch, tscrunch):
+def load_frb_data(filename, dm, fscrunch, tscrunch, params):
     """
     Load the FRB data from a SIGPROC filterbank file.
 
@@ -21,6 +21,8 @@ def load_frb_data(filename, dm, fscrunch, tscrunch):
         The number of frequency channels to sum.
     tscrunch: int
         The number of time samples to sum.
+    params: dict
+        Additional parameters.
 
     Returns
     -------
@@ -31,17 +33,18 @@ def load_frb_data(filename, dm, fscrunch, tscrunch):
     cand = Candidate.from_filterbank(filename)
     cand.normalise()
 
-    # calculates and applies both IQRM and ACC1 masks
-    mask = cand.apply_chanmask()
-    print(
-        "Channels masked based on stddev (via IQRM) and acc1: {} / {} ({:.2%})".format(
-            mask.sum(), cand.nchans, mask.sum() / cand.nchans
+    if "norfi" in params and not params["norfi"]:
+        # calculates and applies both IQRM and ACC1 masks
+        mask = cand.apply_chanmask()
+        print(
+            "Channels masked based on stddev (via IQRM) and acc1: {} / {} ({:.2%})".format(
+                mask.sum(), cand.nchans, mask.sum() / cand.nchans
+            )
         )
-    )
 
-    # z-dot filter
-    print("Applying z-dot filter")
-    cand.zdot()
+        # z-dot filter
+        print("Applying z-dot filter")
+        cand.zdot()
 
     # dedisperse
     cand.set_dm(dm)

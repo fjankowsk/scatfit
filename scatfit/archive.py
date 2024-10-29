@@ -300,7 +300,7 @@ class Candidate(object):
         return scrunch(self._data, t=t, f=f, select=select)
 
 
-def load_frb_data(filename, dm, fscrunch, tscrunch):
+def load_frb_data(filename, dm, fscrunch, tscrunch, params):
     """
     Load the FRB data from a psrchive file.
 
@@ -314,6 +314,8 @@ def load_frb_data(filename, dm, fscrunch, tscrunch):
         The number of frequency channels to sum.
     tscrunch: int
         The number of time samples to sum.
+    params: dict
+        Additional parameters.
 
     Returns
     -------
@@ -324,25 +326,19 @@ def load_frb_data(filename, dm, fscrunch, tscrunch):
     cand = Candidate(filename)
     cand.normalise()
 
-    # calculates and applies both IQRM and ACC1 masks
-    mask = cand.apply_chanmask()
-    print(
-        "Channels masked based on stddev (via IQRM) and acc1: {} / {} ({:.2%})".format(
-            mask.sum(), cand.nchans, mask.sum() / cand.nchans
+    if "norfi" in params and not params["norfi"]:
+        # calculates and applies both IQRM and ACC1 masks
+        mask = cand.apply_chanmask()
+        print(
+            "Channels masked based on stddev (via IQRM) and acc1: {} / {} ({:.2%})".format(
+                mask.sum(), cand.nchans, mask.sum() / cand.nchans
+            )
         )
-    )
 
-    num_masked_chans = mask.sum()
-    print(
-        "Channels masked in total: {} / {} ({:.2%})".format(
-            num_masked_chans, cand.nchans, num_masked_chans / cand.nchans
-        )
-    )
-
-    # z-dot filter
-    print("Applying z-dot filter if DM > 20 pc cm^-3.")
-    if dm > 20:
-        cand.zdot()
+        # z-dot filter
+        print("Applying z-dot filter if DM > 20 pc cm^-3.")
+        if dm > 20:
+            cand.zdot()
 
     # dedisperse
     cand.set_dm(dm)

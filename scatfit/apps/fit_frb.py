@@ -110,6 +110,14 @@ def parse_args():
     )
 
     parser.add_argument(
+        "--norfi",
+        action="store_true",
+        dest="norfi",
+        default=False,
+        help="Disable all internal RFI excision methods and use the input data as provided (aside from scaling). This is useful for synthetic input data or if you have cleaned the data already using external tools.",
+    )
+
+    parser.add_argument(
         "--smodel",
         dest="smodel",
         choices=[
@@ -680,13 +688,13 @@ def main():
         sys.exit(1)
 
     # check if the file is filterbank or archive
-    if args.filename.split(".")[-1] == "fil":
+    if os.path.splitext(args.filename)[1] == ".fil":
         cand = sigproc.load_frb_data(
-            args.filename, args.dm, args.fscrunch_factor, args.tscrunch_factor
+            args.filename, args.dm, args.fscrunch_factor, args.tscrunch_factor, args
         )
     else:
         cand = archive.load_frb_data(
-            args.filename, args.dm, args.fscrunch_factor, args.tscrunch_factor
+            args.filename, args.dm, args.fscrunch_factor, args.tscrunch_factor, args
         )
 
     # band-integrated profile
