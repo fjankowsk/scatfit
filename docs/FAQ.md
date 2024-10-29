@@ -1,5 +1,9 @@
 # FAQ #
 
+## How do I fit FRB data? ##
+
+XXX
+
 ## How do I fit folded pulsar profile data? ##
 
 `scatfit` works well with folded pulsar profile data. It can load full-polarisation and total intensity data in most pulsar data formats, including PSRFITS and Timer. It also supports already dedispersed data, as produced by single-pulse pipelines.
@@ -8,9 +12,9 @@ The input data should be fully integrated in time (tscrunched) but must contain 
 `$ pam -Tp -e Tp filename.fits`
 
 You can then run `scatfit` on the time and polarisation integrated data like this:  
-`$ scatfit-fitfrb filename.Tp <DM> --fscrunch <fscrunch> --fitrange -200 200 -z -50 200 --fitscatindex --snr 3.0 --norfi`
+`$ scatfit-fitfrb filename.Tp 57.2 --fscrunch 48 --fitrange -200 200 -z -50 200 --fitscatindex --snr 3.0 --norfi`
 
-Select a good initial <DM> from the ATNF pulsar catalogue or from running `PSRCHIVE`'s `pdmp`. Use an <fscrunch> value appropriate for your data and their total number of channels. Adjust the fit and zoom range to fit our use case. The same goes for the minimum sub-band S/N. As we have cleaned the data before, we turned off all further RFI excision methods within `scatfit`.
+Select a good initial *DM* from the ATNF pulsar catalogue or from running `PSRCHIVE`'s `pdmp`. Use an *fscrunch* value appropriate for your data and their total number of channels. Adjust the fit and zoom range to fit our use case. The same goes for the minimum sub-band S/N. As we have cleaned the data before, we turned off all further RFI excision methods within `scatfit`.
 
 ## What scattering model should I use? ##
 
