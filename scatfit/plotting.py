@@ -112,6 +112,9 @@ def plot_frb_scat(
     cmap2="YlGnBu",
     dynspec=True,
 ):
+    """
+    Plot the dynamic spectrum and the sub-band profiles in a combined figure.
+    """
 
     # TODO: Include additional arguments in result to be ablo to plot all models
     if smodel == "unscattered":
@@ -433,11 +436,19 @@ def plot_width_scaling(t_df, cand, fitresult):
     freqs = cand.freqs
     chan_bw = np.diff(freqs)[0]
 
+    # switch between ghz and mhz
+    if np.max(freqs) > 1000.0:
+        fact = 1e-3
+        xlabel = "Frequency (GHz)"
+    else:
+        fact = 1
+        xlabel = "Frequency (MHz)"
+
     fig = plt.figure()
     ax = fig.add_subplot()
 
     ax.errorbar(
-        x=1e-3 * df["cfreq"],
+        x=fact * df["cfreq"],
         y=df["w50i"],
         yerr=df["err_w50i"],
         fmt="o",
@@ -447,7 +458,7 @@ def plot_width_scaling(t_df, cand, fitresult):
     )
 
     ax.errorbar(
-        x=1e-3 * df["cfreq"],
+        x=fact * df["cfreq"],
         y=df["w10i"],
         yerr=df["err_w10i"],
         fmt="+",
@@ -457,7 +468,7 @@ def plot_width_scaling(t_df, cand, fitresult):
     )
 
     ax.scatter(
-        x=1e-3 * df["cfreq"],
+        x=fact * df["cfreq"],
         y=df["weq"],
         color="grey",
         marker="*",
@@ -466,7 +477,7 @@ def plot_width_scaling(t_df, cand, fitresult):
     )
 
     ax.scatter(
-        x=1e-3 * df["cfreq"],
+        x=fact * df["cfreq"],
         y=df["w50p"],
         color="grey",
         marker="d",
@@ -475,7 +486,7 @@ def plot_width_scaling(t_df, cand, fitresult):
     )
 
     ax.scatter(
-        x=1e-3 * df["cfreq"],
+        x=fact * df["cfreq"],
         y=df["w10p"],
         color="grey",
         marker="+",
@@ -485,7 +496,7 @@ def plot_width_scaling(t_df, cand, fitresult):
 
     if "taus" in df.columns:
         ax.errorbar(
-            x=1e-3 * df["cfreq"],
+            x=fact * df["cfreq"],
             y=df["taus"],
             yerr=df["err_taus"],
             fmt="x",
@@ -497,7 +508,7 @@ def plot_width_scaling(t_df, cand, fitresult):
     # scattering time fit
     if fitresult is not None:
         ax.plot(
-            1e-3 * df["cfreq"],
+            fact * df["cfreq"],
             10**fitresult.best_fit,
             color="dimgrey",
             ls="solid",
@@ -538,7 +549,7 @@ def plot_width_scaling(t_df, cand, fitresult):
     plot_range = 0.5 * (f_lo + f_hi)
 
     ax.plot(
-        1e-3 * plot_range,
+        fact * plot_range,
         dm_smear,
         color="grey",
         ls="dashed",
@@ -549,7 +560,7 @@ def plot_width_scaling(t_df, cand, fitresult):
 
     ax.grid()
     ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.0), frameon=False, ncol=4)
-    ax.set_xlabel("Frequency (GHz)")
+    ax.set_xlabel(xlabel)
     ax.set_ylabel("Width (ms)")
     ax.set_xscale("log")
     ax.set_yscale("log")
