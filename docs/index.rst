@@ -11,6 +11,7 @@ Welcome to scatfit's documentation!
    :caption: Contents:
 
    README
+   telescope_data
    FAQ
    api
 
