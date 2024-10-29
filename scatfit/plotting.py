@@ -178,8 +178,8 @@ def plot_frb_scat(
     axs[0].set_yticks(yloc, labels=labels)
 
     axs[0].set_xlim(left=params["zoom"][0], right=params["zoom"][1])
-    axs[0].set_ylabel("Frequency (MHz)")
     if not dynspec:
+        axs[0].set_ylabel("Frequency (MHz)")
         axs[0].set_xlabel("Time (ms)")
 
     axs[0].tick_params(
@@ -216,7 +216,9 @@ def plot_frb_scat(
 
         axs[1].set_xlim(left=params["zoom"][0], right=params["zoom"][1])
         axs[1].set_xlabel("Time (ms)")
-        axs[1].set_ylabel("Frequency (MHz)")
+
+        # use a common ylabel
+        fig.supylabel("Frequency (MHz)")
 
         axs[1].tick_params(
             axis="both",
@@ -227,8 +229,6 @@ def plot_frb_scat(
             left=True,
             right=True,
         )
-
-    fig.align_labels()
 
     fig.tight_layout()
 
