@@ -10,7 +10,7 @@ This could happen if you run `scatfit` from its software repository git checkout
 
 ## What data formats are supported? ##
 
-`scatfit` supports loading data from `SIGPROC` filterbank files. Alternative loaders can be implemented relatively easily.
+`scatfit` supports loading data from `SIGPROC` filterbank files and all the data formats readable by `PSRCHIVE`. The latter includes standard pulsar astronomy "archive" data formats, such as PSRFITS or Timer. You must have the `PSRCHIVE` Python bindings installed for this to work. Alternative loaders can be implemented relatively easily.
 
 ## Does it work on ARM-based Macs? ##
 
