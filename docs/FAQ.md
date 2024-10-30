@@ -19,6 +19,12 @@ You can then run `scatfit` on the time and polarisation integrated data like thi
 
 Select a good initial *DM* from the ATNF pulsar catalogue or from running `PSRCHIVE`'s `pdmp`. Use an *fscrunch* value appropriate for your data and their total number of channels. Adjust the fit and zoom range to fit your use case. Make sure that most of the on-pulse profile phase bins or time samples are used in the fit. Adjust the minimum sub-band S/N as required. As we have cleaned the data before, we turned off all further RFI excision methods within `scatfit`.
 
+## What should I do if some distributions in the MCMC corner plots look artificially cut off? ##
+
+This should not happen in a correct `scatfit` run. However, it might happen if some fit values are outside the allowed ranges predefined for each fit parameter (e.g. amplitude, centre, sigma, or taus). What happens is that the Markov chain sampler hits one or multiple boundaries of the predefined ranges. As a result, the MCMC samples pile up at the boundary, and the parameter range gets artificially cut off. This is visible as correlation ellipses being truncated or halved.
+
+The solution is simple but requires editing the `scatfit` code, particularly the parameter hints in the `fit_frb.py` Python file in your local installation. Look for lines similar to `model.set_param_hint("taus", value=1.5, min=5.0e-5)` or `model.set_param_hint("center", value=0.0, min=-20.0, max=20.0)` and adjust the *min* or *max* boundaries as required for your data. Ensure that the updated allowed parameter ranges are in effect by rerunning the fit.
+
 ## What scattering model should I use? ##
 
 The answer depends on the data set at hand. However, the following advice is generally accurate. For frequency (sub-)bands of small fractional bandwidth or at high frequencies, i.e. where the narrow bandwidth approximation roughly holds, it is OK to use the default `scattered_isotropic_analytic` model. At low frequencies (< 1 GHz) or for wide (sub-)bands, use the much more complex and, therefore, slower `scattered_isotropic_bandintegrated` model.
