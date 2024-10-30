@@ -6,6 +6,10 @@ We have verified the `scatfit` software with simulated and real FRB and pulsar d
 
 * Folded dispersion-corrected data in total intensity (PSRFITS)
 
+*LOFAR*
+
+* Single-station folded pulsar mode data from offline processing in full polarisation (Timer)
+
 *MeerKAT*
 
 * TUSE data snippets in total intensity (SIGPROC)
