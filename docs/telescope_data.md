@@ -15,6 +15,10 @@ We have verified the `scatfit` software with simulated and real FRB and pulsar d
 * TUSE data snippets in total intensity (SIGPROC)
 * TUSE high time-resolution voltage buffer data in full polarisation (Timer)
 
+*Nançay Radio Telescope*
+
+* NUPPI folded pulsar mode data in full polarisation (PSRFITS)
+
 *NenuFAR*
 
 * Standard folded pulsar mode data in full polarisation (PSRFITS)
