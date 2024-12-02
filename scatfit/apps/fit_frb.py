@@ -372,7 +372,7 @@ def compute_updated_dm(t_df, dm, params):
     updated_dm = {"value": dm + delta_dm, "error": err_delta_dm}
 
     print(
-        "Updated DM: {0:.3f} +- {1:.3f} pc cm^-3".format(
+        "Updated DM: {0:.4f} +- {1:.4f} pc cm^-3".format(
             updated_dm["value"], updated_dm["error"]
         )
     )
