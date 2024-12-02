@@ -14,6 +14,9 @@ Tweak the sub-band *S/N* threshold as required for your data. If `scatfit` does 
 The input data should be fully integrated in time (tscrunched) but must contain frequency and, eventually, polarisation information, in addition to the phase bin dimension. The most common pre-processing workflow is to RFI clean the data in the integration (subint) and frequency (channel) dimensions and then integrate them in time and polarisation. You might also want to reduce the number of phase bins (nbin) at the same time. This can be achieved most easily by running `PSRCHIVE`'s `pam` command like so:  
 `$ pam -Tp -e Tp filename.fits`
 
+If required, rotate the pulse profile so that the scattering tail does not wrap around in phase. A good approach is to place the peak of the profile at around 0.2 phase. You can do this by running `pam` with the appropriate value for the phase rotation like so:  
+`$ pam -r 0.3 filename.Tp -m`
+
 You can then run `scatfit` on the time and polarisation integrated data like this:  
 `$ scatfit-fitfrb filename.Tp 57.2 --fscrunch 48 --fitrange -200 200 -z -50 200 --fitscatindex --snr 15.0 --norfi`
 
