@@ -677,6 +677,8 @@ def main():
     check_args(args)
 
     plotting.use_custom_matplotlib_formatting()
+    # scatfit creates many diagnostic figures on purpose, silence the warning
+    plt.rcParams.update({"figure.max_open_warning": 0})
 
     if args.show_models:
         plotting.plot_profile_models()
