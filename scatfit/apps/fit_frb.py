@@ -497,14 +497,14 @@ def fit_profile_model(fit_range, profile, smodel, params):
 
     print(fitresult_ml.fit_report())
 
-    # 100 * (5000 - 1000)/10 = 40k samples
-    emcee_kws = dict(steps=5000, burn=1000, thin=10, is_weighted=False, progress=True)
+    # 100 * (5000 - 1000)/5 = 80k samples
+    emcee_kws = dict(steps=5000, burn=1000, thin=5, is_weighted=False, progress=True)
 
     if params["fast"]:
-        # 100 * (300 - 100)/2 = 10k samples
-        emcee_kws["steps"] = 300
-        emcee_kws["burn"] = 100
-        emcee_kws["thin"] = 2
+        # 100 * (400 - 200)/1 = 20k samples
+        emcee_kws["steps"] = 400
+        emcee_kws["burn"] = 200
+        emcee_kws["thin"] = 1
 
     emcee_params = fitresult_ml.params.copy()
     emcee_params.add("__lnsigma", value=np.log(0.1), min=np.log(0.001), max=np.log(2.0))
