@@ -46,9 +46,8 @@ Further documentation of the software is available on our dedicated [Read the do
 
 ```console
 $ scatfit-fitfrb -h
-usage: scatfit-fitfrb [-h] [--compare] [--binburst bin] [--fscrunch factor] [--tscrunch factor] [--fast] [--fitrange start end] [--fitscatindex] [--norfi]
-                      [--smodel {unscattered,scattered_isotropic_analytic,scattered_isotropic_convolving,scattered_isotropic_bandintegrated,scattered_isotropic_afb_instrumental,scattered_isotropic_dfb_instrumental}] [--showmodels] [--snr snr]
-                      [--publish] [-z start end]
+usage: scatfit-fitfrb [-h] [--binburst bin] [--fast] [--fitrange start end] [--fscrunch factor] [--tscrunch factor] [--norfi]
+                      [--smodel {unscattered,scattered_isotropic_analytic,scattered_isotropic_convolving,scattered_isotropic_bandintegrated,scattered_isotropic_afb_instrumental,scattered_isotropic_dfb_instrumental}] [--snr snr] [--compare] [--fitscatindex] [--showmodels] [--publish] [-z start end]
                       filename dm
 
 Fit a scattering model to FRB data.
@@ -59,18 +58,22 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
-  --compare             Fit an unscattered Gaussian model for comparison. (default: False)
   --binburst bin        Specify the burst location bin manually. (default: None)
-  --fscrunch factor     Integrate this many frequency channels. (default: 256)
-  --tscrunch factor     Integrate this many time samples. (default: 1)
   --fast                Enable fast processing. This reduces the number of MCMC steps drastically. (default: False)
   --fitrange start end  Consider only this time range of data in the fit. Increase the region for wide or highly-scattered bursts. Ensure that most of the scattering tail is included in the fit. (default: [-150.0, 150.0])
-  --fitscatindex        Fit the scattering times and determine the scattering index. (default: False)
+  --fscrunch factor     Integrate this many frequency channels. (default: 256)
+  --tscrunch factor     Integrate this many time samples. (default: 1)
   --norfi               Disable all internal RFI excision methods and use the input data as provided (aside from scaling). This is useful for synthetic input data or if you have cleaned the data already using external tools. (default: False)
   --smodel {unscattered,scattered_isotropic_analytic,scattered_isotropic_convolving,scattered_isotropic_bandintegrated,scattered_isotropic_afb_instrumental,scattered_isotropic_dfb_instrumental}
                         Use the specified scattering model. (default: scattered_isotropic_analytic)
-  --showmodels          Show comparison plot of scattering models. (default: False)
-  --snr snr             Only consider sub-bands above this S/N threshold. (default: 3.8)
+  --snr snr             Only consider sub-bands above this S/N threshold. (default: 10.0)
+
+Additional analyses:
+  --compare             Fit an unscattered Gaussian model for comparison. (default: False)
+  --fitscatindex        Fit the scattering times and determine the scattering index. (default: False)
+  --showmodels          Show comparison plot of implemented scattering models. (default: False)
+
+Output formatting:
   --publish             Output plots suitable for publication. (default: False)
   -z start end, --zoom start end
                         Zoom into this time region. (default: [-50.0, 50.0])
@@ -82,7 +85,7 @@ usage: scatfit-simpulse [-h]
 
 Simulate scattered pulses.
 
-options:
+optional arguments:
   -h, --help  show this help message and exit
 ```
 
