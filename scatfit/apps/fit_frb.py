@@ -648,13 +648,14 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
 
         # compute baseline statistics outside the central +- 30 ms
         # XXX: we should adjust this based on the actual pulse width
-        mask = np.abs(fit_range) > 30.0
-        quantiles = np.quantile(sub_profile[mask], q=[0.25, 0.75], axis=None)
+        mask_offp = np.abs(fit_range) > 30.0
+        mask_onp = np.logical_not(mask_offp)
+        quantiles = np.quantile(sub_profile[mask_offp], q=[0.25, 0.75], axis=None)
         std = 0.7413 * np.abs(quantiles[1] - quantiles[0])
-        snr = np.max(sub_profile[~mask]) / std
+        snr = np.max(sub_profile[mask_onp]) / std
 
         # compute s/n using boxcar equivalent width
-        snr_weq = get_snr_weq(sub_profile[mask], sub_profile[~mask])
+        snr_weq = get_snr_weq(sub_profile[mask_onp], sub_profile[mask_offp])
         print(f"S/N max, Weq: {snr:.2f}, {snr_weq:.2f}")
 
         if not snr >= params["snr"]:
