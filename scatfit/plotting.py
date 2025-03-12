@@ -666,9 +666,7 @@ def plot_corner(fitresult_emcee, smodel, output, params):
     smooth = False
     var_names = fitresult_emcee.var_names
 
-    if params["fast"]:
-        plot_datapoints = True
-    else:
+    if not params["fast"]:
         bins = 40
 
     if params["publish"]:
