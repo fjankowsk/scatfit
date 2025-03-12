@@ -18,6 +18,7 @@ import pandas as pd
 
 from scatfit.dm import KDM, get_dm_smearing
 import scatfit.plotting as plotting
+from scatfit.profile import get_snr_weq
 import scatfit.pulsemodels as pulsemodels
 import scatfit.sigproc as sigproc
 import scatfit.archive as archive
@@ -651,7 +652,10 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
         quantiles = np.quantile(sub_profile[mask], q=[0.25, 0.75], axis=None)
         std = 0.7413 * np.abs(quantiles[1] - quantiles[0])
         snr = np.max(sub_profile[~mask]) / std
-        print(f"S/N: {snr:.2f}")
+
+        # compute s/n using boxcar equivalent width
+        snr_weq = get_snr_weq(sub_profile[mask], sub_profile[~mask])
+        print(f"S/N max, Weq: {snr:.2f}, {snr_weq:.2f}")
 
         if not snr >= params["snr"]:
             print(f"Profile S/N too low: {snr:.2f}")
