@@ -130,9 +130,7 @@ def plot_frb_scat(
     elif smodel == "scattered_isotropic_dfb_instrumental":
         scat_model = pulsemodels.gaussian_scattered_dfb_instrumental
     else:
-        raise NotImplementedError(
-            "Scattering model not implemented: {0}".format(smodel)
-        )
+        raise NotImplementedError(f"Scattering model not implemented: {smodel}")
 
     model = Model(scat_model)
 
@@ -375,7 +373,7 @@ def plot_profile_fit(
         )
 
     # show centre frequency and scattering time
-    info_str = "{0:.0f} MHz".format(cfreq)
+    info_str = f"{cfreq:.0f} MHz"
 
     if "taus" in fitresult.best_values:
         info_str += "\n" + "${0:.1f} \pm {1:.1f}$ ms".format(
@@ -394,7 +392,7 @@ def plot_profile_fit(
 
     ax1.set_ylabel("Flux (a.u.)")
     if not params["publish"]:
-        ax1.set_title("Sub-band {0}".format(iband))
+        ax1.set_title(f"Sub-band {iband}")
 
     # hide bottom ticks
     ax1.tick_params(bottom=False)
@@ -423,7 +421,7 @@ def plot_profile_fit(
 
     fig.tight_layout()
 
-    fig.savefig("scattering_fit_band_{0}.pdf".format(iband), bbox_inches="tight")
+    fig.savefig(f"scattering_fit_band_{iband}.pdf", bbox_inches="tight")
 
 
 def plot_width_scaling(t_df, cand, fitresult):
@@ -712,7 +710,7 @@ def plot_corner(fitresult_emcee, smodel, output, params):
         fig.suptitle("Sub-band {0}".format(params["iband"]))
 
     if output:
-        fig.savefig("corner_{0}.pdf".format(smodel), bbox_inches="tight")
+        fig.savefig(f"corner_{smodel}.pdf", bbox_inches="tight")
 
     # reset
     matplotlib.rcParams["font.size"] = fontsize_before

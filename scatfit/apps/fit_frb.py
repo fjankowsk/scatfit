@@ -444,9 +444,7 @@ def fit_profile_model(fit_range, profile, smodel, params):
     elif smodel == "scattered_isotropic_dfb_instrumental":
         scat_model = pulsemodels.gaussian_scattered_dfb_instrumental
     else:
-        raise NotImplementedError(
-            "Scattering model not implemented: {0}".format(smodel)
-        )
+        raise NotImplementedError(f"Scattering model not implemented: {smodel}")
 
     model = Model(scat_model)
 

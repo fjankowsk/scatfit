@@ -211,9 +211,7 @@ class Pulse(object):
         mapping = {8: np.uint8, 16: np.uint16, 32: np.uint32}
 
         if nbit not in mapping:
-            raise NotImplementedError(
-                "Requested bit depth not implemented: {0}".format(nbit)
-            )
+            raise NotImplementedError(f"Requested bit depth not implemented: {nbit}")
 
         # normalise the data before integer conversion
         # we follow the psrfits convention here
