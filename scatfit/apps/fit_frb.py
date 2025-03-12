@@ -50,38 +50,12 @@ def parse_args():
     )
 
     parser.add_argument(
-        "--compare",
-        dest="compare",
-        action="store_true",
-        default=False,
-        help="Fit an unscattered Gaussian model for comparison.",
-    )
-
-    parser.add_argument(
         "--binburst",
         dest="bin_burst",
         default=None,
         metavar="bin",
         type=int,
         help="Specify the burst location bin manually.",
-    )
-
-    parser.add_argument(
-        "--fscrunch",
-        dest="fscrunch_factor",
-        default=256,
-        metavar="factor",
-        type=int,
-        help="Integrate this many frequency channels.",
-    )
-
-    parser.add_argument(
-        "--tscrunch",
-        dest="tscrunch_factor",
-        default=1,
-        metavar="factor",
-        type=int,
-        help="Integrate this many time samples.",
     )
 
     parser.add_argument(
@@ -103,11 +77,21 @@ def parse_args():
     )
 
     parser.add_argument(
-        "--fitscatindex",
-        action="store_true",
-        dest="fit_scatindex",
-        default=False,
-        help="Fit the scattering times and determine the scattering index.",
+        "--fscrunch",
+        dest="fscrunch_factor",
+        default=256,
+        metavar="factor",
+        type=int,
+        help="Integrate this many frequency channels.",
+    )
+
+    parser.add_argument(
+        "--tscrunch",
+        dest="tscrunch_factor",
+        default=1,
+        metavar="factor",
+        type=int,
+        help="Integrate this many time samples.",
     )
 
     parser.add_argument(
@@ -134,14 +118,6 @@ def parse_args():
     )
 
     parser.add_argument(
-        "--showmodels",
-        action="store_true",
-        dest="show_models",
-        default=False,
-        help="Show comparison plot of scattering models.",
-    )
-
-    parser.add_argument(
         "--snr",
         dest="snr",
         default=3.8,
@@ -150,7 +126,37 @@ def parse_args():
         help="Only consider sub-bands above this S/N threshold.",
     )
 
-    parser.add_argument(
+    # perform additional analyses
+    analysis = parser.add_argument_group(title="Additional analyses")
+
+    analysis.add_argument(
+        "--compare",
+        dest="compare",
+        action="store_true",
+        default=False,
+        help="Fit an unscattered Gaussian model for comparison.",
+    )
+
+    analysis.add_argument(
+        "--fitscatindex",
+        action="store_true",
+        dest="fit_scatindex",
+        default=False,
+        help="Fit the scattering times and determine the scattering index.",
+    )
+
+    analysis.add_argument(
+        "--showmodels",
+        action="store_true",
+        dest="show_models",
+        default=False,
+        help="Show comparison plot of implemented scattering models.",
+    )
+
+    # options that affect the output formatting
+    output = parser.add_argument_group(title="Output formatting")
+
+    output.add_argument(
         "--publish",
         dest="publish",
         action="store_true",
@@ -158,7 +164,7 @@ def parse_args():
         help="Output plots suitable for publication.",
     )
 
-    parser.add_argument(
+    output.add_argument(
         "-z",
         "--zoom",
         dest="zoom",
