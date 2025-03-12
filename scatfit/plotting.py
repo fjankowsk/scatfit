@@ -661,12 +661,14 @@ def plot_corner(fitresult_emcee, smodel, output, params):
     hist_kwargs = None
     labelpad = 0.125
     max_n_ticks = 5
-    plot_datapoints = True
+    plot_datapoints = False
     show_titles = True
     smooth = False
     var_names = fitresult_emcee.var_names
 
-    if not params["fast"]:
+    if params["fast"]:
+        plot_datapoints = True
+    else:
         bins = 40
 
     if params["publish"]:
@@ -674,7 +676,6 @@ def plot_corner(fitresult_emcee, smodel, output, params):
         labelpad = 0.475
         max_n_ticks = 2
         matplotlib.rcParams["font.size"] = 34.0
-        plot_datapoints = False
         show_titles = False
         smooth = True
 
