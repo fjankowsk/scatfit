@@ -120,7 +120,7 @@ def parse_args():
     parser.add_argument(
         "--snr",
         dest="snr",
-        default=3.8,
+        default=10.0,
         metavar="snr",
         type=float,
         help="Only consider sub-bands above this S/N threshold.",
