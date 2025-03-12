@@ -229,6 +229,22 @@ def linear(x, x0, slope, intercept):
 def fit_powerlaw(x, y, err_y, params):
     """
     Fit a power law to data.
+
+    Parameters
+    ----------
+    x: ~np.array of float
+        The independent variable.
+    y: ~np.array of float
+        The dependent variable.
+    err_y: ~np.array of float
+        The uncertainty in `y`.
+    params: dict
+        Additional parameters that affect the processing.
+
+    Returns
+    -------
+    fitresult_emcee: dict
+        The power law fit results from the MCMC run.
     """
 
     # convert to logscale
@@ -317,6 +333,15 @@ def compute_updated_dm(t_df, dm, params):
     """
     Compute an updated dispersion measure by fitting the
     center versus frequency curve.
+
+    Parameters
+    ----------
+    t_df: ~pd.DataFrame
+        The input data.
+    dm: float
+        The previous DM.
+    params: dict
+        Additional parameters that affect the processing.
     """
 
     df = t_df.copy()
@@ -381,6 +406,22 @@ def compute_updated_dm(t_df, dm, params):
 def fit_profile_model(fit_range, profile, smodel, params):
     """
     Fit a profile model to data.
+
+    Parameters
+    ----------
+    fit_range: ~np.array of float
+        The time sample range, i.e. the dependent variable.
+    profile: ~np.array of float
+        The profile amplitudes.
+    smodel: str
+        The name of the scattering model to use.
+    params: dict
+        Additional parameters that affect the processing.
+
+    Returns
+    -------
+    fitresult_emcee: dict
+        The power law fit results from the MCMC run.
     """
 
     if smodel == "unscattered":
@@ -483,6 +524,18 @@ def compute_post_widths(fit_range, t_fitresult):
     """
     Compute the full post-scattering widths numerically
     from the Markov chain samples.
+
+    Parameters
+    ----------
+    fit_range: ~np.array of float
+        The time sample range, i.e. the dependent variable.
+    t_fitresult: dict
+        The result object from the fit.
+
+    Returns
+    -------
+    widths: dict
+        The post-scattering pulse widths.
     """
 
     fitresult = copy.deepcopy(t_fitresult)
@@ -534,6 +587,26 @@ def compute_post_widths(fit_range, t_fitresult):
 def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
     """
     Fit an FRB profile.
+
+    Parameters
+    ----------
+    cand: ~mtcutils.Candidate
+        The candidate FRB or pulsar data.
+    plot_range: ~np.array of float
+        The time sample range, i.e. the dependent variable.
+    fscrunch_factor: int
+        The number of frequency channels to integrate.
+    smodel: str
+        The name of the scattering model to use.
+    params: dict
+        Additional parameters that affect the processing.
+
+    Returns
+    -------
+    df: ~pd.DataFrame
+        The fit results as a DataFrame.
+    fitresult: dict
+        The result object from the fit.
     """
 
     df = pd.DataFrame(
