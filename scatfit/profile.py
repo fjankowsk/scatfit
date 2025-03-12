@@ -25,12 +25,13 @@ def get_snr_weq(on, off):
     """
 
     off_mean = np.mean(off)
-    off_var = np.var(off)
+    off_quantiles = np.quantile(off, q=[0.25, 0.75], axis=None)
+    off_std = 0.7413 * np.abs(off_quantiles[1] - off_quantiles[0])
     w_eq = np.sum(on) / np.max(on)
 
     energy = np.sum(on - off_mean)
 
-    snr = energy / np.sqrt(off_var * w_eq)
+    snr = energy / (off_std * np.sqrt(w_eq))
 
     # treat special cases
     if energy < 0 or w_eq <= 0:
