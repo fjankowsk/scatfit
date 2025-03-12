@@ -589,7 +589,7 @@ def compute_post_widths(fit_range, t_fitresult):
     return widths
 
 
-def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
+def fit_profile(cand, plot_range, fscrunch_factor, smodel, t_params):
     """
     Fit an FRB profile.
 
@@ -603,7 +603,7 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
         The number of frequency channels to integrate.
     smodel: str
         The name of the scattering model to use.
-    params: dict
+    t_params: dict
         Additional parameters that affect the processing.
 
     Returns
@@ -613,6 +613,8 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
     fitresult: dict
         The result object from the fit.
     """
+
+    params = copy.deepcopy(t_params)
 
     df = pd.DataFrame(
         columns=[
@@ -819,9 +821,8 @@ def main():
     print("\nFit results")
     print(fit_df)
 
-    # Saving resut
-    fnout = "scattering_fit_result.csv"
-    fit_df.to_csv(fnout)
+    # save fit result as csv
+    fit_df.to_csv("scattering_fit_result.csv")
 
     # compute updated dm
     if len(fit_df.index) >= 2:
