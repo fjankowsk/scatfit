@@ -70,7 +70,7 @@ def test_compare_models():
 
     for sigma in np.geomspace(0.1, 50.0, num=10):
         for taus in np.geomspace(0.1, 50.0, num=10):
-            print("Sigma, tau: {0:.2f}, {1:.2f}".format(sigma, taus))
+            print(f"Sigma, tau: {sigma:.2f}, {taus:.2f}")
 
             curve_full = full_model(plot_range, fluence, center, sigma, taus, dc)
             curve_analytical = analytical_model(

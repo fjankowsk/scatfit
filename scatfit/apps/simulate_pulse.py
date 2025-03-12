@@ -110,9 +110,7 @@ class Pulse(object):
                 center = self.toa_highest_freq + dm_shift
                 taus = self.taus_1ghz * (jfreq / 1000.0) ** self.scatindex
                 print(
-                    "Cfreq, subfreq, fluence, center, taus: {0:.2f} MHz, {1:.2f} MHz, {2:.2f} a.u., {3:.2f} ms, {4:.2f} ms".format(
-                        ifreq, jfreq, fluence, center, taus
-                    )
+                    f"Cfreq, subfreq, fluence, center, taus: {ifreq:.2f} MHz, {jfreq:.2f} MHz, {fluence:.2f} a.u., {center:.2f} ms, {taus:.2f} ms"
                 )
                 temp[j, :] = pulsemodels.scattered_profile(
                     times, fluence, center, self.sigma, taus, self.dc
@@ -228,9 +226,7 @@ class Pulse(object):
         data_scale = (np.max(data) - data_offset) / float(zero_offset - 0.5)
 
         print(
-            "Zero offset, data offset, data scale: {0}, {1}, {2}".format(
-                zero_offset, data_offset, data_scale
-            )
+            f"Zero offset, data offset, data scale: {zero_offset}, {data_offset}, {data_scale}"
         )
         scaled_data = (data - data_offset) / data_scale + zero_offset
 

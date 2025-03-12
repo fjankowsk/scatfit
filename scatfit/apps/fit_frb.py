@@ -630,7 +630,7 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
 
     fitresults = []
     for iband in range(cand.dynspec.shape[0]):
-        print("\nRunning sub-band: {0}".format(iband))
+        print(f"\nRunning sub-band: {iband}")
 
         sub_profile = cand.dynspec[iband, :]
 
@@ -651,10 +651,10 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
         quantiles = np.quantile(sub_profile[mask], q=[0.25, 0.75], axis=None)
         std = 0.7413 * np.abs(quantiles[1] - quantiles[0])
         snr = np.max(sub_profile[~mask]) / std
-        print("S/N: {0:.2f}".format(snr))
+        print(f"S/N: {snr:.2f}")
 
         if not snr >= params["snr"]:
-            print("Profile S/N too low: {0:.2f}".format(snr))
+            print(f"Profile S/N too low: {snr:.2f}")
             continue
 
         idx_hi = iband * fscrunch_factor
@@ -669,9 +669,7 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
         )
 
         print(
-            "Frequencies (MHz), DM smearing (ms): {0:.2f}, {1:.2f}, {2:.2f}, {3:.2f}".format(
-                f_lo, cfreq, f_hi, dm_smear
-            )
+            f"Frequencies (MHz), DM smearing (ms): {f_lo:.2f}, {cfreq:.2f}, {f_hi:.2f}, {dm_smear:.2f}"
         )
 
         params["f_lo"] = f_lo
@@ -759,7 +757,7 @@ def main():
         sys.exit(0)
 
     if not os.path.isfile(args.filename):
-        print("The file does not exist: {0}".format(args.filename))
+        print(f"The file does not exist: {args.filename}")
         sys.exit(1)
 
     # check if the file is filterbank or archive
@@ -834,11 +832,7 @@ def main():
         )
         fit_offset = TimeDelta(1.0e-3 * fit_df["center"].iloc[0], format="sec")
         mjd_topo = start_mjd + burst_offset + fit_offset
-        print(
-            "Topocentric burst arrival time at {0} MHz: MJD {1}".format(
-                cand.fch1, mjd_topo
-            )
-        )
+        print(f"Topocentric burst arrival time at {cand.fch1} MHz: MJD {mjd_topo}")
 
     if args.fit_scatindex and len(fit_df.index) >= 2 and "taus" in fit_df.columns:
         fitresult = fit_powerlaw(
