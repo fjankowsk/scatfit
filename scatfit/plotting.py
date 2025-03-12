@@ -601,7 +601,7 @@ def plot_center_scaling(t_df):
     fig.tight_layout()
 
 
-def plot_chains(fitresult_emcee):
+def plot_chains(fitresult_emcee, params):
     """
     Plot the MCMC chains from an emcee sampling run.
 
@@ -609,6 +609,8 @@ def plot_chains(fitresult_emcee):
     ----------
     fitresult_emcee: ~lmfit.MinimizerResult
         The minimizer result object from lmfit.
+    params: dict
+        Other parameters that affect the output.
     """
 
     samples = fitresult_emcee.flatchain
@@ -622,6 +624,9 @@ def plot_chains(fitresult_emcee):
         axs[i].set_ylabel(name)
 
     axs[nvary - 1].set_xlabel("Step Number")
+
+    if "iband" in params:
+        fig.suptitle("Sub-band {0}".format(params["iband"]))
 
     # align the labels of the subplots vertically
     fig.align_ylabels()
@@ -702,6 +707,9 @@ def plot_corner(fitresult_emcee, smodel, output, params):
         smooth=smooth,
         title_kwargs={"fontsize": 10},
     )
+
+    if "iband" in params and not params["publish"]:
+        fig.suptitle("Sub-band {0}".format(params["iband"]))
 
     if output:
         fig.savefig("corner_{0}.pdf".format(smodel), bbox_inches="tight")

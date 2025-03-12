@@ -515,7 +515,7 @@ def fit_profile_model(fit_range, profile, smodel, params):
 
     print(fitresult_emcee.fit_report())
 
-    plotting.plot_chains(fitresult_emcee)
+    plotting.plot_chains(fitresult_emcee, params)
     plotting.plot_corner(fitresult_emcee, smodel, True, params)
 
     return fitresult_emcee
@@ -632,6 +632,7 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, params):
     fitresults = []
     for iband in range(cand.dynspec.shape[0]):
         print(f"\nRunning sub-band: {iband}")
+        params["iband"] = iband
 
         sub_profile = cand.dynspec[iband, :]
 
