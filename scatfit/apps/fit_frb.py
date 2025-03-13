@@ -690,7 +690,7 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, t_params):
         )
 
         print(
-            f"Frequencies (MHz), DM smearing (ms): {f_lo:.2f}, {cfreq:.2f}, {f_hi:.2f}, {dm_smear:.2f}"
+            f"Frequencies, DM smearing: [{f_lo:.2f} MHz, {cfreq:.2f} MHz, {f_hi:.2f} MHz], {dm_smear:.2f} ms"
         )
 
         params["f_lo"] = f_lo
