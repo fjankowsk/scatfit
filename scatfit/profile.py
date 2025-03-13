@@ -28,6 +28,7 @@ def get_snr_weq(on, off):
 
     off_mean = np.mean(off)
     off_std = get_robust_std(off, axis=None)
+    # in bins
     w_eq = np.sum(on) / np.max(on)
 
     energy = np.sum(on - off_mean)
