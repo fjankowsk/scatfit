@@ -34,7 +34,7 @@ Please verify that your installation works as expected by downloading a pre-gene
 `wget https://github.com/fjankowsk/scatfit/raw/master/extra/fake_burst_500_DM.fil`
 
 Then run the main analysis on the filterbank data file like this:  
-`scatfit-fitfrb fake_burst_500_DM.fil 500.0 --fitscatindex --fscrunch 128 --fast --norfi`
+`scatfit-fitfrb fake_burst_500_DM.fil 500.0 --fitscatindex --fscrunch 128 --norfi --fast`
 
 You should see several diagnostic windows open. The terminal output should show an updated DM close to 500 pc cm$^{-3}$, a scattering index near -4.0, and a scattering time at 1 GHz of about 20 ms.
 
