@@ -5,6 +5,8 @@
 
 import numpy as np
 
+from scatfit.stats import get_robust_std
+
 
 def get_snr_weq(on, off):
     """
@@ -25,8 +27,7 @@ def get_snr_weq(on, off):
     """
 
     off_mean = np.mean(off)
-    off_quantiles = np.quantile(off, q=[0.25, 0.75], axis=None)
-    off_std = 0.7413 * np.abs(off_quantiles[1] - off_quantiles[0])
+    off_std = get_robust_std(off, axis=None)
     w_eq = np.sum(on) / np.max(on)
 
     energy = np.sum(on - off_mean)

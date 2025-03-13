@@ -21,6 +21,7 @@ import scatfit.plotting as plotting
 from scatfit.profile import get_snr_weq
 import scatfit.pulsemodels as pulsemodels
 import scatfit.sigproc as sigproc
+from scatfit.stats import get_robust_std
 import scatfit.archive as archive
 
 
@@ -666,9 +667,8 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, t_params):
         # XXX: we should adjust this based on the actual pulse width
         mask_offp = np.abs(fit_range) > 30.0
         mask_onp = np.logical_not(mask_offp)
-        quantiles = np.quantile(sub_profile[mask_offp], q=[0.25, 0.75], axis=None)
-        std = 0.7413 * np.abs(quantiles[1] - quantiles[0])
-        snr_peak = np.max(sub_profile[mask_onp]) / std
+        _std_offp = get_robust_std(sub_profile[mask_offp], axis=None)
+        snr_peak = np.max(sub_profile[mask_onp]) / _std_offp
 
         # compute s/n using boxcar equivalent width
         snr_weq = get_snr_weq(sub_profile[mask_onp], sub_profile[mask_offp])
