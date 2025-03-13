@@ -478,10 +478,19 @@ def fit_profile_model(fit_range, profile, smodel, params):
         model.set_param_hint("f_hi", value=params["f_hi"], vary=False)
 
     if "nfreq" in arg_list:
+        # use one frequency evaluation per mhz of bandwidth
+        _bw_subband = np.abs(params["f_hi"] - params["f_lo"])
+        nfreq = int(np.ceil(_bw_subband))
+        assert nfreq > 0
+        print(f"Bandwidth sub-band, nfreq: {_bw_subband:.2f} MHz, {nfreq}")
         if params["fast"]:
-            model.set_param_hint("nfreq", value=3, vary=False)
+            if nfreq > 3:
+                nfreq = 3
         else:
-            model.set_param_hint("nfreq", value=9, vary=False)
+            if nfreq > 9:
+                nfreq = 9
+
+        model.set_param_hint("nfreq", value=nfreq, vary=False)
 
     fitparams = model.make_params()
 
