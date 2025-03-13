@@ -1,6 +1,6 @@
 #
 #   Pulse models implemented using Python and Numpy.
-#   2022 Fabian Jankowski
+#   2022 - 2025 Fabian Jankowski
 #
 
 import numpy as np

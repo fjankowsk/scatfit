@@ -1,6 +1,6 @@
 #
 #   DM functions.
-#   2022 Fabian Jankowski
+#   2022 - 2025 Fabian Jankowski
 #
 
 # use the inverse dispersion constant rounded to three digits that

@@ -1,7 +1,7 @@
 #
 #   Functions to read a PSRCHIVE file.
 #   2023 Ines Pastor-Marazuela
-#   2024 Fabian Jankowski
+#   2024 - 2025 Fabian Jankowski
 #
 
 import numpy as np

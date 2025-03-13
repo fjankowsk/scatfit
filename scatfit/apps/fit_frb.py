@@ -1,6 +1,6 @@
 #
 #   Fit scattering models to FRB data.
-#   2022 - 2024 Fabian Jankowski
+#   2022 - 2025 Fabian Jankowski
 #   2023 Ines Pastor-Marazuela
 #
 

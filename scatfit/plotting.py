@@ -1,6 +1,6 @@
 #
 #   Plotting functions.
-#   2022 - 2024 Fabian Jankowski
+#   2022 - 2025 Fabian Jankowski
 #
 
 import corner

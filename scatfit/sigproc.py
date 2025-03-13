@@ -1,6 +1,6 @@
 #
 #   SIGPROC filterbank functions.
-#   2022 - 2024 Fabian Jankowski
+#   2022 - 2025 Fabian Jankowski
 #
 
 from mtcutils import Candidate

@@ -9,7 +9,7 @@ from scatfit import __version__
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "scatfit"
-copyright = "2022-2023, Fabian Jankowski"
+copyright = "2022-2025, Fabian Jankowski"
 author = "Fabian Jankowski"
 release = __version__
 version = release
