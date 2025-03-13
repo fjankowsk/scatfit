@@ -11,10 +11,22 @@ archive
 .. automodule:: scatfit.archive
     :members:
 
+dm
+---
+
+.. automodule:: scatfit.dm
+    :members:
+
 plotting
 --------
 
 .. automodule:: scatfit.plotting
+    :members:
+
+profile
+-------
+
+.. automodule:: scatfit.profile
     :members:
 
 pulsemodels
@@ -33,6 +45,12 @@ sigproc
 -------
 
 .. automodule:: scatfit.sigproc
+    :members:
+
+stats
+-----
+
+.. automodule:: scatfit.stats
     :members:
 
 Applications
