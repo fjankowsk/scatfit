@@ -531,8 +531,9 @@ def fit_profile_model(fit_range, profile, smodel, params):
 
     if hasattr(fitresult_emcee, "acor"):
         print("Autocorrelation time in steps per fit parameter.")
-        for i, p in enumerate(fitresult_emcee.params):
-            print(f"{p}: {fitresult_emcee.acor[i]:.2f}")
+        var_names = fitresult_emcee.var_names
+        for idx, name in enumerate(var_names):
+            print(f"{name}: {fitresult_emcee.acor[idx]:.2f}")
 
     plotting.plot_chains(fitresult_emcee, params)
     plotting.plot_corner(fitresult_emcee, smodel, True, params)
