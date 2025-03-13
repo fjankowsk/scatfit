@@ -31,10 +31,9 @@ def get_snr_weq(on, off):
 
     energy = np.sum(on - off_mean)
 
-    snr = energy / (off_std * np.sqrt(w_eq))
-
-    # treat special cases
-    if energy < 0 or w_eq <= 0:
-        snr = 0
+    if energy > 0 and off_std > 0 and w_eq > 0:
+        snr = energy / (off_std * np.sqrt(w_eq))
+    else:
+        snr = 0.0
 
     return snr
