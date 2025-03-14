@@ -660,9 +660,11 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, t_params):
         ]
     )
 
+    nsub = cand.dynspec.shape[0]
     fitresults = []
-    for iband in range(cand.dynspec.shape[0]):
-        print(f"\nRunning sub-band: {iband}")
+
+    for iband in range(nsub):
+        print(f"\nRunning sub-band: {iband} / {nsub}")
         params["iband"] = iband
 
         sub_profile = cand.dynspec[iband, :]
