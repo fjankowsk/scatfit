@@ -158,6 +158,15 @@ def parse_args():
     output = parser.add_argument_group(title="Output formatting")
 
     output.add_argument(
+        "-o",
+        "--output",
+        dest="output",
+        action="store_true",
+        default=False,
+        help="Output plots to file rather than to screen.",
+    )
+
+    output.add_argument(
         "--publish",
         dest="publish",
         action="store_true",
@@ -293,7 +302,7 @@ def fit_powerlaw(x, y, err_y, params):
 
     print(fitresult_emcee.fit_report())
 
-    plotting.plot_corner(fitresult_emcee, "", False, params)
+    plotting.plot_corner(fitresult_emcee, "powerlaw", params)
 
     print(
         "Scattering index: {0:.2f} +- {1:.2f}".format(
@@ -397,7 +406,7 @@ def compute_updated_dm(t_df, dm, params):
 
     print(fitresult_emcee.fit_report())
 
-    plotting.plot_corner(fitresult_emcee, "", False, params)
+    plotting.plot_corner(fitresult_emcee, "dm", params)
 
     delta_dm = fitresult_emcee.best_values["slope"]
     err_delta_dm = fitresult_emcee.params["slope"].stderr
@@ -536,7 +545,7 @@ def fit_profile_model(fit_range, profile, smodel, params):
             print(f"{name}: {fitresult_emcee.acor[idx]:.2f}")
 
     plotting.plot_chains(fitresult_emcee, params)
-    plotting.plot_corner(fitresult_emcee, smodel, True, params)
+    plotting.plot_corner(fitresult_emcee, smodel, params)
 
     return fitresult_emcee
 
@@ -774,13 +783,24 @@ def main():
     # sanity check command line arguments
     check_args(args)
 
+    params = {
+        "compare": args.compare,
+        "fast": args.fast,
+        "fitrange": args.fitrange,
+        "output": args.output,
+        "publish": args.publish,
+        "snr": args.snr,
+        "zoom": args.zoom,
+    }
+
     plotting.use_custom_matplotlib_formatting()
     # scatfit creates many diagnostic figures on purpose, silence the warning
     plt.rcParams.update({"figure.max_open_warning": 0})
 
     if args.show_models:
-        plotting.plot_profile_models()
-        plt.show()
+        plotting.plot_profile_models(params)
+        if not args.output:
+            plt.show()
         sys.exit(0)
 
     if not os.path.isfile(args.filename):
@@ -820,15 +840,6 @@ def main():
         bin_burst = np.argmax(profile)
     plot_range -= fact * bin_burst
 
-    params = {
-        "compare": args.compare,
-        "fast": args.fast,
-        "fitrange": args.fitrange,
-        "publish": args.publish,
-        "snr": args.snr,
-        "zoom": args.zoom,
-    }
-
     # fit integrated profile
     fit_df, fit_results = fit_profile(
         cand, plot_range, args.fscrunch_factor, args.smodel, params
@@ -841,7 +852,7 @@ def main():
 
     # compute updated dm
     if len(fit_df.index) >= 2:
-        plotting.plot_center_scaling(fit_df)
+        plotting.plot_center_scaling(fit_df, params)
         compute_updated_dm(fit_df, args.dm, params)
 
     if args.smodel == "unscattered" and args.tscrunch_factor == 1:
@@ -882,7 +893,8 @@ def main():
         cand, fit_df, fit_results, args.smodel, plot_range, params, dynspec=False
     )
 
-    plt.show()
+    if not args.output:
+        plt.show()
 
     print("All done.")
 

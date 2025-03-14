@@ -238,15 +238,20 @@ def plot_frb_scat(
     fig.savefig(filename, bbox_inches="tight", pad_inches=0.1)
 
 
-def plot_profile_models():
+def plot_profile_models(params):
     """
     Plot and compare the profile scattering models.
+
+    Parameters
+    ----------
+    params: dict
+        Additional parameters that affect the processing.
     """
 
     plot_range = np.linspace(-200.0, 200.0, num=8000)
 
     fig = plt.figure()
-    ax = fig.add_subplot(111)
+    ax = fig.add_subplot()
 
     ax.plot(
         plot_range,
@@ -316,6 +321,9 @@ def plot_profile_models():
     ax.set_ylabel("Flux (a.u.)")
 
     fig.tight_layout()
+
+    if params["output"]:
+        fig.savefig("profile_models.pdf", bbox_inches="tight")
 
 
 def plot_profile_fit(
@@ -421,7 +429,7 @@ def plot_profile_fit(
 
     fig.tight_layout()
 
-    fig.savefig(f"scattering_fit_band_{iband}.pdf", bbox_inches="tight")
+    fig.savefig(f"scattering_fit_band-{iband}.pdf", bbox_inches="tight")
 
 
 def plot_width_scaling(t_df, cand, fitresult):
@@ -573,9 +581,16 @@ def plot_width_scaling(t_df, cand, fitresult):
     fig.savefig("width_scaling.pdf", bbox_inches="tight")
 
 
-def plot_center_scaling(t_df):
+def plot_center_scaling(t_df, params):
     """
     Plot the scaling of fitted center with frequency.
+
+    Parameters
+    ----------
+    t_df: ~pd.DataFrame
+        The input data.
+    params: dict
+        Other parameters that affect the output.
     """
 
     df = t_df.copy()
@@ -597,6 +612,9 @@ def plot_center_scaling(t_df):
     ax.set_ylabel("Center (ms)")
 
     fig.tight_layout()
+
+    if params["output"]:
+        fig.savefig("center_scaling.pdf", bbox_inches="tight")
 
 
 def plot_chains(fitresult_emcee, params):
@@ -631,8 +649,12 @@ def plot_chains(fitresult_emcee, params):
 
     fig.tight_layout()
 
+    if params["output"]:
+        filename = "chains_band-{1}.pdf".format(params["iband"])
+        fig.savefig(filename, bbox_inches="tight")
 
-def plot_corner(fitresult_emcee, smodel, output, params):
+
+def plot_corner(fitresult_emcee, fnlabel, params):
     """
     Make a corner plot.
 
@@ -640,10 +662,8 @@ def plot_corner(fitresult_emcee, smodel, output, params):
     ----------
     fitresult_emcee: ~lmfit.MinimizerResult
         The minimizer result object from lmfit.
-    smodel: str
-        The name of the scattering model used.
-    output: bool
-        Whether to output the plot to a file.
+    fnlabel: str
+        Postfix label for the filename.
     params: dict
         Additional plotting parameters.
     """
@@ -708,8 +728,13 @@ def plot_corner(fitresult_emcee, smodel, output, params):
     if "iband" in params and not params["publish"]:
         fig.suptitle("Sub-band {0}".format(params["iband"]))
 
-    if output:
-        fig.savefig(f"corner_{smodel}.pdf", bbox_inches="tight")
+    if params["output"]:
+        if "iband" in params:
+            filename = "corner_{0}_band-{1}.pdf".format(fnlabel, params["iband"])
+        else:
+            filename = f"corner_{fnlabel}.pdf"
+
+        fig.savefig(filename, bbox_inches="tight")
 
     # reset
     matplotlib.rcParams["font.size"] = fontsize_before
