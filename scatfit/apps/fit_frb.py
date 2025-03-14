@@ -302,7 +302,7 @@ def fit_powerlaw(x, y, err_y, params):
 
     print(fitresult_emcee.fit_report())
 
-    plotting.plot_corner(fitresult_emcee, "powerlaw", params)
+    plotting.plot_corner(fitresult_emcee, "scatindex", params)
 
     print(
         "Scattering index: {0:.2f} +- {1:.2f}".format(
