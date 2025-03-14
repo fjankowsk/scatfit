@@ -650,7 +650,7 @@ def plot_chains(fitresult_emcee, params):
     fig.tight_layout()
 
     if params["output"]:
-        filename = "chains_band-{1}.pdf".format(params["iband"])
+        filename = "chains_band-{0}.pdf".format(params["iband"])
         fig.savefig(filename, bbox_inches="tight")
 
 
