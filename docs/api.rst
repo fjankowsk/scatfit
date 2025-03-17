@@ -47,10 +47,10 @@ sigproc
 .. automodule:: scatfit.sigproc
     :members:
 
-stats
------
+stats_helpers
+-------------
 
-.. automodule:: scatfit.stats
+.. automodule:: scatfit.stats_helpers
     :members:
 
 Applications

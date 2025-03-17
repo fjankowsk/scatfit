@@ -5,7 +5,7 @@
 
 import numpy as np
 
-from scatfit.stats import get_robust_std
+from scatfit.stats_helpers import get_robust_std
 
 
 def get_snr_weq(on, off):

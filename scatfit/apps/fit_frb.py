@@ -21,7 +21,7 @@ import scatfit.plotting as plotting
 from scatfit.profile_helpers import get_snr_weq
 import scatfit.pulsemodels as pulsemodels
 import scatfit.sigproc as sigproc
-from scatfit.stats import get_robust_std
+from scatfit.stats_helpers import get_robust_std
 import scatfit.archive as archive
 
 
