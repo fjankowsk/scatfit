@@ -23,10 +23,10 @@ plotting
 .. automodule:: scatfit.plotting
     :members:
 
-profile
--------
+profile_helpers
+---------------
 
-.. automodule:: scatfit.profile
+.. automodule:: scatfit.profile_helpers
     :members:
 
 pulsemodels

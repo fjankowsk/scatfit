@@ -1,5 +1,5 @@
 #
-#   Profile functions.
+#   Profile-related helper functions.
 #   2025 Fabian Jankowski
 #
 

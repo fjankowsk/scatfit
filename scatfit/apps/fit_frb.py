@@ -18,7 +18,7 @@ import pandas as pd
 
 from scatfit.dm import KDM, get_dm_smearing
 import scatfit.plotting as plotting
-from scatfit.profile import get_snr_weq
+from scatfit.profile_helpers import get_snr_weq
 import scatfit.pulsemodels as pulsemodels
 import scatfit.sigproc as sigproc
 from scatfit.stats import get_robust_std
