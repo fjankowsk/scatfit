@@ -102,6 +102,41 @@ def test_agreement_python_and_cython_models_bandintegrated():
                         assert np.allclose(curve_python, curve_cython)
 
 
+def test_c_contiguous_input_output():
+    """
+    Check that C-contiguous numpy arrays work as input
+    and that the functions return C-contiguous arrays.
+    """
+
+    plot_range = np.linspace(-1000.0, 1000.0, num=8000)
+    assert plot_range.flags.c_contiguous
+
+    fluence = 10.0
+    center = 0.0
+    sigma = 1.0
+    taus = 5.0
+    dc = 0.0
+    f_lo = 856.0
+    f_hi = 1712.0
+    nfreq = 9
+
+    # normed gaussian
+    res = pm_cython.gaussian_normed(plot_range, fluence, center, sigma)
+    assert res.flags.c_contiguous
+
+    # scattered gaussian pulse
+    res = pm_cython.scattered_gaussian_pulse(
+        plot_range, fluence, center, sigma, taus, dc
+    )
+    assert res.flags.c_contiguous
+
+    # bandintegrated model
+    res = pm_cython.bandintegrated_model(
+        plot_range, fluence, center, sigma, taus, dc, f_lo, f_hi, nfreq
+    )
+    assert res.flags.c_contiguous
+
+
 if __name__ == "__main__":
     import pytest
 
