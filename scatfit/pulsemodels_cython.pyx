@@ -11,7 +11,7 @@ import numpy as np
 @cython.boundscheck(False)
 @cython.wraparound(False)
 def gaussian_normed(
-    const double[:] x,
+    const double[::1] x,
     double fluence,
     double center,
     double sigma,
@@ -44,7 +44,7 @@ def gaussian_normed(
     cdef double A = fluence * invsigma * invsqrt
 
     res = np.zeros(N, dtype=np.double)
-    cdef double[:] res_view = res
+    cdef double[::1] res_view = res
 
     for i in range(N):
         res_view[i] = A * cmath.exp(-0.5 * cmath.pow((x[i] - center) * invsigma, 2))
@@ -55,7 +55,7 @@ def gaussian_normed(
 @cython.boundscheck(False)
 @cython.wraparound(False)
 def scattered_gaussian_pulse(
-    const double[:] x,
+    const double[::1] x,
     double fluence,
     double center,
     double sigma,
@@ -102,10 +102,10 @@ def scattered_gaussian_pulse(
     cdef double invsqrt = 1.0 / cmath.sqrt(2.0)
 
     res = np.zeros(N, dtype=np.double)
-    cdef double[:] res_view = res
+    cdef double[::1] res_view = res
 
     cdef double mu_gauss
-    cdef double[:] gauss
+    cdef double[::1] gauss
 
     cdef double y
     cdef double argexp
@@ -142,7 +142,7 @@ def scattered_gaussian_pulse(
 @cython.boundscheck(False)
 @cython.wraparound(False)
 def bandintegrated_model(
-    const double[:] x,
+    const double[::1] x,
     double fluence,
     double center,
     double sigma,
@@ -201,7 +201,7 @@ def bandintegrated_model(
     cdef double cfreq_i
     cdef double taus_i
     cdef double fluence_i
-    cdef double[:] scatpulse_tmp
+    cdef double[::1] scatpulse_tmp
 
     # the low-frequency profiles dominate the total band-integrated
     # profile because of the strong fluence power law scaling
@@ -210,7 +210,7 @@ def bandintegrated_model(
     cdef double step = cmath.pow(10.0, delta / (nfreq - 1.0))
 
     profile = np.zeros(N, dtype=np.double)
-    cdef double[:] profile_view = profile
+    cdef double[::1] profile_view = profile
 
     for i in range(nfreq):
         cfreq_i = f_lo * cmath.pow(step, i)
