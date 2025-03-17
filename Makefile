@@ -42,7 +42,7 @@ install:
 	${MAKE} clean
 
 profile:
-	python3 -m cProfile -s tottime scatfit/apps/fit_frb.py extra/fake_burst_500_DM.fil 500.0 --smodel scattered_isotropic_bandintegrated --fscrunch 1024 --fast
+	python3 -m cProfile -s tottime scatfit/apps/fit_frb.py extra/fake_burst_500_DM.fil 500.0 --smodel scattered_isotropic_bandintegrated --fscrunch 1024 --norfi --fast --output
 
 test:
 	pytest --verbose -m 'not interactive'
