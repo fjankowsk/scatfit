@@ -1,6 +1,6 @@
 #
 #   Pulse models implemented using Cython.
-#   2022 Fabian Jankowski
+#   2022 - 2025 Fabian Jankowski
 #
 
 cimport cython
@@ -11,7 +11,7 @@ import numpy as np
 @cython.boundscheck(False)
 @cython.wraparound(False)
 def gaussian_normed(
-    double[:] x,
+    const double[:] x,
     double fluence,
     double center,
     double sigma,
@@ -55,7 +55,7 @@ def gaussian_normed(
 @cython.boundscheck(False)
 @cython.wraparound(False)
 def scattered_gaussian_pulse(
-    double[:] x,
+    const double[:] x,
     double fluence,
     double center,
     double sigma,
@@ -142,7 +142,7 @@ def scattered_gaussian_pulse(
 @cython.boundscheck(False)
 @cython.wraparound(False)
 def bandintegrated_model(
-    double[:] x,
+    const double[:] x,
     double fluence,
     double center,
     double sigma,
