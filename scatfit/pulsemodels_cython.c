@@ -2627,10 +2627,10 @@ static int __Pyx_ValidateAndInit_memviewslice(
                 PyObject *original_obj);
 
 /* ObjectToMemviewSlice.proto */
-static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_ds_double__const__(PyObject *, int writable_flag);
+static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_dc_double__const__(PyObject *, int writable_flag);
 
 /* ObjectToMemviewSlice.proto */
-static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_ds_double(PyObject *, int writable_flag);
+static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_dc_double(PyObject *, int writable_flag);
 
 /* MemviewDtypeToObject.proto */
 static CYTHON_INLINE PyObject *__pyx_memview_get_double__const__(const char *itemp);
@@ -17667,7 +17667,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       values[2] = __Pyx_Arg_FASTCALL(__pyx_args, 2);
       values[3] = __Pyx_Arg_FASTCALL(__pyx_args, 3);
     }
-    __pyx_v_x = __Pyx_PyObject_to_MemoryviewSlice_ds_double__const__(values[0], 0); if (unlikely(!__pyx_v_x.memview)) __PYX_ERR(0, 14, __pyx_L3_error)
+    __pyx_v_x = __Pyx_PyObject_to_MemoryviewSlice_dc_double__const__(values[0], 0); if (unlikely(!__pyx_v_x.memview)) __PYX_ERR(0, 14, __pyx_L3_error)
     __pyx_v_fluence = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_fluence == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 15, __pyx_L3_error)
     __pyx_v_center = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_center == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 16, __pyx_L3_error)
     __pyx_v_sigma = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_sigma == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 17, __pyx_L3_error)
@@ -17779,7 +17779,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_gaussian_normed(CYTHON_U
  *     cdef double A = fluence * invsigma * invsqrt
  * 
  *     res = np.zeros(N, dtype=np.double)             # <<<<<<<<<<<<<<
- *     cdef double[:] res_view = res
+ *     cdef double[::1] res_view = res
  * 
  */
   __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 46, __pyx_L1_error)
@@ -17814,17 +17814,17 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_gaussian_normed(CYTHON_U
   /* "scatfit/pulsemodels_cython.pyx":47
  * 
  *     res = np.zeros(N, dtype=np.double)
- *     cdef double[:] res_view = res             # <<<<<<<<<<<<<<
+ *     cdef double[::1] res_view = res             # <<<<<<<<<<<<<<
  * 
  *     for i in range(N):
  */
-  __pyx_t_7 = __Pyx_PyObject_to_MemoryviewSlice_ds_double(__pyx_v_res, PyBUF_WRITABLE); if (unlikely(!__pyx_t_7.memview)) __PYX_ERR(0, 47, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_to_MemoryviewSlice_dc_double(__pyx_v_res, PyBUF_WRITABLE); if (unlikely(!__pyx_t_7.memview)) __PYX_ERR(0, 47, __pyx_L1_error)
   __pyx_v_res_view = __pyx_t_7;
   __pyx_t_7.memview = NULL;
   __pyx_t_7.data = NULL;
 
   /* "scatfit/pulsemodels_cython.pyx":49
- *     cdef double[:] res_view = res
+ *     cdef double[::1] res_view = res
  * 
  *     for i in range(N):             # <<<<<<<<<<<<<<
  *         res_view[i] = A * cmath.exp(-0.5 * cmath.pow((x[i] - center) * invsigma, 2))
@@ -17844,7 +17844,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_gaussian_normed(CYTHON_U
  */
     __pyx_t_11 = __pyx_v_i;
     __pyx_t_12 = __pyx_v_i;
-    *((double *) ( /* dim=0 */ (__pyx_v_res_view.data + __pyx_t_12 * __pyx_v_res_view.strides[0]) )) = (__pyx_v_A * exp((-0.5 * pow((((*((double const  *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_11 * __pyx_v_x.strides[0]) ))) - __pyx_v_center) * __pyx_v_invsigma), 2.0))));
+    *((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_res_view.data) + __pyx_t_12)) )) = (__pyx_v_A * exp((-0.5 * pow((((*((double const  *) ( /* dim=0 */ ((char *) (((double const  *) __pyx_v_x.data) + __pyx_t_11)) ))) - __pyx_v_center) * __pyx_v_invsigma), 2.0))));
   }
 
   /* "scatfit/pulsemodels_cython.pyx":52
@@ -18029,7 +18029,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       values[4] = __Pyx_Arg_FASTCALL(__pyx_args, 4);
       values[5] = __Pyx_Arg_FASTCALL(__pyx_args, 5);
     }
-    __pyx_v_x = __Pyx_PyObject_to_MemoryviewSlice_ds_double__const__(values[0], 0); if (unlikely(!__pyx_v_x.memview)) __PYX_ERR(0, 58, __pyx_L3_error)
+    __pyx_v_x = __Pyx_PyObject_to_MemoryviewSlice_dc_double__const__(values[0], 0); if (unlikely(!__pyx_v_x.memview)) __PYX_ERR(0, 58, __pyx_L3_error)
     __pyx_v_fluence = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_fluence == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 59, __pyx_L3_error)
     __pyx_v_center = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_center == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 60, __pyx_L3_error)
     __pyx_v_sigma = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_sigma == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 61, __pyx_L3_error)
@@ -18166,7 +18166,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_2scattered_gaussian_puls
  *     cdef double invsqrt = 1.0 / cmath.sqrt(2.0)
  * 
  *     res = np.zeros(N, dtype=np.double)             # <<<<<<<<<<<<<<
- *     cdef double[:] res_view = res
+ *     cdef double[::1] res_view = res
  * 
  */
   __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 104, __pyx_L1_error)
@@ -18201,11 +18201,11 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_2scattered_gaussian_puls
   /* "scatfit/pulsemodels_cython.pyx":105
  * 
  *     res = np.zeros(N, dtype=np.double)
- *     cdef double[:] res_view = res             # <<<<<<<<<<<<<<
+ *     cdef double[::1] res_view = res             # <<<<<<<<<<<<<<
  * 
  *     cdef double mu_gauss
  */
-  __pyx_t_7 = __Pyx_PyObject_to_MemoryviewSlice_ds_double(__pyx_v_res, PyBUF_WRITABLE); if (unlikely(!__pyx_t_7.memview)) __PYX_ERR(0, 105, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_to_MemoryviewSlice_dc_double(__pyx_v_res, PyBUF_WRITABLE); if (unlikely(!__pyx_t_7.memview)) __PYX_ERR(0, 105, __pyx_L1_error)
   __pyx_v_res_view = __pyx_t_7;
   __pyx_t_7.memview = NULL;
   __pyx_t_7.data = NULL;
@@ -18272,7 +18272,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_2scattered_gaussian_puls
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     }
-    __pyx_t_7 = __Pyx_PyObject_to_MemoryviewSlice_ds_double(__pyx_t_6, PyBUF_WRITABLE); if (unlikely(!__pyx_t_7.memview)) __PYX_ERR(0, 116, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_to_MemoryviewSlice_dc_double(__pyx_t_6, PyBUF_WRITABLE); if (unlikely(!__pyx_t_7.memview)) __PYX_ERR(0, 116, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __pyx_v_gauss = __pyx_t_7;
     __pyx_t_7.memview = NULL;
@@ -18299,7 +18299,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_2scattered_gaussian_puls
  */
       __pyx_t_15 = __pyx_v_i;
       __pyx_t_16 = __pyx_v_i;
-      *((double *) ( /* dim=0 */ (__pyx_v_res_view.data + __pyx_t_16 * __pyx_v_res_view.strides[0]) )) = (__pyx_v_dc + (*((double *) ( /* dim=0 */ (__pyx_v_gauss.data + __pyx_t_15 * __pyx_v_gauss.strides[0]) ))));
+      *((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_res_view.data) + __pyx_t_16)) )) = (__pyx_v_dc + (*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_gauss.data) + __pyx_t_15)) ))));
     }
 
     /* "scatfit/pulsemodels_cython.pyx":114
@@ -18333,7 +18333,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_2scattered_gaussian_puls
  * 
  */
       __pyx_t_15 = __pyx_v_i;
-      __pyx_v_y = (((*((double const  *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_15 * __pyx_v_x.strides[0]) ))) - __pyx_v_center) * __pyx_v_invsigma);
+      __pyx_v_y = (((*((double const  *) ( /* dim=0 */ ((char *) (((double const  *) __pyx_v_x.data) + __pyx_t_15)) ))) - __pyx_v_center) * __pyx_v_invsigma);
 
       /* "scatfit/pulsemodels_cython.pyx":123
  *         for i in range(N):
@@ -18389,7 +18389,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_2scattered_gaussian_puls
  *     return res
  */
       __pyx_t_15 = __pyx_v_i;
-      *((double *) ( /* dim=0 */ (__pyx_v_res_view.data + __pyx_t_15 * __pyx_v_res_view.strides[0]) )) = (__pyx_v_dc + (__pyx_v_fluence * __pyx_v_exgaussian));
+      *((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_res_view.data) + __pyx_t_15)) )) = (__pyx_v_dc + (__pyx_v_fluence * __pyx_v_exgaussian));
     }
   }
   __pyx_L3:;
@@ -18621,7 +18621,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       values[7] = __Pyx_Arg_FASTCALL(__pyx_args, 7);
       values[8] = __Pyx_Arg_FASTCALL(__pyx_args, 8);
     }
-    __pyx_v_x = __Pyx_PyObject_to_MemoryviewSlice_ds_double__const__(values[0], 0); if (unlikely(!__pyx_v_x.memview)) __PYX_ERR(0, 145, __pyx_L3_error)
+    __pyx_v_x = __Pyx_PyObject_to_MemoryviewSlice_dc_double__const__(values[0], 0); if (unlikely(!__pyx_v_x.memview)) __PYX_ERR(0, 145, __pyx_L3_error)
     __pyx_v_fluence = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_fluence == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 146, __pyx_L3_error)
     __pyx_v_center = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_center == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 147, __pyx_L3_error)
     __pyx_v_sigma = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_sigma == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 148, __pyx_L3_error)
@@ -18763,7 +18763,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_4bandintegrated_model(CY
  *     cdef double step = cmath.pow(10.0, delta / (nfreq - 1.0))
  * 
  *     profile = np.zeros(N, dtype=np.double)             # <<<<<<<<<<<<<<
- *     cdef double[:] profile_view = profile
+ *     cdef double[::1] profile_view = profile
  * 
  */
   __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 212, __pyx_L1_error)
@@ -18798,17 +18798,17 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_4bandintegrated_model(CY
   /* "scatfit/pulsemodels_cython.pyx":213
  * 
  *     profile = np.zeros(N, dtype=np.double)
- *     cdef double[:] profile_view = profile             # <<<<<<<<<<<<<<
+ *     cdef double[::1] profile_view = profile             # <<<<<<<<<<<<<<
  * 
  *     for i in range(nfreq):
  */
-  __pyx_t_7 = __Pyx_PyObject_to_MemoryviewSlice_ds_double(__pyx_v_profile, PyBUF_WRITABLE); if (unlikely(!__pyx_t_7.memview)) __PYX_ERR(0, 213, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_to_MemoryviewSlice_dc_double(__pyx_v_profile, PyBUF_WRITABLE); if (unlikely(!__pyx_t_7.memview)) __PYX_ERR(0, 213, __pyx_L1_error)
   __pyx_v_profile_view = __pyx_t_7;
   __pyx_t_7.memview = NULL;
   __pyx_t_7.data = NULL;
 
   /* "scatfit/pulsemodels_cython.pyx":215
- *     cdef double[:] profile_view = profile
+ *     cdef double[::1] profile_view = profile
  * 
  *     for i in range(nfreq):             # <<<<<<<<<<<<<<
  *         cfreq_i = f_lo * cmath.pow(step, i)
@@ -18892,7 +18892,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_4bandintegrated_model(CY
       __Pyx_GOTREF(__pyx_t_6);
       __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     }
-    __pyx_t_7 = __Pyx_PyObject_to_MemoryviewSlice_ds_double(__pyx_t_6, PyBUF_WRITABLE); if (unlikely(!__pyx_t_7.memview)) __PYX_ERR(0, 220, __pyx_L1_error)
+    __pyx_t_7 = __Pyx_PyObject_to_MemoryviewSlice_dc_double(__pyx_t_6, PyBUF_WRITABLE); if (unlikely(!__pyx_t_7.memview)) __PYX_ERR(0, 220, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
     __PYX_XCLEAR_MEMVIEW(&__pyx_v_scatpulse_tmp, 1);
     __pyx_v_scatpulse_tmp = __pyx_t_7;
@@ -18921,7 +18921,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_4bandintegrated_model(CY
       __pyx_t_18 = __pyx_v_j;
       __pyx_t_19 = __pyx_v_j;
       __pyx_t_20 = __pyx_v_j;
-      *((double *) ( /* dim=0 */ (__pyx_v_profile_view.data + __pyx_t_20 * __pyx_v_profile_view.strides[0]) )) = ((*((double *) ( /* dim=0 */ (__pyx_v_profile_view.data + __pyx_t_18 * __pyx_v_profile_view.strides[0]) ))) + (*((double *) ( /* dim=0 */ (__pyx_v_scatpulse_tmp.data + __pyx_t_19 * __pyx_v_scatpulse_tmp.strides[0]) ))));
+      *((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_profile_view.data) + __pyx_t_20)) )) = ((*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_profile_view.data) + __pyx_t_18)) ))) + (*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_scatpulse_tmp.data) + __pyx_t_19)) ))));
     }
   }
 
@@ -18954,7 +18954,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_4bandintegrated_model(CY
  *     tot_fluence = tot_fluence * cmath.fabs(x[0] - x[1])
  */
     __pyx_t_19 = __pyx_v_j;
-    __pyx_v_tot_fluence = (__pyx_v_tot_fluence + (*((double *) ( /* dim=0 */ (__pyx_v_profile_view.data + __pyx_t_19 * __pyx_v_profile_view.strides[0]) ))));
+    __pyx_v_tot_fluence = (__pyx_v_tot_fluence + (*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_profile_view.data) + __pyx_t_19)) ))));
   }
 
   /* "scatfit/pulsemodels_cython.pyx":231
@@ -18966,7 +18966,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_4bandintegrated_model(CY
  */
   __pyx_t_19 = 0;
   __pyx_t_18 = 1;
-  __pyx_v_tot_fluence = (__pyx_v_tot_fluence * fabs(((*((double const  *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_19 * __pyx_v_x.strides[0]) ))) - (*((double const  *) ( /* dim=0 */ (__pyx_v_x.data + __pyx_t_18 * __pyx_v_x.strides[0]) ))))));
+  __pyx_v_tot_fluence = (__pyx_v_tot_fluence * fabs(((*((double const  *) ( /* dim=0 */ ((char *) (((double const  *) __pyx_v_x.data) + __pyx_t_19)) ))) - (*((double const  *) ( /* dim=0 */ ((char *) (((double const  *) __pyx_v_x.data) + __pyx_t_18)) ))))));
 
   /* "scatfit/pulsemodels_cython.pyx":232
  * 
@@ -19002,7 +19002,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_4bandintegrated_model(CY
  */
     __pyx_t_18 = __pyx_v_j;
     __pyx_t_19 = __pyx_v_j;
-    *((double *) ( /* dim=0 */ (__pyx_v_profile_view.data + __pyx_t_19 * __pyx_v_profile_view.strides[0]) )) = (__pyx_v_dc + (__pyx_v_A * (*((double *) ( /* dim=0 */ (__pyx_v_profile_view.data + __pyx_t_18 * __pyx_v_profile_view.strides[0]) )))));
+    *((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_profile_view.data) + __pyx_t_19)) )) = (__pyx_v_dc + (__pyx_v_A * (*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_profile_view.data) + __pyx_t_18)) )))));
   }
 
   /* "scatfit/pulsemodels_cython.pyx":237
@@ -26915,17 +26915,17 @@ no_fail:
 }
 
 /* ObjectToMemviewSlice */
-  static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_ds_double__const__(PyObject *obj, int writable_flag) {
+  static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_dc_double__const__(PyObject *obj, int writable_flag) {
     __Pyx_memviewslice result = { 0, 0, { 0 }, { 0 }, { 0 } };
     __Pyx_BufFmt_StackElem stack[1];
-    int axes_specs[] = { (__Pyx_MEMVIEW_DIRECT | __Pyx_MEMVIEW_STRIDED) };
+    int axes_specs[] = { (__Pyx_MEMVIEW_DIRECT | __Pyx_MEMVIEW_CONTIG) };
     int retcode;
     if (obj == Py_None) {
         result.memview = (struct __pyx_memoryview_obj *) Py_None;
         return result;
     }
-    retcode = __Pyx_ValidateAndInit_memviewslice(axes_specs, 0,
-                                                 PyBUF_RECORDS_RO | writable_flag, 1,
+    retcode = __Pyx_ValidateAndInit_memviewslice(axes_specs, __Pyx_IS_C_CONTIG,
+                                                 (PyBUF_C_CONTIGUOUS | PyBUF_FORMAT) | writable_flag, 1,
                                                  &__Pyx_TypeInfo_double__const__, stack,
                                                  &result, obj);
     if (unlikely(retcode == -1))
@@ -26960,17 +26960,17 @@ __pyx_fail:
     }
 
 /* ObjectToMemviewSlice */
-  static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_ds_double(PyObject *obj, int writable_flag) {
+  static CYTHON_INLINE __Pyx_memviewslice __Pyx_PyObject_to_MemoryviewSlice_dc_double(PyObject *obj, int writable_flag) {
     __Pyx_memviewslice result = { 0, 0, { 0 }, { 0 }, { 0 } };
     __Pyx_BufFmt_StackElem stack[1];
-    int axes_specs[] = { (__Pyx_MEMVIEW_DIRECT | __Pyx_MEMVIEW_STRIDED) };
+    int axes_specs[] = { (__Pyx_MEMVIEW_DIRECT | __Pyx_MEMVIEW_CONTIG) };
     int retcode;
     if (obj == Py_None) {
         result.memview = (struct __pyx_memoryview_obj *) Py_None;
         return result;
     }
-    retcode = __Pyx_ValidateAndInit_memviewslice(axes_specs, 0,
-                                                 PyBUF_RECORDS_RO | writable_flag, 1,
+    retcode = __Pyx_ValidateAndInit_memviewslice(axes_specs, __Pyx_IS_C_CONTIG,
+                                                 (PyBUF_C_CONTIGUOUS | PyBUF_FORMAT) | writable_flag, 1,
                                                  &__Pyx_TypeInfo_double, stack,
                                                  &result, obj);
     if (unlikely(retcode == -1))
