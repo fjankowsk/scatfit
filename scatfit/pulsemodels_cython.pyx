@@ -36,8 +36,8 @@ def gaussian_normed(
         The profile data.
     """
 
-    cdef int i
-    cdef int N = x.shape[0]
+    cdef Py_ssize_t i
+    cdef Py_ssize_t N = x.shape[0]
 
     cdef double invsigma = 1.0 / sigma
     cdef double invsqrt = 1.0 / cmath.sqrt(2.0 * cmath.M_PI)
@@ -89,8 +89,8 @@ def scattered_gaussian_pulse(
         The profile data.
     """
 
-    cdef int i
-    cdef int N = x.shape[0]
+    cdef Py_ssize_t i
+    cdef Py_ssize_t N = x.shape[0]
 
     # treat the following special cases
     # 1) invK >> 1, i.e. sigma >> taus
@@ -193,8 +193,8 @@ def bandintegrated_model(
         The profile data.
     """
 
-    cdef int i
-    cdef int N = x.shape[0]
+    cdef Py_ssize_t i
+    cdef Py_ssize_t N = x.shape[0]
 
     cdef double band_cfreq = 0.5 * (f_lo + f_hi)
     cdef double invband_cfreq = 1.0 / band_cfreq

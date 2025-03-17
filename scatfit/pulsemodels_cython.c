@@ -17704,8 +17704,8 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
 }
 
 static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_gaussian_normed(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_x, double __pyx_v_fluence, double __pyx_v_center, double __pyx_v_sigma) {
-  int __pyx_v_i;
-  int __pyx_v_N;
+  Py_ssize_t __pyx_v_i;
+  Py_ssize_t __pyx_v_N;
   double __pyx_v_invsigma;
   double __pyx_v_invsqrt;
   double __pyx_v_A;
@@ -17720,9 +17720,9 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_gaussian_normed(CYTHON_U
   PyObject *__pyx_t_5 = NULL;
   PyObject *__pyx_t_6 = NULL;
   __Pyx_memviewslice __pyx_t_7 = { 0, 0, { 0 }, { 0 }, { 0 } };
-  int __pyx_t_8;
-  int __pyx_t_9;
-  int __pyx_t_10;
+  Py_ssize_t __pyx_t_8;
+  Py_ssize_t __pyx_t_9;
+  Py_ssize_t __pyx_t_10;
   Py_ssize_t __pyx_t_11;
   Py_ssize_t __pyx_t_12;
   int __pyx_lineno = 0;
@@ -17732,15 +17732,15 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_gaussian_normed(CYTHON_U
 
   /* "scatfit/pulsemodels_cython.pyx":40
  * 
- *     cdef int i
- *     cdef int N = x.shape[0]             # <<<<<<<<<<<<<<
+ *     cdef Py_ssize_t i
+ *     cdef Py_ssize_t N = x.shape[0]             # <<<<<<<<<<<<<<
  * 
  *     cdef double invsigma = 1.0 / sigma
  */
   __pyx_v_N = (__pyx_v_x.shape[0]);
 
   /* "scatfit/pulsemodels_cython.pyx":42
- *     cdef int N = x.shape[0]
+ *     cdef Py_ssize_t N = x.shape[0]
  * 
  *     cdef double invsigma = 1.0 / sigma             # <<<<<<<<<<<<<<
  *     cdef double invsqrt = 1.0 / cmath.sqrt(2.0 * cmath.M_PI)
@@ -17787,7 +17787,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_gaussian_normed(CYTHON_U
   __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_zeros); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 46, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_N); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 46, __pyx_L1_error)
+  __pyx_t_2 = PyInt_FromSsize_t(__pyx_v_N); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 46, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 46, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
@@ -18068,8 +18068,8 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
 }
 
 static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_2scattered_gaussian_pulse(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_x, double __pyx_v_fluence, double __pyx_v_center, double __pyx_v_sigma, double __pyx_v_taus, double __pyx_v_dc) {
-  int __pyx_v_i;
-  int __pyx_v_N;
+  Py_ssize_t __pyx_v_i;
+  Py_ssize_t __pyx_v_N;
   double __pyx_v_invsigma;
   double __pyx_v_K;
   double __pyx_v_invK;
@@ -18094,9 +18094,9 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_2scattered_gaussian_puls
   PyObject *__pyx_t_9 = NULL;
   PyObject *__pyx_t_10 = NULL;
   unsigned int __pyx_t_11;
-  int __pyx_t_12;
-  int __pyx_t_13;
-  int __pyx_t_14;
+  Py_ssize_t __pyx_t_12;
+  Py_ssize_t __pyx_t_13;
+  Py_ssize_t __pyx_t_14;
   Py_ssize_t __pyx_t_15;
   Py_ssize_t __pyx_t_16;
   int __pyx_lineno = 0;
@@ -18106,8 +18106,8 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_2scattered_gaussian_puls
 
   /* "scatfit/pulsemodels_cython.pyx":93
  * 
- *     cdef int i
- *     cdef int N = x.shape[0]             # <<<<<<<<<<<<<<
+ *     cdef Py_ssize_t i
+ *     cdef Py_ssize_t N = x.shape[0]             # <<<<<<<<<<<<<<
  * 
  *     # treat the following special cases
  */
@@ -18174,7 +18174,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_2scattered_gaussian_puls
   __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_zeros); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 104, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_N); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 104, __pyx_L1_error)
+  __pyx_t_2 = PyInt_FromSsize_t(__pyx_v_N); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 104, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 104, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
@@ -18663,8 +18663,8 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
 }
 
 static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_4bandintegrated_model(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_x, double __pyx_v_fluence, double __pyx_v_center, double __pyx_v_sigma, double __pyx_v_taus, double __pyx_v_dc, double __pyx_v_f_lo, double __pyx_v_f_hi, int __pyx_v_nfreq) {
-  int __pyx_v_i;
-  int __pyx_v_N;
+  Py_ssize_t __pyx_v_i;
+  Py_ssize_t __pyx_v_N;
   double __pyx_v_band_cfreq;
   double __pyx_v_invband_cfreq;
   double __pyx_v_cfreq_i;
@@ -18675,7 +18675,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_4bandintegrated_model(CY
   double __pyx_v_step;
   PyObject *__pyx_v_profile = NULL;
   __Pyx_memviewslice __pyx_v_profile_view = { 0, 0, { 0 }, { 0 }, { 0 } };
-  int __pyx_v_j;
+  Py_ssize_t __pyx_v_j;
   double __pyx_v_tot_fluence;
   double __pyx_v_A;
   PyObject *__pyx_r = NULL;
@@ -18689,14 +18689,14 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_4bandintegrated_model(CY
   __Pyx_memviewslice __pyx_t_7 = { 0, 0, { 0 }, { 0 }, { 0 } };
   int __pyx_t_8;
   int __pyx_t_9;
-  int __pyx_t_10;
+  Py_ssize_t __pyx_t_10;
   PyObject *__pyx_t_11 = NULL;
   PyObject *__pyx_t_12 = NULL;
   PyObject *__pyx_t_13 = NULL;
   unsigned int __pyx_t_14;
-  int __pyx_t_15;
-  int __pyx_t_16;
-  int __pyx_t_17;
+  Py_ssize_t __pyx_t_15;
+  Py_ssize_t __pyx_t_16;
+  Py_ssize_t __pyx_t_17;
   Py_ssize_t __pyx_t_18;
   Py_ssize_t __pyx_t_19;
   Py_ssize_t __pyx_t_20;
@@ -18707,15 +18707,15 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_4bandintegrated_model(CY
 
   /* "scatfit/pulsemodels_cython.pyx":197
  * 
- *     cdef int i
- *     cdef int N = x.shape[0]             # <<<<<<<<<<<<<<
+ *     cdef Py_ssize_t i
+ *     cdef Py_ssize_t N = x.shape[0]             # <<<<<<<<<<<<<<
  * 
  *     cdef double band_cfreq = 0.5 * (f_lo + f_hi)
  */
   __pyx_v_N = (__pyx_v_x.shape[0]);
 
   /* "scatfit/pulsemodels_cython.pyx":199
- *     cdef int N = x.shape[0]
+ *     cdef Py_ssize_t N = x.shape[0]
  * 
  *     cdef double band_cfreq = 0.5 * (f_lo + f_hi)             # <<<<<<<<<<<<<<
  *     cdef double invband_cfreq = 1.0 / band_cfreq
@@ -18771,7 +18771,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_4bandintegrated_model(CY
   __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_zeros); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 212, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_N); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 212, __pyx_L1_error)
+  __pyx_t_2 = PyInt_FromSsize_t(__pyx_v_N); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 212, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 212, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
@@ -18941,10 +18941,10 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_4bandintegrated_model(CY
  *         tot_fluence = tot_fluence + profile_view[j]
  * 
  */
-  __pyx_t_8 = __pyx_v_N;
-  __pyx_t_9 = __pyx_t_8;
-  for (__pyx_t_10 = 0; __pyx_t_10 < __pyx_t_9; __pyx_t_10+=1) {
-    __pyx_v_j = __pyx_t_10;
+  __pyx_t_10 = __pyx_v_N;
+  __pyx_t_15 = __pyx_t_10;
+  for (__pyx_t_16 = 0; __pyx_t_16 < __pyx_t_15; __pyx_t_16+=1) {
+    __pyx_v_j = __pyx_t_16;
 
     /* "scatfit/pulsemodels_cython.pyx":229
  *     cdef double tot_fluence = 0.0
@@ -18988,10 +18988,10 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_4bandintegrated_model(CY
  *         profile_view[j] = dc + A * profile_view[j]
  * 
  */
-  __pyx_t_8 = __pyx_v_N;
-  __pyx_t_9 = __pyx_t_8;
-  for (__pyx_t_10 = 0; __pyx_t_10 < __pyx_t_9; __pyx_t_10+=1) {
-    __pyx_v_j = __pyx_t_10;
+  __pyx_t_10 = __pyx_v_N;
+  __pyx_t_15 = __pyx_t_10;
+  for (__pyx_t_16 = 0; __pyx_t_16 < __pyx_t_15; __pyx_t_16+=1) {
+    __pyx_v_j = __pyx_t_16;
 
     /* "scatfit/pulsemodels_cython.pyx":235
  * 
