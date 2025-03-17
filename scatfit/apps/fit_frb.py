@@ -516,8 +516,8 @@ def fit_profile_model(fit_range, profile, smodel, params):
 
     print(fitresult_ml.fit_report())
 
-    # 100 * (5000 - 600)/20 = 22k samples
-    emcee_kws = dict(steps=5000, burn=600, thin=20, is_weighted=False, progress=True)
+    # 100 * (5000 - 600)/10 = 44k samples
+    emcee_kws = dict(steps=5000, burn=600, thin=10, is_weighted=False, progress=True)
 
     if params["fast"]:
         # 100 * (400 - 200)/1 = 20k samples
