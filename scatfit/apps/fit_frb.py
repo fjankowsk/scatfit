@@ -460,20 +460,16 @@ def fit_profile_model(fit_range, profile, smodel, params):
 
     model.set_param_hint("fluence", value=5.0, min=0.1)
     model.set_param_hint("center", value=0.0, min=-20.0, max=20.0)
-    # XXX: we should set the minimum based on the sampling time of the data
-    # model.set_param_hint("sigma", value=1.5, min=0.30624, max=20.0)
-    model.set_param_hint("sigma", value=1.5, min=7.0e-5, max=20.0)
+    # set the minimum to the sampling time of the data
+    model.set_param_hint("sigma", value=1.5, min=params["tsamp"], max=20.0)
 
     arg_list = list(inspect.signature(scat_model).parameters.keys())
 
     if "taus" in arg_list:
-        # XXX: same here
-        # model.set_param_hint("taus", value=1.5, min=0.1)
-        model.set_param_hint("taus", value=1.5, min=5.0e-5)
+        model.set_param_hint("taus", value=1.5, min=params["tsamp"])
 
     if "taui" in arg_list:
-        # XXX: same here
-        model.set_param_hint("taui", value=0.30624, vary=False)
+        model.set_param_hint("taui", value=params["tsamp"], vary=False)
 
     if "taud" in arg_list:
         model.set_param_hint("taud", value=params["dm_smear"], vary=False)
@@ -832,15 +828,19 @@ def main():
     profile = profile - np.mean(profile)
     profile = profile / np.max(profile)
 
-    fact = 1000 * cand.tsamp * args.tscrunch_factor
-    plot_range = np.linspace(0, fact * len(profile), num=len(profile))
+    # sampling time in ms
+    tsamp = 1000 * cand.tsamp * args.tscrunch_factor
+    print(f"Sampling time: {tsamp:.5f} ms")
+    params["tsamp"] = tsamp
+
+    plot_range = np.linspace(0, tsamp * len(profile), num=len(profile))
 
     # centre on the burst
     if args.bin_burst is not None:
         bin_burst = args.bin_burst
     else:
         bin_burst = np.argmax(profile)
-    plot_range -= fact * bin_burst
+    plot_range -= tsamp * bin_burst
 
     # fit integrated profile
     fit_df, fit_results = fit_profile(
