@@ -47,7 +47,8 @@ Further documentation of the software is available on our dedicated [Read the do
 ```console
 $ scatfit-fitfrb -h
 usage: scatfit-fitfrb [-h] [--binburst bin] [--fast] [--fitrange start end] [--fscrunch factor] [--tscrunch factor] [--norfi]
-                      [--smodel {unscattered,scattered_isotropic_analytic,scattered_isotropic_convolving,scattered_isotropic_bandintegrated,scattered_isotropic_afb_instrumental,scattered_isotropic_dfb_instrumental}] [--snr snr] [--compare] [--fitscatindex] [--showmodels] [--publish] [-z start end]
+                      [--smodel {unscattered,scattered_isotropic_analytic,scattered_isotropic_convolving,scattered_isotropic_bandintegrated,scattered_isotropic_afb_instrumental,scattered_isotropic_dfb_instrumental}] [--snr snr] [--compare] [--fitscatindex] [--showmodels] [--nodmsmearing] [-o] [--publish]
+                      [-z start end]
                       filename dm
 
 Fit a scattering model to FRB data.
@@ -74,6 +75,8 @@ Additional analyses:
   --showmodels          Show comparison plot of implemented scattering models. (default: False)
 
 Output formatting:
+  --nodmsmearing        Do not show the DM smearing in the width scaling plot. This is useful for coherently dedispersed data. (default: False)
+  -o, --output          Output plots to file rather than to screen. (default: False)
   --publish             Output plots suitable for publication. (default: False)
   -z start end, --zoom start end
                         Zoom into this time region. (default: [-50.0, 50.0])
