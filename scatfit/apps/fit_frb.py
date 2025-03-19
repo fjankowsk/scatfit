@@ -158,6 +158,14 @@ def parse_args():
     output = parser.add_argument_group(title="Output formatting")
 
     output.add_argument(
+        "--nodmsmearing",
+        dest="nodmsmearing",
+        action="store_true",
+        default=False,
+        help="Do not show the DM smearing in the width scaling plot. This is useful for coherently dedispersed data.",
+    )
+
+    output.add_argument(
         "-o",
         "--output",
         dest="output",
@@ -785,6 +793,7 @@ def main():
         "compare": args.compare,
         "fast": args.fast,
         "fitrange": args.fitrange,
+        "nodmsmearing": args.nodmsmearing,
         "output": args.output,
         "publish": args.publish,
         "snr": args.snr,
@@ -883,7 +892,7 @@ def main():
     else:
         fitresult = None
 
-    plotting.plot_width_scaling(fit_df, cand, fitresult)
+    plotting.plot_width_scaling(fit_df, cand, fitresult, params)
 
     plotting.plot_frb(cand, plot_range, profile, params)
 

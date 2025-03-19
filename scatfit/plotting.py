@@ -432,7 +432,7 @@ def plot_profile_fit(
     fig.savefig(f"scattering_fit_band-{iband}.pdf", bbox_inches="tight")
 
 
-def plot_width_scaling(t_df, cand, fitresult):
+def plot_width_scaling(t_df, cand, fitresult, params):
     """
     Plot the scaling of fitted widths with frequency.
     """
@@ -547,22 +547,23 @@ def plot_width_scaling(t_df, cand, fitresult):
         )
 
     # intra-channel dispersive smearing
-    f_lo = np.sort(freqs)
-    f_hi = f_lo + np.abs(chan_bw)
+    if not params["nodmsmearing"]:
+        f_lo = np.sort(freqs)
+        f_hi = f_lo + np.abs(chan_bw)
 
-    dm_smear = get_dm_smearing(f_lo, f_hi, cand.dm)
+        dm_smear = get_dm_smearing(f_lo, f_hi, cand.dm)
 
-    plot_range = 0.5 * (f_lo + f_hi)
+        plot_range = 0.5 * (f_lo + f_hi)
 
-    ax.plot(
-        fact * plot_range,
-        dm_smear,
-        color="grey",
-        ls="dashed",
-        lw=2.0,
-        zorder=3,
-        label=r"$t_\mathrm{dm}$",
-    )
+        ax.plot(
+            fact * plot_range,
+            dm_smear,
+            color="grey",
+            ls="dashed",
+            lw=2.0,
+            zorder=3,
+            label=r"$t_\mathrm{dm}$",
+        )
 
     ax.grid()
     ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.0), frameon=False, ncol=4)
