@@ -28,6 +28,9 @@ def gaussian_normed(x, fluence, center, sigma):
         The profile data.
     """
 
+    assert fluence > 0
+    assert sigma > 0
+
     invsigma = 1.0 / sigma
     invsqrt = 1.0 / np.sqrt(2.0 * np.pi)
     A = fluence * invsigma * invsqrt
@@ -64,6 +67,10 @@ def scattered_gaussian_pulse(x, fluence, center, sigma, taus, dc):
     res: ~np.array
         The profile data.
     """
+
+    assert fluence > 0
+    assert sigma > 0
+    assert taus > 0
 
     # treat the following special cases
     # 1) invK >> 1, i.e. sigma >> taus
@@ -135,6 +142,13 @@ def bandintegrated_model(x, fluence, center, sigma, taus, dc, f_lo, f_hi, nfreq)
     res: ~np.array
         The profile data.
     """
+
+    assert fluence > 0
+    assert sigma > 0
+    assert taus > 0
+    assert f_lo > 0
+    assert f_hi > 0
+    assert nfreq > 1
 
     band_cfreq = 0.5 * (f_lo + f_hi)
 

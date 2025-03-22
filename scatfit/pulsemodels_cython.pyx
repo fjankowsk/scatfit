@@ -36,6 +36,9 @@ def gaussian_normed(
         The profile data.
     """
 
+    assert fluence > 0
+    assert sigma > 0
+
     cdef Py_ssize_t i
     cdef Py_ssize_t N = x.shape[0]
 
@@ -88,6 +91,10 @@ def scattered_gaussian_pulse(
     res: ~np.array
         The profile data.
     """
+
+    assert fluence > 0
+    assert sigma > 0
+    assert taus > 0
 
     cdef Py_ssize_t i
     cdef Py_ssize_t N = x.shape[0]
@@ -192,6 +199,13 @@ def bandintegrated_model(
     res: ~np.array
         The profile data.
     """
+
+    assert fluence > 0
+    assert sigma > 0
+    assert taus > 0
+    assert f_lo > 0
+    assert f_hi > 0
+    assert nfreq > 1
 
     cdef Py_ssize_t i
     cdef Py_ssize_t N = x.shape[0]
