@@ -148,6 +148,7 @@ def bandintegrated_model(x, fluence, center, sigma, taus, dc, f_lo, f_hi, nfreq)
     assert taus > 0
     assert f_lo > 0
     assert f_hi > 0
+    assert f_lo < f_hi
     assert nfreq > 1
 
     band_cfreq = 0.5 * (f_lo + f_hi)
