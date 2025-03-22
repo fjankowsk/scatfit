@@ -2777,13 +2777,13 @@ int __pyx_module_is_main_scatfit__pulsemodels_cython = 0;
 
 /* Implementation of "scatfit.pulsemodels_cython" */
 /* #### Code section: global_var ### */
+static PyObject *__pyx_builtin_AssertionError;
 static PyObject *__pyx_builtin_range;
 static PyObject *__pyx_builtin___import__;
 static PyObject *__pyx_builtin_ValueError;
 static PyObject *__pyx_builtin_MemoryError;
 static PyObject *__pyx_builtin_enumerate;
 static PyObject *__pyx_builtin_TypeError;
-static PyObject *__pyx_builtin_AssertionError;
 static PyObject *__pyx_builtin_Ellipsis;
 static PyObject *__pyx_builtin_id;
 static PyObject *__pyx_builtin_IndexError;
@@ -17713,24 +17713,63 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_gaussian_normed(CYTHON_U
   __Pyx_memviewslice __pyx_v_res_view = { 0, 0, { 0 }, { 0 }, { 0 } };
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
-  double __pyx_t_1;
-  PyObject *__pyx_t_2 = NULL;
+  int __pyx_t_1;
+  double __pyx_t_2;
   PyObject *__pyx_t_3 = NULL;
   PyObject *__pyx_t_4 = NULL;
   PyObject *__pyx_t_5 = NULL;
   PyObject *__pyx_t_6 = NULL;
-  __Pyx_memviewslice __pyx_t_7 = { 0, 0, { 0 }, { 0 }, { 0 } };
-  Py_ssize_t __pyx_t_8;
+  PyObject *__pyx_t_7 = NULL;
+  __Pyx_memviewslice __pyx_t_8 = { 0, 0, { 0 }, { 0 }, { 0 } };
   Py_ssize_t __pyx_t_9;
   Py_ssize_t __pyx_t_10;
   Py_ssize_t __pyx_t_11;
   Py_ssize_t __pyx_t_12;
+  Py_ssize_t __pyx_t_13;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("gaussian_normed", 1);
 
+  /* "scatfit/pulsemodels_cython.pyx":39
+ *     """
+ * 
+ *     assert fluence > 0             # <<<<<<<<<<<<<<
+ *     assert sigma > 0
+ * 
+ */
+  #ifndef CYTHON_WITHOUT_ASSERTIONS
+  if (unlikely(__pyx_assertions_enabled())) {
+    __pyx_t_1 = (__pyx_v_fluence > 0.0);
+    if (unlikely(!__pyx_t_1)) {
+      __Pyx_Raise(__pyx_builtin_AssertionError, 0, 0, 0);
+      __PYX_ERR(0, 39, __pyx_L1_error)
+    }
+  }
+  #else
+  if ((1)); else __PYX_ERR(0, 39, __pyx_L1_error)
+  #endif
+
   /* "scatfit/pulsemodels_cython.pyx":40
+ * 
+ *     assert fluence > 0
+ *     assert sigma > 0             # <<<<<<<<<<<<<<
+ * 
+ *     cdef Py_ssize_t i
+ */
+  #ifndef CYTHON_WITHOUT_ASSERTIONS
+  if (unlikely(__pyx_assertions_enabled())) {
+    __pyx_t_1 = (__pyx_v_sigma > 0.0);
+    if (unlikely(!__pyx_t_1)) {
+      __Pyx_Raise(__pyx_builtin_AssertionError, 0, 0, 0);
+      __PYX_ERR(0, 40, __pyx_L1_error)
+    }
+  }
+  #else
+  if ((1)); else __PYX_ERR(0, 40, __pyx_L1_error)
+  #endif
+
+  /* "scatfit/pulsemodels_cython.pyx":43
  * 
  *     cdef Py_ssize_t i
  *     cdef Py_ssize_t N = x.shape[0]             # <<<<<<<<<<<<<<
@@ -17739,7 +17778,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_gaussian_normed(CYTHON_U
  */
   __pyx_v_N = (__pyx_v_x.shape[0]);
 
-  /* "scatfit/pulsemodels_cython.pyx":42
+  /* "scatfit/pulsemodels_cython.pyx":45
  *     cdef Py_ssize_t N = x.shape[0]
  * 
  *     cdef double invsigma = 1.0 / sigma             # <<<<<<<<<<<<<<
@@ -17748,25 +17787,25 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_gaussian_normed(CYTHON_U
  */
   if (unlikely(__pyx_v_sigma == 0)) {
     PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-    __PYX_ERR(0, 42, __pyx_L1_error)
+    __PYX_ERR(0, 45, __pyx_L1_error)
   }
   __pyx_v_invsigma = (1.0 / __pyx_v_sigma);
 
-  /* "scatfit/pulsemodels_cython.pyx":43
+  /* "scatfit/pulsemodels_cython.pyx":46
  * 
  *     cdef double invsigma = 1.0 / sigma
  *     cdef double invsqrt = 1.0 / cmath.sqrt(2.0 * cmath.M_PI)             # <<<<<<<<<<<<<<
  *     cdef double A = fluence * invsigma * invsqrt
  * 
  */
-  __pyx_t_1 = sqrt((2.0 * M_PI));
-  if (unlikely(__pyx_t_1 == 0)) {
+  __pyx_t_2 = sqrt((2.0 * M_PI));
+  if (unlikely(__pyx_t_2 == 0)) {
     PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-    __PYX_ERR(0, 43, __pyx_L1_error)
+    __PYX_ERR(0, 46, __pyx_L1_error)
   }
-  __pyx_v_invsqrt = (1.0 / __pyx_t_1);
+  __pyx_v_invsqrt = (1.0 / __pyx_t_2);
 
-  /* "scatfit/pulsemodels_cython.pyx":44
+  /* "scatfit/pulsemodels_cython.pyx":47
  *     cdef double invsigma = 1.0 / sigma
  *     cdef double invsqrt = 1.0 / cmath.sqrt(2.0 * cmath.M_PI)
  *     cdef double A = fluence * invsigma * invsqrt             # <<<<<<<<<<<<<<
@@ -17775,79 +17814,79 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_gaussian_normed(CYTHON_U
  */
   __pyx_v_A = ((__pyx_v_fluence * __pyx_v_invsigma) * __pyx_v_invsqrt);
 
-  /* "scatfit/pulsemodels_cython.pyx":46
+  /* "scatfit/pulsemodels_cython.pyx":49
  *     cdef double A = fluence * invsigma * invsqrt
  * 
  *     res = np.zeros(N, dtype=np.double)             # <<<<<<<<<<<<<<
  *     cdef double[::1] res_view = res
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 46, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_zeros); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 46, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 49, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = PyInt_FromSsize_t(__pyx_v_N); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 46, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 46, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_zeros); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 49, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_GIVEREF(__pyx_t_2);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_2)) __PYX_ERR(0, 46, __pyx_L1_error);
-  __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 46, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_np); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 46, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_double); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 46, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_dtype, __pyx_t_6) < 0) __PYX_ERR(0, 46, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 46, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyInt_FromSsize_t(__pyx_v_N); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 49, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 49, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_GIVEREF(__pyx_t_3);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3)) __PYX_ERR(0, 49, __pyx_L1_error);
+  __pyx_t_3 = 0;
+  __pyx_t_3 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 49, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_np); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 49, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_double); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 49, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_dtype, __pyx_t_7) < 0) __PYX_ERR(0, 49, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_5, __pyx_t_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 49, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_v_res = __pyx_t_6;
-  __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_v_res = __pyx_t_7;
+  __pyx_t_7 = 0;
 
-  /* "scatfit/pulsemodels_cython.pyx":47
+  /* "scatfit/pulsemodels_cython.pyx":50
  * 
  *     res = np.zeros(N, dtype=np.double)
  *     cdef double[::1] res_view = res             # <<<<<<<<<<<<<<
  * 
  *     for i in range(N):
  */
-  __pyx_t_7 = __Pyx_PyObject_to_MemoryviewSlice_dc_double(__pyx_v_res, PyBUF_WRITABLE); if (unlikely(!__pyx_t_7.memview)) __PYX_ERR(0, 47, __pyx_L1_error)
-  __pyx_v_res_view = __pyx_t_7;
-  __pyx_t_7.memview = NULL;
-  __pyx_t_7.data = NULL;
+  __pyx_t_8 = __Pyx_PyObject_to_MemoryviewSlice_dc_double(__pyx_v_res, PyBUF_WRITABLE); if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 50, __pyx_L1_error)
+  __pyx_v_res_view = __pyx_t_8;
+  __pyx_t_8.memview = NULL;
+  __pyx_t_8.data = NULL;
 
-  /* "scatfit/pulsemodels_cython.pyx":49
+  /* "scatfit/pulsemodels_cython.pyx":52
  *     cdef double[::1] res_view = res
  * 
  *     for i in range(N):             # <<<<<<<<<<<<<<
  *         res_view[i] = A * cmath.exp(-0.5 * cmath.pow((x[i] - center) * invsigma, 2))
  * 
  */
-  __pyx_t_8 = __pyx_v_N;
-  __pyx_t_9 = __pyx_t_8;
-  for (__pyx_t_10 = 0; __pyx_t_10 < __pyx_t_9; __pyx_t_10+=1) {
-    __pyx_v_i = __pyx_t_10;
+  __pyx_t_9 = __pyx_v_N;
+  __pyx_t_10 = __pyx_t_9;
+  for (__pyx_t_11 = 0; __pyx_t_11 < __pyx_t_10; __pyx_t_11+=1) {
+    __pyx_v_i = __pyx_t_11;
 
-    /* "scatfit/pulsemodels_cython.pyx":50
+    /* "scatfit/pulsemodels_cython.pyx":53
  * 
  *     for i in range(N):
  *         res_view[i] = A * cmath.exp(-0.5 * cmath.pow((x[i] - center) * invsigma, 2))             # <<<<<<<<<<<<<<
  * 
  *     return res
  */
-    __pyx_t_11 = __pyx_v_i;
     __pyx_t_12 = __pyx_v_i;
-    *((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_res_view.data) + __pyx_t_12)) )) = (__pyx_v_A * exp((-0.5 * pow((((*((double const  *) ( /* dim=0 */ ((char *) (((double const  *) __pyx_v_x.data) + __pyx_t_11)) ))) - __pyx_v_center) * __pyx_v_invsigma), 2.0))));
+    __pyx_t_13 = __pyx_v_i;
+    *((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_res_view.data) + __pyx_t_13)) )) = (__pyx_v_A * exp((-0.5 * pow((((*((double const  *) ( /* dim=0 */ ((char *) (((double const  *) __pyx_v_x.data) + __pyx_t_12)) ))) - __pyx_v_center) * __pyx_v_invsigma), 2.0))));
   }
 
-  /* "scatfit/pulsemodels_cython.pyx":52
+  /* "scatfit/pulsemodels_cython.pyx":55
  *         res_view[i] = A * cmath.exp(-0.5 * cmath.pow((x[i] - center) * invsigma, 2))
  * 
  *     return res             # <<<<<<<<<<<<<<
@@ -17869,12 +17908,12 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_gaussian_normed(CYTHON_U
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_6);
-  __PYX_XCLEAR_MEMVIEW(&__pyx_t_7, 1);
+  __Pyx_XDECREF(__pyx_t_7);
+  __PYX_XCLEAR_MEMVIEW(&__pyx_t_8, 1);
   __Pyx_AddTraceback("scatfit.pulsemodels_cython.gaussian_normed", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
@@ -17885,7 +17924,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_gaussian_normed(CYTHON_U
   return __pyx_r;
 }
 
-/* "scatfit/pulsemodels_cython.pyx":55
+/* "scatfit/pulsemodels_cython.pyx":58
  * 
  * 
  * @cython.boundscheck(False)             # <<<<<<<<<<<<<<
@@ -17962,7 +18001,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 55, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 58, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -17970,9 +18009,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[1]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 55, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 58, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("scattered_gaussian_pulse", 1, 6, 6, 1); __PYX_ERR(0, 55, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("scattered_gaussian_pulse", 1, 6, 6, 1); __PYX_ERR(0, 58, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -17980,9 +18019,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[2]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 55, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 58, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("scattered_gaussian_pulse", 1, 6, 6, 2); __PYX_ERR(0, 55, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("scattered_gaussian_pulse", 1, 6, 6, 2); __PYX_ERR(0, 58, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
@@ -17990,9 +18029,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[3]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 55, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 58, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("scattered_gaussian_pulse", 1, 6, 6, 3); __PYX_ERR(0, 55, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("scattered_gaussian_pulse", 1, 6, 6, 3); __PYX_ERR(0, 58, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
@@ -18000,9 +18039,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[4]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 55, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 58, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("scattered_gaussian_pulse", 1, 6, 6, 4); __PYX_ERR(0, 55, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("scattered_gaussian_pulse", 1, 6, 6, 4); __PYX_ERR(0, 58, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
@@ -18010,14 +18049,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[5]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 55, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 58, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("scattered_gaussian_pulse", 1, 6, 6, 5); __PYX_ERR(0, 55, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("scattered_gaussian_pulse", 1, 6, 6, 5); __PYX_ERR(0, 58, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "scattered_gaussian_pulse") < 0)) __PYX_ERR(0, 55, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "scattered_gaussian_pulse") < 0)) __PYX_ERR(0, 58, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 6)) {
       goto __pyx_L5_argtuple_error;
@@ -18029,16 +18068,16 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       values[4] = __Pyx_Arg_FASTCALL(__pyx_args, 4);
       values[5] = __Pyx_Arg_FASTCALL(__pyx_args, 5);
     }
-    __pyx_v_x = __Pyx_PyObject_to_MemoryviewSlice_dc_double__const__(values[0], 0); if (unlikely(!__pyx_v_x.memview)) __PYX_ERR(0, 58, __pyx_L3_error)
-    __pyx_v_fluence = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_fluence == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 59, __pyx_L3_error)
-    __pyx_v_center = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_center == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 60, __pyx_L3_error)
-    __pyx_v_sigma = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_sigma == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 61, __pyx_L3_error)
-    __pyx_v_taus = __pyx_PyFloat_AsDouble(values[4]); if (unlikely((__pyx_v_taus == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 62, __pyx_L3_error)
-    __pyx_v_dc = __pyx_PyFloat_AsDouble(values[5]); if (unlikely((__pyx_v_dc == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 63, __pyx_L3_error)
+    __pyx_v_x = __Pyx_PyObject_to_MemoryviewSlice_dc_double__const__(values[0], 0); if (unlikely(!__pyx_v_x.memview)) __PYX_ERR(0, 61, __pyx_L3_error)
+    __pyx_v_fluence = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_fluence == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 62, __pyx_L3_error)
+    __pyx_v_center = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_center == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 63, __pyx_L3_error)
+    __pyx_v_sigma = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_sigma == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 64, __pyx_L3_error)
+    __pyx_v_taus = __pyx_PyFloat_AsDouble(values[4]); if (unlikely((__pyx_v_taus == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 65, __pyx_L3_error)
+    __pyx_v_dc = __pyx_PyFloat_AsDouble(values[5]); if (unlikely((__pyx_v_dc == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 66, __pyx_L3_error)
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("scattered_gaussian_pulse", 1, 6, 6, __pyx_nargs); __PYX_ERR(0, 55, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("scattered_gaussian_pulse", 1, 6, 6, __pyx_nargs); __PYX_ERR(0, 58, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -18083,14 +18122,14 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_2scattered_gaussian_puls
   double __pyx_v_exgaussian;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
-  double __pyx_t_1;
-  PyObject *__pyx_t_2 = NULL;
+  int __pyx_t_1;
+  double __pyx_t_2;
   PyObject *__pyx_t_3 = NULL;
   PyObject *__pyx_t_4 = NULL;
   PyObject *__pyx_t_5 = NULL;
   PyObject *__pyx_t_6 = NULL;
-  __Pyx_memviewslice __pyx_t_7 = { 0, 0, { 0 }, { 0 }, { 0 } };
-  int __pyx_t_8;
+  PyObject *__pyx_t_7 = NULL;
+  __Pyx_memviewslice __pyx_t_8 = { 0, 0, { 0 }, { 0 }, { 0 } };
   PyObject *__pyx_t_9 = NULL;
   PyObject *__pyx_t_10 = NULL;
   unsigned int __pyx_t_11;
@@ -18104,7 +18143,64 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_2scattered_gaussian_puls
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("scattered_gaussian_pulse", 1);
 
-  /* "scatfit/pulsemodels_cython.pyx":93
+  /* "scatfit/pulsemodels_cython.pyx":95
+ *     """
+ * 
+ *     assert fluence > 0             # <<<<<<<<<<<<<<
+ *     assert sigma > 0
+ *     assert taus > 0
+ */
+  #ifndef CYTHON_WITHOUT_ASSERTIONS
+  if (unlikely(__pyx_assertions_enabled())) {
+    __pyx_t_1 = (__pyx_v_fluence > 0.0);
+    if (unlikely(!__pyx_t_1)) {
+      __Pyx_Raise(__pyx_builtin_AssertionError, 0, 0, 0);
+      __PYX_ERR(0, 95, __pyx_L1_error)
+    }
+  }
+  #else
+  if ((1)); else __PYX_ERR(0, 95, __pyx_L1_error)
+  #endif
+
+  /* "scatfit/pulsemodels_cython.pyx":96
+ * 
+ *     assert fluence > 0
+ *     assert sigma > 0             # <<<<<<<<<<<<<<
+ *     assert taus > 0
+ * 
+ */
+  #ifndef CYTHON_WITHOUT_ASSERTIONS
+  if (unlikely(__pyx_assertions_enabled())) {
+    __pyx_t_1 = (__pyx_v_sigma > 0.0);
+    if (unlikely(!__pyx_t_1)) {
+      __Pyx_Raise(__pyx_builtin_AssertionError, 0, 0, 0);
+      __PYX_ERR(0, 96, __pyx_L1_error)
+    }
+  }
+  #else
+  if ((1)); else __PYX_ERR(0, 96, __pyx_L1_error)
+  #endif
+
+  /* "scatfit/pulsemodels_cython.pyx":97
+ *     assert fluence > 0
+ *     assert sigma > 0
+ *     assert taus > 0             # <<<<<<<<<<<<<<
+ * 
+ *     cdef Py_ssize_t i
+ */
+  #ifndef CYTHON_WITHOUT_ASSERTIONS
+  if (unlikely(__pyx_assertions_enabled())) {
+    __pyx_t_1 = (__pyx_v_taus > 0.0);
+    if (unlikely(!__pyx_t_1)) {
+      __Pyx_Raise(__pyx_builtin_AssertionError, 0, 0, 0);
+      __PYX_ERR(0, 97, __pyx_L1_error)
+    }
+  }
+  #else
+  if ((1)); else __PYX_ERR(0, 97, __pyx_L1_error)
+  #endif
+
+  /* "scatfit/pulsemodels_cython.pyx":100
  * 
  *     cdef Py_ssize_t i
  *     cdef Py_ssize_t N = x.shape[0]             # <<<<<<<<<<<<<<
@@ -18113,7 +18209,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_2scattered_gaussian_puls
  */
   __pyx_v_N = (__pyx_v_x.shape[0]);
 
-  /* "scatfit/pulsemodels_cython.pyx":99
+  /* "scatfit/pulsemodels_cython.pyx":106
  *     # -> function becomes a regular gaussian
  * 
  *     cdef double invsigma = 1.0 / sigma             # <<<<<<<<<<<<<<
@@ -18122,11 +18218,11 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_2scattered_gaussian_puls
  */
   if (unlikely(__pyx_v_sigma == 0)) {
     PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-    __PYX_ERR(0, 99, __pyx_L1_error)
+    __PYX_ERR(0, 106, __pyx_L1_error)
   }
   __pyx_v_invsigma = (1.0 / __pyx_v_sigma);
 
-  /* "scatfit/pulsemodels_cython.pyx":100
+  /* "scatfit/pulsemodels_cython.pyx":107
  * 
  *     cdef double invsigma = 1.0 / sigma
  *     cdef double K = taus * invsigma             # <<<<<<<<<<<<<<
@@ -18135,7 +18231,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_2scattered_gaussian_puls
  */
   __pyx_v_K = (__pyx_v_taus * __pyx_v_invsigma);
 
-  /* "scatfit/pulsemodels_cython.pyx":101
+  /* "scatfit/pulsemodels_cython.pyx":108
  *     cdef double invsigma = 1.0 / sigma
  *     cdef double K = taus * invsigma
  *     cdef double invK = 1.0 / K             # <<<<<<<<<<<<<<
@@ -18144,83 +18240,83 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_2scattered_gaussian_puls
  */
   if (unlikely(__pyx_v_K == 0)) {
     PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-    __PYX_ERR(0, 101, __pyx_L1_error)
+    __PYX_ERR(0, 108, __pyx_L1_error)
   }
   __pyx_v_invK = (1.0 / __pyx_v_K);
 
-  /* "scatfit/pulsemodels_cython.pyx":102
+  /* "scatfit/pulsemodels_cython.pyx":109
  *     cdef double K = taus * invsigma
  *     cdef double invK = 1.0 / K
  *     cdef double invsqrt = 1.0 / cmath.sqrt(2.0)             # <<<<<<<<<<<<<<
  * 
  *     res = np.zeros(N, dtype=np.double)
  */
-  __pyx_t_1 = sqrt(2.0);
-  if (unlikely(__pyx_t_1 == 0)) {
+  __pyx_t_2 = sqrt(2.0);
+  if (unlikely(__pyx_t_2 == 0)) {
     PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-    __PYX_ERR(0, 102, __pyx_L1_error)
+    __PYX_ERR(0, 109, __pyx_L1_error)
   }
-  __pyx_v_invsqrt = (1.0 / __pyx_t_1);
+  __pyx_v_invsqrt = (1.0 / __pyx_t_2);
 
-  /* "scatfit/pulsemodels_cython.pyx":104
+  /* "scatfit/pulsemodels_cython.pyx":111
  *     cdef double invsqrt = 1.0 / cmath.sqrt(2.0)
  * 
  *     res = np.zeros(N, dtype=np.double)             # <<<<<<<<<<<<<<
  *     cdef double[::1] res_view = res
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 104, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_zeros); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 104, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 111, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = PyInt_FromSsize_t(__pyx_v_N); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 104, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 104, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_zeros); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 111, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_GIVEREF(__pyx_t_2);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_2)) __PYX_ERR(0, 104, __pyx_L1_error);
-  __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 104, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_np); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 104, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_double); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 104, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_dtype, __pyx_t_6) < 0) __PYX_ERR(0, 104, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 104, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyInt_FromSsize_t(__pyx_v_N); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 111, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 111, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_GIVEREF(__pyx_t_3);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3)) __PYX_ERR(0, 111, __pyx_L1_error);
+  __pyx_t_3 = 0;
+  __pyx_t_3 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 111, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_np); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 111, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_double); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 111, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_dtype, __pyx_t_7) < 0) __PYX_ERR(0, 111, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_5, __pyx_t_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 111, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_v_res = __pyx_t_6;
-  __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_v_res = __pyx_t_7;
+  __pyx_t_7 = 0;
 
-  /* "scatfit/pulsemodels_cython.pyx":105
+  /* "scatfit/pulsemodels_cython.pyx":112
  * 
  *     res = np.zeros(N, dtype=np.double)
  *     cdef double[::1] res_view = res             # <<<<<<<<<<<<<<
  * 
  *     cdef double mu_gauss
  */
-  __pyx_t_7 = __Pyx_PyObject_to_MemoryviewSlice_dc_double(__pyx_v_res, PyBUF_WRITABLE); if (unlikely(!__pyx_t_7.memview)) __PYX_ERR(0, 105, __pyx_L1_error)
-  __pyx_v_res_view = __pyx_t_7;
-  __pyx_t_7.memview = NULL;
-  __pyx_t_7.data = NULL;
+  __pyx_t_8 = __Pyx_PyObject_to_MemoryviewSlice_dc_double(__pyx_v_res, PyBUF_WRITABLE); if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 112, __pyx_L1_error)
+  __pyx_v_res_view = __pyx_t_8;
+  __pyx_t_8.memview = NULL;
+  __pyx_t_8.data = NULL;
 
-  /* "scatfit/pulsemodels_cython.pyx":114
+  /* "scatfit/pulsemodels_cython.pyx":121
  *     cdef double exgaussian
  * 
  *     if invK >= 10.0:             # <<<<<<<<<<<<<<
  *         mu_gauss = center + taus
  *         gauss = gaussian_normed(x, fluence, mu_gauss, sigma)
  */
-  __pyx_t_8 = (__pyx_v_invK >= 10.0);
-  if (__pyx_t_8) {
+  __pyx_t_1 = (__pyx_v_invK >= 10.0);
+  if (__pyx_t_1) {
 
-    /* "scatfit/pulsemodels_cython.pyx":115
+    /* "scatfit/pulsemodels_cython.pyx":122
  * 
  *     if invK >= 10.0:
  *         mu_gauss = center + taus             # <<<<<<<<<<<<<<
@@ -18229,56 +18325,56 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_2scattered_gaussian_puls
  */
     __pyx_v_mu_gauss = (__pyx_v_center + __pyx_v_taus);
 
-    /* "scatfit/pulsemodels_cython.pyx":116
+    /* "scatfit/pulsemodels_cython.pyx":123
  *     if invK >= 10.0:
  *         mu_gauss = center + taus
  *         gauss = gaussian_normed(x, fluence, mu_gauss, sigma)             # <<<<<<<<<<<<<<
  * 
  *         for i in range(N):
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_gaussian_normed); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 116, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_4 = __pyx_memoryview_fromslice(__pyx_v_x, 1, (PyObject *(*)(char *)) __pyx_memview_get_double__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 116, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_3 = PyFloat_FromDouble(__pyx_v_fluence); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 116, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_gaussian_normed); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 123, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_5 = PyFloat_FromDouble(__pyx_v_mu_gauss); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 116, __pyx_L1_error)
+    __pyx_t_5 = __pyx_memoryview_fromslice(__pyx_v_x, 1, (PyObject *(*)(char *)) __pyx_memview_get_double__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 123, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_9 = PyFloat_FromDouble(__pyx_v_sigma); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 116, __pyx_L1_error)
+    __pyx_t_4 = PyFloat_FromDouble(__pyx_v_fluence); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 123, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_6 = PyFloat_FromDouble(__pyx_v_mu_gauss); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 123, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __pyx_t_9 = PyFloat_FromDouble(__pyx_v_sigma); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 123, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_9);
     __pyx_t_10 = NULL;
     __pyx_t_11 = 0;
     #if CYTHON_UNPACK_METHODS
-    if (unlikely(PyMethod_Check(__pyx_t_2))) {
-      __pyx_t_10 = PyMethod_GET_SELF(__pyx_t_2);
+    if (unlikely(PyMethod_Check(__pyx_t_3))) {
+      __pyx_t_10 = PyMethod_GET_SELF(__pyx_t_3);
       if (likely(__pyx_t_10)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
         __Pyx_INCREF(__pyx_t_10);
         __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_2, function);
+        __Pyx_DECREF_SET(__pyx_t_3, function);
         __pyx_t_11 = 1;
       }
     }
     #endif
     {
-      PyObject *__pyx_callargs[5] = {__pyx_t_10, __pyx_t_4, __pyx_t_3, __pyx_t_5, __pyx_t_9};
-      __pyx_t_6 = __Pyx_PyObject_FastCall(__pyx_t_2, __pyx_callargs+1-__pyx_t_11, 4+__pyx_t_11);
+      PyObject *__pyx_callargs[5] = {__pyx_t_10, __pyx_t_5, __pyx_t_4, __pyx_t_6, __pyx_t_9};
+      __pyx_t_7 = __Pyx_PyObject_FastCall(__pyx_t_3, __pyx_callargs+1-__pyx_t_11, 4+__pyx_t_11);
       __Pyx_XDECREF(__pyx_t_10); __pyx_t_10 = 0;
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-      if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 116, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_6);
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+      if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 123, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_7);
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     }
-    __pyx_t_7 = __Pyx_PyObject_to_MemoryviewSlice_dc_double(__pyx_t_6, PyBUF_WRITABLE); if (unlikely(!__pyx_t_7.memview)) __PYX_ERR(0, 116, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-    __pyx_v_gauss = __pyx_t_7;
-    __pyx_t_7.memview = NULL;
-    __pyx_t_7.data = NULL;
+    __pyx_t_8 = __Pyx_PyObject_to_MemoryviewSlice_dc_double(__pyx_t_7, PyBUF_WRITABLE); if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 123, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+    __pyx_v_gauss = __pyx_t_8;
+    __pyx_t_8.memview = NULL;
+    __pyx_t_8.data = NULL;
 
-    /* "scatfit/pulsemodels_cython.pyx":118
+    /* "scatfit/pulsemodels_cython.pyx":125
  *         gauss = gaussian_normed(x, fluence, mu_gauss, sigma)
  * 
  *         for i in range(N):             # <<<<<<<<<<<<<<
@@ -18290,7 +18386,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_2scattered_gaussian_puls
     for (__pyx_t_14 = 0; __pyx_t_14 < __pyx_t_13; __pyx_t_14+=1) {
       __pyx_v_i = __pyx_t_14;
 
-      /* "scatfit/pulsemodels_cython.pyx":119
+      /* "scatfit/pulsemodels_cython.pyx":126
  * 
  *         for i in range(N):
  *             res_view[i] = dc + gauss[i]             # <<<<<<<<<<<<<<
@@ -18302,7 +18398,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_2scattered_gaussian_puls
       *((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_res_view.data) + __pyx_t_16)) )) = (__pyx_v_dc + (*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_gauss.data) + __pyx_t_15)) ))));
     }
 
-    /* "scatfit/pulsemodels_cython.pyx":114
+    /* "scatfit/pulsemodels_cython.pyx":121
  *     cdef double exgaussian
  * 
  *     if invK >= 10.0:             # <<<<<<<<<<<<<<
@@ -18312,7 +18408,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_2scattered_gaussian_puls
     goto __pyx_L3;
   }
 
-  /* "scatfit/pulsemodels_cython.pyx":121
+  /* "scatfit/pulsemodels_cython.pyx":128
  *             res_view[i] = dc + gauss[i]
  *     else:
  *         for i in range(N):             # <<<<<<<<<<<<<<
@@ -18325,7 +18421,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_2scattered_gaussian_puls
     for (__pyx_t_14 = 0; __pyx_t_14 < __pyx_t_13; __pyx_t_14+=1) {
       __pyx_v_i = __pyx_t_14;
 
-      /* "scatfit/pulsemodels_cython.pyx":122
+      /* "scatfit/pulsemodels_cython.pyx":129
  *     else:
  *         for i in range(N):
  *             y = (x[i] - center) * invsigma             # <<<<<<<<<<<<<<
@@ -18335,7 +18431,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_2scattered_gaussian_puls
       __pyx_t_15 = __pyx_v_i;
       __pyx_v_y = (((*((double const  *) ( /* dim=0 */ ((char *) (((double const  *) __pyx_v_x.data) + __pyx_t_15)) ))) - __pyx_v_center) * __pyx_v_invsigma);
 
-      /* "scatfit/pulsemodels_cython.pyx":123
+      /* "scatfit/pulsemodels_cython.pyx":130
  *         for i in range(N):
  *             y = (x[i] - center) * invsigma
  *             argexp = 0.5 * cmath.pow(invK, 2) - y * invK             # <<<<<<<<<<<<<<
@@ -18344,17 +18440,17 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_2scattered_gaussian_puls
  */
       __pyx_v_argexp = ((0.5 * pow(__pyx_v_invK, 2.0)) - (__pyx_v_y * __pyx_v_invK));
 
-      /* "scatfit/pulsemodels_cython.pyx":126
+      /* "scatfit/pulsemodels_cython.pyx":133
  * 
  *             # prevent numerical overflows
  *             if argexp >= 300.0:             # <<<<<<<<<<<<<<
  *                 argexp = 0.0
  * 
  */
-      __pyx_t_8 = (__pyx_v_argexp >= 300.0);
-      if (__pyx_t_8) {
+      __pyx_t_1 = (__pyx_v_argexp >= 300.0);
+      if (__pyx_t_1) {
 
-        /* "scatfit/pulsemodels_cython.pyx":127
+        /* "scatfit/pulsemodels_cython.pyx":134
  *             # prevent numerical overflows
  *             if argexp >= 300.0:
  *                 argexp = 0.0             # <<<<<<<<<<<<<<
@@ -18363,7 +18459,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_2scattered_gaussian_puls
  */
         __pyx_v_argexp = 0.0;
 
-        /* "scatfit/pulsemodels_cython.pyx":126
+        /* "scatfit/pulsemodels_cython.pyx":133
  * 
  *             # prevent numerical overflows
  *             if argexp >= 300.0:             # <<<<<<<<<<<<<<
@@ -18372,7 +18468,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_2scattered_gaussian_puls
  */
       }
 
-      /* "scatfit/pulsemodels_cython.pyx":134
+      /* "scatfit/pulsemodels_cython.pyx":141
  *                 * invsigma
  *                 * cmath.exp(argexp)
  *                 * cmath.erfc(-(y - invK) * invsqrt)             # <<<<<<<<<<<<<<
@@ -18381,7 +18477,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_2scattered_gaussian_puls
  */
       __pyx_v_exgaussian = ((((0.5 * __pyx_v_invK) * __pyx_v_invsigma) * exp(__pyx_v_argexp)) * erfc(((-(__pyx_v_y - __pyx_v_invK)) * __pyx_v_invsqrt)));
 
-      /* "scatfit/pulsemodels_cython.pyx":137
+      /* "scatfit/pulsemodels_cython.pyx":144
  *             )
  * 
  *             res_view[i] = dc + fluence * exgaussian             # <<<<<<<<<<<<<<
@@ -18394,7 +18490,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_2scattered_gaussian_puls
   }
   __pyx_L3:;
 
-  /* "scatfit/pulsemodels_cython.pyx":139
+  /* "scatfit/pulsemodels_cython.pyx":146
  *             res_view[i] = dc + fluence * exgaussian
  * 
  *     return res             # <<<<<<<<<<<<<<
@@ -18406,7 +18502,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_2scattered_gaussian_puls
   __pyx_r = __pyx_v_res;
   goto __pyx_L0;
 
-  /* "scatfit/pulsemodels_cython.pyx":55
+  /* "scatfit/pulsemodels_cython.pyx":58
  * 
  * 
  * @cython.boundscheck(False)             # <<<<<<<<<<<<<<
@@ -18416,12 +18512,12 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_2scattered_gaussian_puls
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_6);
-  __PYX_XCLEAR_MEMVIEW(&__pyx_t_7, 1);
+  __Pyx_XDECREF(__pyx_t_7);
+  __PYX_XCLEAR_MEMVIEW(&__pyx_t_8, 1);
   __Pyx_XDECREF(__pyx_t_9);
   __Pyx_XDECREF(__pyx_t_10);
   __Pyx_AddTraceback("scatfit.pulsemodels_cython.scattered_gaussian_pulse", __pyx_clineno, __pyx_lineno, __pyx_filename);
@@ -18435,7 +18531,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_2scattered_gaussian_puls
   return __pyx_r;
 }
 
-/* "scatfit/pulsemodels_cython.pyx":142
+/* "scatfit/pulsemodels_cython.pyx":149
  * 
  * 
  * @cython.boundscheck(False)             # <<<<<<<<<<<<<<
@@ -18521,7 +18617,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 142, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 149, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -18529,9 +18625,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[1]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 142, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 149, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("bandintegrated_model", 1, 9, 9, 1); __PYX_ERR(0, 142, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("bandintegrated_model", 1, 9, 9, 1); __PYX_ERR(0, 149, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
@@ -18539,9 +18635,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[2]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 142, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 149, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("bandintegrated_model", 1, 9, 9, 2); __PYX_ERR(0, 142, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("bandintegrated_model", 1, 9, 9, 2); __PYX_ERR(0, 149, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
@@ -18549,9 +18645,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[3]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 142, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 149, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("bandintegrated_model", 1, 9, 9, 3); __PYX_ERR(0, 142, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("bandintegrated_model", 1, 9, 9, 3); __PYX_ERR(0, 149, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
@@ -18559,9 +18655,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[4]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 142, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 149, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("bandintegrated_model", 1, 9, 9, 4); __PYX_ERR(0, 142, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("bandintegrated_model", 1, 9, 9, 4); __PYX_ERR(0, 149, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
@@ -18569,9 +18665,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[5]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 142, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 149, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("bandintegrated_model", 1, 9, 9, 5); __PYX_ERR(0, 142, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("bandintegrated_model", 1, 9, 9, 5); __PYX_ERR(0, 149, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  6:
@@ -18579,9 +18675,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[6]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 142, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 149, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("bandintegrated_model", 1, 9, 9, 6); __PYX_ERR(0, 142, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("bandintegrated_model", 1, 9, 9, 6); __PYX_ERR(0, 149, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  7:
@@ -18589,9 +18685,9 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[7]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 142, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 149, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("bandintegrated_model", 1, 9, 9, 7); __PYX_ERR(0, 142, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("bandintegrated_model", 1, 9, 9, 7); __PYX_ERR(0, 149, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  8:
@@ -18599,14 +18695,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[8]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 142, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 149, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("bandintegrated_model", 1, 9, 9, 8); __PYX_ERR(0, 142, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("bandintegrated_model", 1, 9, 9, 8); __PYX_ERR(0, 149, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "bandintegrated_model") < 0)) __PYX_ERR(0, 142, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "bandintegrated_model") < 0)) __PYX_ERR(0, 149, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 9)) {
       goto __pyx_L5_argtuple_error;
@@ -18621,19 +18717,19 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       values[7] = __Pyx_Arg_FASTCALL(__pyx_args, 7);
       values[8] = __Pyx_Arg_FASTCALL(__pyx_args, 8);
     }
-    __pyx_v_x = __Pyx_PyObject_to_MemoryviewSlice_dc_double__const__(values[0], 0); if (unlikely(!__pyx_v_x.memview)) __PYX_ERR(0, 145, __pyx_L3_error)
-    __pyx_v_fluence = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_fluence == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 146, __pyx_L3_error)
-    __pyx_v_center = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_center == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 147, __pyx_L3_error)
-    __pyx_v_sigma = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_sigma == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 148, __pyx_L3_error)
-    __pyx_v_taus = __pyx_PyFloat_AsDouble(values[4]); if (unlikely((__pyx_v_taus == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 149, __pyx_L3_error)
-    __pyx_v_dc = __pyx_PyFloat_AsDouble(values[5]); if (unlikely((__pyx_v_dc == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 150, __pyx_L3_error)
-    __pyx_v_f_lo = __pyx_PyFloat_AsDouble(values[6]); if (unlikely((__pyx_v_f_lo == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 151, __pyx_L3_error)
-    __pyx_v_f_hi = __pyx_PyFloat_AsDouble(values[7]); if (unlikely((__pyx_v_f_hi == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 152, __pyx_L3_error)
-    __pyx_v_nfreq = __Pyx_PyInt_As_int(values[8]); if (unlikely((__pyx_v_nfreq == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 153, __pyx_L3_error)
+    __pyx_v_x = __Pyx_PyObject_to_MemoryviewSlice_dc_double__const__(values[0], 0); if (unlikely(!__pyx_v_x.memview)) __PYX_ERR(0, 152, __pyx_L3_error)
+    __pyx_v_fluence = __pyx_PyFloat_AsDouble(values[1]); if (unlikely((__pyx_v_fluence == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 153, __pyx_L3_error)
+    __pyx_v_center = __pyx_PyFloat_AsDouble(values[2]); if (unlikely((__pyx_v_center == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 154, __pyx_L3_error)
+    __pyx_v_sigma = __pyx_PyFloat_AsDouble(values[3]); if (unlikely((__pyx_v_sigma == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 155, __pyx_L3_error)
+    __pyx_v_taus = __pyx_PyFloat_AsDouble(values[4]); if (unlikely((__pyx_v_taus == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 156, __pyx_L3_error)
+    __pyx_v_dc = __pyx_PyFloat_AsDouble(values[5]); if (unlikely((__pyx_v_dc == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 157, __pyx_L3_error)
+    __pyx_v_f_lo = __pyx_PyFloat_AsDouble(values[6]); if (unlikely((__pyx_v_f_lo == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 158, __pyx_L3_error)
+    __pyx_v_f_hi = __pyx_PyFloat_AsDouble(values[7]); if (unlikely((__pyx_v_f_hi == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 159, __pyx_L3_error)
+    __pyx_v_nfreq = __Pyx_PyInt_As_int(values[8]); if (unlikely((__pyx_v_nfreq == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 160, __pyx_L3_error)
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("bandintegrated_model", 1, 9, 9, __pyx_nargs); __PYX_ERR(0, 142, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("bandintegrated_model", 1, 9, 9, __pyx_nargs); __PYX_ERR(0, 149, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -18680,32 +18776,166 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_4bandintegrated_model(CY
   double __pyx_v_A;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
-  double __pyx_t_1;
-  PyObject *__pyx_t_2 = NULL;
+  int __pyx_t_1;
+  double __pyx_t_2;
   PyObject *__pyx_t_3 = NULL;
   PyObject *__pyx_t_4 = NULL;
   PyObject *__pyx_t_5 = NULL;
   PyObject *__pyx_t_6 = NULL;
-  __Pyx_memviewslice __pyx_t_7 = { 0, 0, { 0 }, { 0 }, { 0 } };
-  int __pyx_t_8;
+  PyObject *__pyx_t_7 = NULL;
+  __Pyx_memviewslice __pyx_t_8 = { 0, 0, { 0 }, { 0 }, { 0 } };
   int __pyx_t_9;
-  Py_ssize_t __pyx_t_10;
-  PyObject *__pyx_t_11 = NULL;
+  int __pyx_t_10;
+  Py_ssize_t __pyx_t_11;
   PyObject *__pyx_t_12 = NULL;
   PyObject *__pyx_t_13 = NULL;
-  unsigned int __pyx_t_14;
-  Py_ssize_t __pyx_t_15;
+  PyObject *__pyx_t_14 = NULL;
+  unsigned int __pyx_t_15;
   Py_ssize_t __pyx_t_16;
   Py_ssize_t __pyx_t_17;
   Py_ssize_t __pyx_t_18;
   Py_ssize_t __pyx_t_19;
   Py_ssize_t __pyx_t_20;
+  Py_ssize_t __pyx_t_21;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("bandintegrated_model", 1);
 
-  /* "scatfit/pulsemodels_cython.pyx":197
+  /* "scatfit/pulsemodels_cython.pyx":203
+ *     """
+ * 
+ *     assert fluence > 0             # <<<<<<<<<<<<<<
+ *     assert sigma > 0
+ *     assert taus > 0
+ */
+  #ifndef CYTHON_WITHOUT_ASSERTIONS
+  if (unlikely(__pyx_assertions_enabled())) {
+    __pyx_t_1 = (__pyx_v_fluence > 0.0);
+    if (unlikely(!__pyx_t_1)) {
+      __Pyx_Raise(__pyx_builtin_AssertionError, 0, 0, 0);
+      __PYX_ERR(0, 203, __pyx_L1_error)
+    }
+  }
+  #else
+  if ((1)); else __PYX_ERR(0, 203, __pyx_L1_error)
+  #endif
+
+  /* "scatfit/pulsemodels_cython.pyx":204
+ * 
+ *     assert fluence > 0
+ *     assert sigma > 0             # <<<<<<<<<<<<<<
+ *     assert taus > 0
+ *     assert f_lo > 0
+ */
+  #ifndef CYTHON_WITHOUT_ASSERTIONS
+  if (unlikely(__pyx_assertions_enabled())) {
+    __pyx_t_1 = (__pyx_v_sigma > 0.0);
+    if (unlikely(!__pyx_t_1)) {
+      __Pyx_Raise(__pyx_builtin_AssertionError, 0, 0, 0);
+      __PYX_ERR(0, 204, __pyx_L1_error)
+    }
+  }
+  #else
+  if ((1)); else __PYX_ERR(0, 204, __pyx_L1_error)
+  #endif
+
+  /* "scatfit/pulsemodels_cython.pyx":205
+ *     assert fluence > 0
+ *     assert sigma > 0
+ *     assert taus > 0             # <<<<<<<<<<<<<<
+ *     assert f_lo > 0
+ *     assert f_hi > 0
+ */
+  #ifndef CYTHON_WITHOUT_ASSERTIONS
+  if (unlikely(__pyx_assertions_enabled())) {
+    __pyx_t_1 = (__pyx_v_taus > 0.0);
+    if (unlikely(!__pyx_t_1)) {
+      __Pyx_Raise(__pyx_builtin_AssertionError, 0, 0, 0);
+      __PYX_ERR(0, 205, __pyx_L1_error)
+    }
+  }
+  #else
+  if ((1)); else __PYX_ERR(0, 205, __pyx_L1_error)
+  #endif
+
+  /* "scatfit/pulsemodels_cython.pyx":206
+ *     assert sigma > 0
+ *     assert taus > 0
+ *     assert f_lo > 0             # <<<<<<<<<<<<<<
+ *     assert f_hi > 0
+ *     assert f_lo < f_hi
+ */
+  #ifndef CYTHON_WITHOUT_ASSERTIONS
+  if (unlikely(__pyx_assertions_enabled())) {
+    __pyx_t_1 = (__pyx_v_f_lo > 0.0);
+    if (unlikely(!__pyx_t_1)) {
+      __Pyx_Raise(__pyx_builtin_AssertionError, 0, 0, 0);
+      __PYX_ERR(0, 206, __pyx_L1_error)
+    }
+  }
+  #else
+  if ((1)); else __PYX_ERR(0, 206, __pyx_L1_error)
+  #endif
+
+  /* "scatfit/pulsemodels_cython.pyx":207
+ *     assert taus > 0
+ *     assert f_lo > 0
+ *     assert f_hi > 0             # <<<<<<<<<<<<<<
+ *     assert f_lo < f_hi
+ *     assert nfreq > 1
+ */
+  #ifndef CYTHON_WITHOUT_ASSERTIONS
+  if (unlikely(__pyx_assertions_enabled())) {
+    __pyx_t_1 = (__pyx_v_f_hi > 0.0);
+    if (unlikely(!__pyx_t_1)) {
+      __Pyx_Raise(__pyx_builtin_AssertionError, 0, 0, 0);
+      __PYX_ERR(0, 207, __pyx_L1_error)
+    }
+  }
+  #else
+  if ((1)); else __PYX_ERR(0, 207, __pyx_L1_error)
+  #endif
+
+  /* "scatfit/pulsemodels_cython.pyx":208
+ *     assert f_lo > 0
+ *     assert f_hi > 0
+ *     assert f_lo < f_hi             # <<<<<<<<<<<<<<
+ *     assert nfreq > 1
+ * 
+ */
+  #ifndef CYTHON_WITHOUT_ASSERTIONS
+  if (unlikely(__pyx_assertions_enabled())) {
+    __pyx_t_1 = (__pyx_v_f_lo < __pyx_v_f_hi);
+    if (unlikely(!__pyx_t_1)) {
+      __Pyx_Raise(__pyx_builtin_AssertionError, 0, 0, 0);
+      __PYX_ERR(0, 208, __pyx_L1_error)
+    }
+  }
+  #else
+  if ((1)); else __PYX_ERR(0, 208, __pyx_L1_error)
+  #endif
+
+  /* "scatfit/pulsemodels_cython.pyx":209
+ *     assert f_hi > 0
+ *     assert f_lo < f_hi
+ *     assert nfreq > 1             # <<<<<<<<<<<<<<
+ * 
+ *     cdef Py_ssize_t i
+ */
+  #ifndef CYTHON_WITHOUT_ASSERTIONS
+  if (unlikely(__pyx_assertions_enabled())) {
+    __pyx_t_1 = (__pyx_v_nfreq > 1);
+    if (unlikely(!__pyx_t_1)) {
+      __Pyx_Raise(__pyx_builtin_AssertionError, 0, 0, 0);
+      __PYX_ERR(0, 209, __pyx_L1_error)
+    }
+  }
+  #else
+  if ((1)); else __PYX_ERR(0, 209, __pyx_L1_error)
+  #endif
+
+  /* "scatfit/pulsemodels_cython.pyx":212
  * 
  *     cdef Py_ssize_t i
  *     cdef Py_ssize_t N = x.shape[0]             # <<<<<<<<<<<<<<
@@ -18714,7 +18944,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_4bandintegrated_model(CY
  */
   __pyx_v_N = (__pyx_v_x.shape[0]);
 
-  /* "scatfit/pulsemodels_cython.pyx":199
+  /* "scatfit/pulsemodels_cython.pyx":214
  *     cdef Py_ssize_t N = x.shape[0]
  * 
  *     cdef double band_cfreq = 0.5 * (f_lo + f_hi)             # <<<<<<<<<<<<<<
@@ -18723,7 +18953,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_4bandintegrated_model(CY
  */
   __pyx_v_band_cfreq = (0.5 * (__pyx_v_f_lo + __pyx_v_f_hi));
 
-  /* "scatfit/pulsemodels_cython.pyx":200
+  /* "scatfit/pulsemodels_cython.pyx":215
  * 
  *     cdef double band_cfreq = 0.5 * (f_lo + f_hi)
  *     cdef double invband_cfreq = 1.0 / band_cfreq             # <<<<<<<<<<<<<<
@@ -18732,11 +18962,11 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_4bandintegrated_model(CY
  */
   if (unlikely(__pyx_v_band_cfreq == 0)) {
     PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-    __PYX_ERR(0, 200, __pyx_L1_error)
+    __PYX_ERR(0, 215, __pyx_L1_error)
   }
   __pyx_v_invband_cfreq = (1.0 / __pyx_v_band_cfreq);
 
-  /* "scatfit/pulsemodels_cython.pyx":209
+  /* "scatfit/pulsemodels_cython.pyx":224
  *     # profile because of the strong fluence power law scaling
  *     # use finer steps towards the low-frequency band edge
  *     cdef double delta = cmath.log10(f_hi) - cmath.log10(f_lo)             # <<<<<<<<<<<<<<
@@ -18745,81 +18975,81 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_4bandintegrated_model(CY
  */
   __pyx_v_delta = (log10(__pyx_v_f_hi) - log10(__pyx_v_f_lo));
 
-  /* "scatfit/pulsemodels_cython.pyx":210
+  /* "scatfit/pulsemodels_cython.pyx":225
  *     # use finer steps towards the low-frequency band edge
  *     cdef double delta = cmath.log10(f_hi) - cmath.log10(f_lo)
  *     cdef double step = cmath.pow(10.0, delta / (nfreq - 1.0))             # <<<<<<<<<<<<<<
  * 
  *     profile = np.zeros(N, dtype=np.double)
  */
-  __pyx_t_1 = (__pyx_v_nfreq - 1.0);
-  if (unlikely(__pyx_t_1 == 0)) {
+  __pyx_t_2 = (__pyx_v_nfreq - 1.0);
+  if (unlikely(__pyx_t_2 == 0)) {
     PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-    __PYX_ERR(0, 210, __pyx_L1_error)
+    __PYX_ERR(0, 225, __pyx_L1_error)
   }
-  __pyx_v_step = pow(10.0, (__pyx_v_delta / __pyx_t_1));
+  __pyx_v_step = pow(10.0, (__pyx_v_delta / __pyx_t_2));
 
-  /* "scatfit/pulsemodels_cython.pyx":212
+  /* "scatfit/pulsemodels_cython.pyx":227
  *     cdef double step = cmath.pow(10.0, delta / (nfreq - 1.0))
  * 
  *     profile = np.zeros(N, dtype=np.double)             # <<<<<<<<<<<<<<
  *     cdef double[::1] profile_view = profile
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_np); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 212, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_zeros); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 212, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 227, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = PyInt_FromSsize_t(__pyx_v_N); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 212, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = PyTuple_New(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 212, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_zeros); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 227, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __Pyx_GIVEREF(__pyx_t_2);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_4, 0, __pyx_t_2)) __PYX_ERR(0, 212, __pyx_L1_error);
-  __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 212, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_2);
-  __Pyx_GetModuleGlobalName(__pyx_t_5, __pyx_n_s_np); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 212, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_double); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 212, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_dtype, __pyx_t_6) < 0) __PYX_ERR(0, 212, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  __pyx_t_6 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_4, __pyx_t_2); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 212, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyInt_FromSsize_t(__pyx_v_N); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 227, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_5 = PyTuple_New(1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 227, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_GIVEREF(__pyx_t_3);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3)) __PYX_ERR(0, 227, __pyx_L1_error);
+  __pyx_t_3 = 0;
+  __pyx_t_3 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 227, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_GetModuleGlobalName(__pyx_t_6, __pyx_n_s_np); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 227, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_6);
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_6, __pyx_n_s_double); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 227, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+  if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_dtype, __pyx_t_7) < 0) __PYX_ERR(0, 227, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_t_7 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_5, __pyx_t_3); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 227, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_v_profile = __pyx_t_6;
-  __pyx_t_6 = 0;
+  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_v_profile = __pyx_t_7;
+  __pyx_t_7 = 0;
 
-  /* "scatfit/pulsemodels_cython.pyx":213
+  /* "scatfit/pulsemodels_cython.pyx":228
  * 
  *     profile = np.zeros(N, dtype=np.double)
  *     cdef double[::1] profile_view = profile             # <<<<<<<<<<<<<<
  * 
  *     for i in range(nfreq):
  */
-  __pyx_t_7 = __Pyx_PyObject_to_MemoryviewSlice_dc_double(__pyx_v_profile, PyBUF_WRITABLE); if (unlikely(!__pyx_t_7.memview)) __PYX_ERR(0, 213, __pyx_L1_error)
-  __pyx_v_profile_view = __pyx_t_7;
-  __pyx_t_7.memview = NULL;
-  __pyx_t_7.data = NULL;
+  __pyx_t_8 = __Pyx_PyObject_to_MemoryviewSlice_dc_double(__pyx_v_profile, PyBUF_WRITABLE); if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 228, __pyx_L1_error)
+  __pyx_v_profile_view = __pyx_t_8;
+  __pyx_t_8.memview = NULL;
+  __pyx_t_8.data = NULL;
 
-  /* "scatfit/pulsemodels_cython.pyx":215
+  /* "scatfit/pulsemodels_cython.pyx":230
  *     cdef double[::1] profile_view = profile
  * 
  *     for i in range(nfreq):             # <<<<<<<<<<<<<<
  *         cfreq_i = f_lo * cmath.pow(step, i)
  *         fluence_i = fluence * cmath.pow(cfreq_i * invband_cfreq, -1.5)
  */
-  __pyx_t_8 = __pyx_v_nfreq;
-  __pyx_t_9 = __pyx_t_8;
-  for (__pyx_t_10 = 0; __pyx_t_10 < __pyx_t_9; __pyx_t_10+=1) {
-    __pyx_v_i = __pyx_t_10;
+  __pyx_t_9 = __pyx_v_nfreq;
+  __pyx_t_10 = __pyx_t_9;
+  for (__pyx_t_11 = 0; __pyx_t_11 < __pyx_t_10; __pyx_t_11+=1) {
+    __pyx_v_i = __pyx_t_11;
 
-    /* "scatfit/pulsemodels_cython.pyx":216
+    /* "scatfit/pulsemodels_cython.pyx":231
  * 
  *     for i in range(nfreq):
  *         cfreq_i = f_lo * cmath.pow(step, i)             # <<<<<<<<<<<<<<
@@ -18828,7 +19058,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_4bandintegrated_model(CY
  */
     __pyx_v_cfreq_i = (__pyx_v_f_lo * pow(__pyx_v_step, __pyx_v_i));
 
-    /* "scatfit/pulsemodels_cython.pyx":217
+    /* "scatfit/pulsemodels_cython.pyx":232
  *     for i in range(nfreq):
  *         cfreq_i = f_lo * cmath.pow(step, i)
  *         fluence_i = fluence * cmath.pow(cfreq_i * invband_cfreq, -1.5)             # <<<<<<<<<<<<<<
@@ -18837,7 +19067,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_4bandintegrated_model(CY
  */
     __pyx_v_fluence_i = (__pyx_v_fluence * pow((__pyx_v_cfreq_i * __pyx_v_invband_cfreq), -1.5));
 
-    /* "scatfit/pulsemodels_cython.pyx":218
+    /* "scatfit/pulsemodels_cython.pyx":233
  *         cfreq_i = f_lo * cmath.pow(step, i)
  *         fluence_i = fluence * cmath.pow(cfreq_i * invband_cfreq, -1.5)
  *         taus_i = taus * cmath.pow(cfreq_i * invband_cfreq, -4.0)             # <<<<<<<<<<<<<<
@@ -18846,86 +19076,86 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_4bandintegrated_model(CY
  */
     __pyx_v_taus_i = (__pyx_v_taus * pow((__pyx_v_cfreq_i * __pyx_v_invband_cfreq), -4.0));
 
-    /* "scatfit/pulsemodels_cython.pyx":220
+    /* "scatfit/pulsemodels_cython.pyx":235
  *         taus_i = taus * cmath.pow(cfreq_i * invband_cfreq, -4.0)
  * 
  *         scatpulse_tmp = scattered_gaussian_pulse(x, fluence_i, center, sigma, taus_i, 0.0)             # <<<<<<<<<<<<<<
  * 
  *         # accumulate
  */
-    __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_scattered_gaussian_pulse); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 220, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_4 = __pyx_memoryview_fromslice(__pyx_v_x, 1, (PyObject *(*)(char *)) __pyx_memview_get_double__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 220, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_4);
-    __pyx_t_3 = PyFloat_FromDouble(__pyx_v_fluence_i); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 220, __pyx_L1_error)
+    __Pyx_GetModuleGlobalName(__pyx_t_3, __pyx_n_s_scattered_gaussian_pulse); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 235, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_5 = PyFloat_FromDouble(__pyx_v_center); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 220, __pyx_L1_error)
+    __pyx_t_5 = __pyx_memoryview_fromslice(__pyx_v_x, 1, (PyObject *(*)(char *)) __pyx_memview_get_double__const__, (int (*)(char *, PyObject *)) NULL, 0);; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 235, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_5);
-    __pyx_t_11 = PyFloat_FromDouble(__pyx_v_sigma); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 220, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_11);
-    __pyx_t_12 = PyFloat_FromDouble(__pyx_v_taus_i); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 220, __pyx_L1_error)
+    __pyx_t_4 = PyFloat_FromDouble(__pyx_v_fluence_i); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 235, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_6 = PyFloat_FromDouble(__pyx_v_center); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 235, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_6);
+    __pyx_t_12 = PyFloat_FromDouble(__pyx_v_sigma); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 235, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_12);
-    __pyx_t_13 = NULL;
-    __pyx_t_14 = 0;
+    __pyx_t_13 = PyFloat_FromDouble(__pyx_v_taus_i); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 235, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_13);
+    __pyx_t_14 = NULL;
+    __pyx_t_15 = 0;
     #if CYTHON_UNPACK_METHODS
-    if (unlikely(PyMethod_Check(__pyx_t_2))) {
-      __pyx_t_13 = PyMethod_GET_SELF(__pyx_t_2);
-      if (likely(__pyx_t_13)) {
-        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-        __Pyx_INCREF(__pyx_t_13);
+    if (unlikely(PyMethod_Check(__pyx_t_3))) {
+      __pyx_t_14 = PyMethod_GET_SELF(__pyx_t_3);
+      if (likely(__pyx_t_14)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+        __Pyx_INCREF(__pyx_t_14);
         __Pyx_INCREF(function);
-        __Pyx_DECREF_SET(__pyx_t_2, function);
-        __pyx_t_14 = 1;
+        __Pyx_DECREF_SET(__pyx_t_3, function);
+        __pyx_t_15 = 1;
       }
     }
     #endif
     {
-      PyObject *__pyx_callargs[7] = {__pyx_t_13, __pyx_t_4, __pyx_t_3, __pyx_t_5, __pyx_t_11, __pyx_t_12, __pyx_float_0_0};
-      __pyx_t_6 = __Pyx_PyObject_FastCall(__pyx_t_2, __pyx_callargs+1-__pyx_t_14, 6+__pyx_t_14);
-      __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
-      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      PyObject *__pyx_callargs[7] = {__pyx_t_14, __pyx_t_5, __pyx_t_4, __pyx_t_6, __pyx_t_12, __pyx_t_13, __pyx_float_0_0};
+      __pyx_t_7 = __Pyx_PyObject_FastCall(__pyx_t_3, __pyx_callargs+1-__pyx_t_15, 6+__pyx_t_15);
+      __Pyx_XDECREF(__pyx_t_14); __pyx_t_14 = 0;
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-      __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
       __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
-      if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 220, __pyx_L1_error)
-      __Pyx_GOTREF(__pyx_t_6);
-      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+      __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
+      if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 235, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_7);
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     }
-    __pyx_t_7 = __Pyx_PyObject_to_MemoryviewSlice_dc_double(__pyx_t_6, PyBUF_WRITABLE); if (unlikely(!__pyx_t_7.memview)) __PYX_ERR(0, 220, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+    __pyx_t_8 = __Pyx_PyObject_to_MemoryviewSlice_dc_double(__pyx_t_7, PyBUF_WRITABLE); if (unlikely(!__pyx_t_8.memview)) __PYX_ERR(0, 235, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     __PYX_XCLEAR_MEMVIEW(&__pyx_v_scatpulse_tmp, 1);
-    __pyx_v_scatpulse_tmp = __pyx_t_7;
-    __pyx_t_7.memview = NULL;
-    __pyx_t_7.data = NULL;
+    __pyx_v_scatpulse_tmp = __pyx_t_8;
+    __pyx_t_8.memview = NULL;
+    __pyx_t_8.data = NULL;
 
-    /* "scatfit/pulsemodels_cython.pyx":223
+    /* "scatfit/pulsemodels_cython.pyx":238
  * 
  *         # accumulate
  *         for j in range(N):             # <<<<<<<<<<<<<<
  *             profile_view[j] = profile_view[j] + scatpulse_tmp[j]
  * 
  */
-    __pyx_t_15 = __pyx_v_N;
-    __pyx_t_16 = __pyx_t_15;
-    for (__pyx_t_17 = 0; __pyx_t_17 < __pyx_t_16; __pyx_t_17+=1) {
-      __pyx_v_j = __pyx_t_17;
+    __pyx_t_16 = __pyx_v_N;
+    __pyx_t_17 = __pyx_t_16;
+    for (__pyx_t_18 = 0; __pyx_t_18 < __pyx_t_17; __pyx_t_18+=1) {
+      __pyx_v_j = __pyx_t_18;
 
-      /* "scatfit/pulsemodels_cython.pyx":224
+      /* "scatfit/pulsemodels_cython.pyx":239
  *         # accumulate
  *         for j in range(N):
  *             profile_view[j] = profile_view[j] + scatpulse_tmp[j]             # <<<<<<<<<<<<<<
  * 
  *     # normalise to match input fluence
  */
-      __pyx_t_18 = __pyx_v_j;
       __pyx_t_19 = __pyx_v_j;
       __pyx_t_20 = __pyx_v_j;
-      *((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_profile_view.data) + __pyx_t_20)) )) = ((*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_profile_view.data) + __pyx_t_18)) ))) + (*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_scatpulse_tmp.data) + __pyx_t_19)) ))));
+      __pyx_t_21 = __pyx_v_j;
+      *((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_profile_view.data) + __pyx_t_21)) )) = ((*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_profile_view.data) + __pyx_t_19)) ))) + (*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_scatpulse_tmp.data) + __pyx_t_20)) ))));
     }
   }
 
-  /* "scatfit/pulsemodels_cython.pyx":227
+  /* "scatfit/pulsemodels_cython.pyx":242
  * 
  *     # normalise to match input fluence
  *     cdef double tot_fluence = 0.0             # <<<<<<<<<<<<<<
@@ -18934,41 +19164,41 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_4bandintegrated_model(CY
  */
   __pyx_v_tot_fluence = 0.0;
 
-  /* "scatfit/pulsemodels_cython.pyx":228
+  /* "scatfit/pulsemodels_cython.pyx":243
  *     # normalise to match input fluence
  *     cdef double tot_fluence = 0.0
  *     for j in range(N):             # <<<<<<<<<<<<<<
  *         tot_fluence = tot_fluence + profile_view[j]
  * 
  */
-  __pyx_t_10 = __pyx_v_N;
-  __pyx_t_15 = __pyx_t_10;
-  for (__pyx_t_16 = 0; __pyx_t_16 < __pyx_t_15; __pyx_t_16+=1) {
-    __pyx_v_j = __pyx_t_16;
+  __pyx_t_11 = __pyx_v_N;
+  __pyx_t_16 = __pyx_t_11;
+  for (__pyx_t_17 = 0; __pyx_t_17 < __pyx_t_16; __pyx_t_17+=1) {
+    __pyx_v_j = __pyx_t_17;
 
-    /* "scatfit/pulsemodels_cython.pyx":229
+    /* "scatfit/pulsemodels_cython.pyx":244
  *     cdef double tot_fluence = 0.0
  *     for j in range(N):
  *         tot_fluence = tot_fluence + profile_view[j]             # <<<<<<<<<<<<<<
  * 
  *     tot_fluence = tot_fluence * cmath.fabs(x[0] - x[1])
  */
-    __pyx_t_19 = __pyx_v_j;
-    __pyx_v_tot_fluence = (__pyx_v_tot_fluence + (*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_profile_view.data) + __pyx_t_19)) ))));
+    __pyx_t_20 = __pyx_v_j;
+    __pyx_v_tot_fluence = (__pyx_v_tot_fluence + (*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_profile_view.data) + __pyx_t_20)) ))));
   }
 
-  /* "scatfit/pulsemodels_cython.pyx":231
+  /* "scatfit/pulsemodels_cython.pyx":246
  *         tot_fluence = tot_fluence + profile_view[j]
  * 
  *     tot_fluence = tot_fluence * cmath.fabs(x[0] - x[1])             # <<<<<<<<<<<<<<
  *     cdef double A = fluence / tot_fluence
  * 
  */
-  __pyx_t_19 = 0;
-  __pyx_t_18 = 1;
-  __pyx_v_tot_fluence = (__pyx_v_tot_fluence * fabs(((*((double const  *) ( /* dim=0 */ ((char *) (((double const  *) __pyx_v_x.data) + __pyx_t_19)) ))) - (*((double const  *) ( /* dim=0 */ ((char *) (((double const  *) __pyx_v_x.data) + __pyx_t_18)) ))))));
+  __pyx_t_20 = 0;
+  __pyx_t_19 = 1;
+  __pyx_v_tot_fluence = (__pyx_v_tot_fluence * fabs(((*((double const  *) ( /* dim=0 */ ((char *) (((double const  *) __pyx_v_x.data) + __pyx_t_20)) ))) - (*((double const  *) ( /* dim=0 */ ((char *) (((double const  *) __pyx_v_x.data) + __pyx_t_19)) ))))));
 
-  /* "scatfit/pulsemodels_cython.pyx":232
+  /* "scatfit/pulsemodels_cython.pyx":247
  * 
  *     tot_fluence = tot_fluence * cmath.fabs(x[0] - x[1])
  *     cdef double A = fluence / tot_fluence             # <<<<<<<<<<<<<<
@@ -18977,35 +19207,35 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_4bandintegrated_model(CY
  */
   if (unlikely(__pyx_v_tot_fluence == 0)) {
     PyErr_SetString(PyExc_ZeroDivisionError, "float division");
-    __PYX_ERR(0, 232, __pyx_L1_error)
+    __PYX_ERR(0, 247, __pyx_L1_error)
   }
   __pyx_v_A = (__pyx_v_fluence / __pyx_v_tot_fluence);
 
-  /* "scatfit/pulsemodels_cython.pyx":234
+  /* "scatfit/pulsemodels_cython.pyx":249
  *     cdef double A = fluence / tot_fluence
  * 
  *     for j in range(N):             # <<<<<<<<<<<<<<
  *         profile_view[j] = dc + A * profile_view[j]
  * 
  */
-  __pyx_t_10 = __pyx_v_N;
-  __pyx_t_15 = __pyx_t_10;
-  for (__pyx_t_16 = 0; __pyx_t_16 < __pyx_t_15; __pyx_t_16+=1) {
-    __pyx_v_j = __pyx_t_16;
+  __pyx_t_11 = __pyx_v_N;
+  __pyx_t_16 = __pyx_t_11;
+  for (__pyx_t_17 = 0; __pyx_t_17 < __pyx_t_16; __pyx_t_17+=1) {
+    __pyx_v_j = __pyx_t_17;
 
-    /* "scatfit/pulsemodels_cython.pyx":235
+    /* "scatfit/pulsemodels_cython.pyx":250
  * 
  *     for j in range(N):
  *         profile_view[j] = dc + A * profile_view[j]             # <<<<<<<<<<<<<<
  * 
  *     return profile
  */
-    __pyx_t_18 = __pyx_v_j;
     __pyx_t_19 = __pyx_v_j;
-    *((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_profile_view.data) + __pyx_t_19)) )) = (__pyx_v_dc + (__pyx_v_A * (*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_profile_view.data) + __pyx_t_18)) )))));
+    __pyx_t_20 = __pyx_v_j;
+    *((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_profile_view.data) + __pyx_t_20)) )) = (__pyx_v_dc + (__pyx_v_A * (*((double *) ( /* dim=0 */ ((char *) (((double *) __pyx_v_profile_view.data) + __pyx_t_19)) )))));
   }
 
-  /* "scatfit/pulsemodels_cython.pyx":237
+  /* "scatfit/pulsemodels_cython.pyx":252
  *         profile_view[j] = dc + A * profile_view[j]
  * 
  *     return profile             # <<<<<<<<<<<<<<
@@ -19015,7 +19245,7 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_4bandintegrated_model(CY
   __pyx_r = __pyx_v_profile;
   goto __pyx_L0;
 
-  /* "scatfit/pulsemodels_cython.pyx":142
+  /* "scatfit/pulsemodels_cython.pyx":149
  * 
  * 
  * @cython.boundscheck(False)             # <<<<<<<<<<<<<<
@@ -19025,15 +19255,15 @@ static PyObject *__pyx_pf_7scatfit_18pulsemodels_cython_4bandintegrated_model(CY
 
   /* function exit code */
   __pyx_L1_error:;
-  __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5);
   __Pyx_XDECREF(__pyx_t_6);
-  __PYX_XCLEAR_MEMVIEW(&__pyx_t_7, 1);
-  __Pyx_XDECREF(__pyx_t_11);
+  __Pyx_XDECREF(__pyx_t_7);
+  __PYX_XCLEAR_MEMVIEW(&__pyx_t_8, 1);
   __Pyx_XDECREF(__pyx_t_12);
   __Pyx_XDECREF(__pyx_t_13);
+  __Pyx_XDECREF(__pyx_t_14);
   __Pyx_AddTraceback("scatfit.pulsemodels_cython.bandintegrated_model", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
@@ -20186,13 +20416,13 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
 }
 /* #### Code section: cached_builtins ### */
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 49, __pyx_L1_error)
+  __pyx_builtin_AssertionError = __Pyx_GetBuiltinName(__pyx_n_s_AssertionError); if (!__pyx_builtin_AssertionError) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 52, __pyx_L1_error)
   __pyx_builtin___import__ = __Pyx_GetBuiltinName(__pyx_n_s_import); if (!__pyx_builtin___import__) __PYX_ERR(1, 100, __pyx_L1_error)
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(1, 141, __pyx_L1_error)
   __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_n_s_MemoryError); if (!__pyx_builtin_MemoryError) __PYX_ERR(1, 156, __pyx_L1_error)
   __pyx_builtin_enumerate = __Pyx_GetBuiltinName(__pyx_n_s_enumerate); if (!__pyx_builtin_enumerate) __PYX_ERR(1, 159, __pyx_L1_error)
   __pyx_builtin_TypeError = __Pyx_GetBuiltinName(__pyx_n_s_TypeError); if (!__pyx_builtin_TypeError) __PYX_ERR(1, 2, __pyx_L1_error)
-  __pyx_builtin_AssertionError = __Pyx_GetBuiltinName(__pyx_n_s_AssertionError); if (!__pyx_builtin_AssertionError) __PYX_ERR(1, 373, __pyx_L1_error)
   __pyx_builtin_Ellipsis = __Pyx_GetBuiltinName(__pyx_n_s_Ellipsis); if (!__pyx_builtin_Ellipsis) __PYX_ERR(1, 408, __pyx_L1_error)
   __pyx_builtin_id = __Pyx_GetBuiltinName(__pyx_n_s_id); if (!__pyx_builtin_id) __PYX_ERR(1, 618, __pyx_L1_error)
   __pyx_builtin_IndexError = __Pyx_GetBuiltinName(__pyx_n_s_IndexError); if (!__pyx_builtin_IndexError) __PYX_ERR(1, 914, __pyx_L1_error)
@@ -20355,29 +20585,29 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GIVEREF(__pyx_tuple__20);
   __pyx_codeobj__21 = (PyObject*)__Pyx_PyCode_New(4, 0, 0, 11, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__20, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_scatfit_pulsemodels_cython_pyx, __pyx_n_s_gaussian_normed, 11, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__21)) __PYX_ERR(0, 11, __pyx_L1_error)
 
-  /* "scatfit/pulsemodels_cython.pyx":55
+  /* "scatfit/pulsemodels_cython.pyx":58
  * 
  * 
  * @cython.boundscheck(False)             # <<<<<<<<<<<<<<
  * @cython.wraparound(False)
  * def scattered_gaussian_pulse(
  */
-  __pyx_tuple__22 = PyTuple_Pack(19, __pyx_n_s_x, __pyx_n_s_fluence, __pyx_n_s_center, __pyx_n_s_sigma, __pyx_n_s_taus, __pyx_n_s_dc, __pyx_n_s_i, __pyx_n_s_N, __pyx_n_s_invsigma, __pyx_n_s_K, __pyx_n_s_invK, __pyx_n_s_invsqrt, __pyx_n_s_res, __pyx_n_s_res_view, __pyx_n_s_mu_gauss, __pyx_n_s_gauss, __pyx_n_s_y, __pyx_n_s_argexp, __pyx_n_s_exgaussian); if (unlikely(!__pyx_tuple__22)) __PYX_ERR(0, 55, __pyx_L1_error)
+  __pyx_tuple__22 = PyTuple_Pack(19, __pyx_n_s_x, __pyx_n_s_fluence, __pyx_n_s_center, __pyx_n_s_sigma, __pyx_n_s_taus, __pyx_n_s_dc, __pyx_n_s_i, __pyx_n_s_N, __pyx_n_s_invsigma, __pyx_n_s_K, __pyx_n_s_invK, __pyx_n_s_invsqrt, __pyx_n_s_res, __pyx_n_s_res_view, __pyx_n_s_mu_gauss, __pyx_n_s_gauss, __pyx_n_s_y, __pyx_n_s_argexp, __pyx_n_s_exgaussian); if (unlikely(!__pyx_tuple__22)) __PYX_ERR(0, 58, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__22);
   __Pyx_GIVEREF(__pyx_tuple__22);
-  __pyx_codeobj__23 = (PyObject*)__Pyx_PyCode_New(6, 0, 0, 19, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__22, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_scatfit_pulsemodels_cython_pyx, __pyx_n_s_scattered_gaussian_pulse, 55, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__23)) __PYX_ERR(0, 55, __pyx_L1_error)
+  __pyx_codeobj__23 = (PyObject*)__Pyx_PyCode_New(6, 0, 0, 19, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__22, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_scatfit_pulsemodels_cython_pyx, __pyx_n_s_scattered_gaussian_pulse, 58, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__23)) __PYX_ERR(0, 58, __pyx_L1_error)
 
-  /* "scatfit/pulsemodels_cython.pyx":142
+  /* "scatfit/pulsemodels_cython.pyx":149
  * 
  * 
  * @cython.boundscheck(False)             # <<<<<<<<<<<<<<
  * @cython.wraparound(False)
  * def bandintegrated_model(
  */
-  __pyx_tuple__24 = PyTuple_Pack(24, __pyx_n_s_x, __pyx_n_s_fluence, __pyx_n_s_center, __pyx_n_s_sigma, __pyx_n_s_taus, __pyx_n_s_dc, __pyx_n_s_f_lo, __pyx_n_s_f_hi, __pyx_n_s_nfreq, __pyx_n_s_i, __pyx_n_s_N, __pyx_n_s_band_cfreq, __pyx_n_s_invband_cfreq, __pyx_n_s_cfreq_i, __pyx_n_s_taus_i, __pyx_n_s_fluence_i, __pyx_n_s_scatpulse_tmp, __pyx_n_s_delta, __pyx_n_s_step, __pyx_n_s_profile, __pyx_n_s_profile_view, __pyx_n_s_j, __pyx_n_s_tot_fluence, __pyx_n_s_A); if (unlikely(!__pyx_tuple__24)) __PYX_ERR(0, 142, __pyx_L1_error)
+  __pyx_tuple__24 = PyTuple_Pack(24, __pyx_n_s_x, __pyx_n_s_fluence, __pyx_n_s_center, __pyx_n_s_sigma, __pyx_n_s_taus, __pyx_n_s_dc, __pyx_n_s_f_lo, __pyx_n_s_f_hi, __pyx_n_s_nfreq, __pyx_n_s_i, __pyx_n_s_N, __pyx_n_s_band_cfreq, __pyx_n_s_invband_cfreq, __pyx_n_s_cfreq_i, __pyx_n_s_taus_i, __pyx_n_s_fluence_i, __pyx_n_s_scatpulse_tmp, __pyx_n_s_delta, __pyx_n_s_step, __pyx_n_s_profile, __pyx_n_s_profile_view, __pyx_n_s_j, __pyx_n_s_tot_fluence, __pyx_n_s_A); if (unlikely(!__pyx_tuple__24)) __PYX_ERR(0, 149, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__24);
   __Pyx_GIVEREF(__pyx_tuple__24);
-  __pyx_codeobj__25 = (PyObject*)__Pyx_PyCode_New(9, 0, 0, 24, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__24, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_scatfit_pulsemodels_cython_pyx, __pyx_n_s_bandintegrated_model, 142, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__25)) __PYX_ERR(0, 142, __pyx_L1_error)
+  __pyx_codeobj__25 = (PyObject*)__Pyx_PyCode_New(9, 0, 0, 24, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__24, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_scatfit_pulsemodels_cython_pyx, __pyx_n_s_bandintegrated_model, 149, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__25)) __PYX_ERR(0, 149, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -21453,28 +21683,28 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_gaussian_normed, __pyx_t_7) < 0) __PYX_ERR(0, 11, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "scatfit/pulsemodels_cython.pyx":55
+  /* "scatfit/pulsemodels_cython.pyx":58
  * 
  * 
  * @cython.boundscheck(False)             # <<<<<<<<<<<<<<
  * @cython.wraparound(False)
  * def scattered_gaussian_pulse(
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_7scatfit_18pulsemodels_cython_3scattered_gaussian_pulse, 0, __pyx_n_s_scattered_gaussian_pulse, NULL, __pyx_n_s_scatfit_pulsemodels_cython, __pyx_d, ((PyObject *)__pyx_codeobj__23)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 55, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_7scatfit_18pulsemodels_cython_3scattered_gaussian_pulse, 0, __pyx_n_s_scattered_gaussian_pulse, NULL, __pyx_n_s_scatfit_pulsemodels_cython, __pyx_d, ((PyObject *)__pyx_codeobj__23)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 58, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_scattered_gaussian_pulse, __pyx_t_7) < 0) __PYX_ERR(0, 55, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_scattered_gaussian_pulse, __pyx_t_7) < 0) __PYX_ERR(0, 58, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "scatfit/pulsemodels_cython.pyx":142
+  /* "scatfit/pulsemodels_cython.pyx":149
  * 
  * 
  * @cython.boundscheck(False)             # <<<<<<<<<<<<<<
  * @cython.wraparound(False)
  * def bandintegrated_model(
  */
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_7scatfit_18pulsemodels_cython_5bandintegrated_model, 0, __pyx_n_s_bandintegrated_model, NULL, __pyx_n_s_scatfit_pulsemodels_cython, __pyx_d, ((PyObject *)__pyx_codeobj__25)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 142, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_7scatfit_18pulsemodels_cython_5bandintegrated_model, 0, __pyx_n_s_bandintegrated_model, NULL, __pyx_n_s_scatfit_pulsemodels_cython, __pyx_d, ((PyObject *)__pyx_codeobj__25)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 149, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_bandintegrated_model, __pyx_t_7) < 0) __PYX_ERR(0, 142, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_bandintegrated_model, __pyx_t_7) < 0) __PYX_ERR(0, 149, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
   /* "scatfit/pulsemodels_cython.pyx":1
