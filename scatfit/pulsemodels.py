@@ -148,7 +148,7 @@ def gaussian_scattered_dfb_instrumental(x, fluence, center, sigma, taus, taud, d
     assert taus > 0
     assert taud > 0
 
-    A = scattered_profile(x, fluence, center, sigma, taus, 0.0)
+    A = scattered_gaussian_pulse(x, fluence, center, sigma, taus, 0.0)
 
     B = boxcar(x, taud)
 
@@ -308,6 +308,8 @@ def pbf_isotropic(plot_range, taus):
 def scattered_profile(x, fluence, center, sigma, taus, dc):
     """
     A scattered pulse profile.
+
+    Implemented using numerical convolution with a pulse broadening function.
 
     Parameters
     ----------
