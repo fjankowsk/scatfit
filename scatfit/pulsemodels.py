@@ -143,6 +143,11 @@ def gaussian_scattered_dfb_instrumental(x, fluence, center, sigma, taus, taud, d
         The profile data.
     """
 
+    assert fluence > 0
+    assert sigma > 0
+    assert taus > 0
+    assert taud > 0
+
     A = scattered_profile(x, fluence, center, sigma, taus, 0.0)
 
     B = boxcar(x, taud)
@@ -269,6 +274,8 @@ def pbf_isotropic(plot_range, taus):
         majority of the exponential sweep, i.e. taus is
         too large for the given time span.
     """
+
+    assert taus > 0
 
     N = len(plot_range)
     tsamp = np.abs(plot_range[0] - plot_range[1])
