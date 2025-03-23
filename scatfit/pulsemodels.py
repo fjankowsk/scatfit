@@ -59,25 +59,29 @@ def gaussian_scattered_afb_instrumental(
         The profile data.
     """
 
-    A = (
-        np.power(taus, 2)
-        * scattered_gaussian_pulse(x, fluence, center, sigma, taus, 0.0)
-        / ((taus - taui) * (taus - taud))
+    assert fluence > 0
+    assert sigma > 0
+    assert taus > 0
+    assert taui > 0
+    assert taud > 0
+    assert taus != taui
+    assert taus != taud
+
+    A = np.power(taus, 2) * scattered_gaussian_pulse(
+        x, fluence, center, sigma, taus, 0.0
     )
 
-    B = (
-        np.power(taui, 2)
-        * scattered_gaussian_pulse(x, fluence, center, sigma, taui, 0.0)
-        / ((taus - taui) * (taui - taud))
+    B = np.power(taui, 2) * scattered_gaussian_pulse(
+        x, fluence, center, sigma, taui, 0.0
     )
 
-    C = (
-        np.power(taud, 2)
-        * scattered_gaussian_pulse(x, fluence, center, sigma, taud, 0.0)
-        / ((taus - taud) * (taui - taud))
+    C = np.power(taud, 2) * scattered_gaussian_pulse(
+        x, fluence, center, sigma, taud, 0.0
     )
 
-    res = dc + A - B + C
+    D = (taus - taui) * (taus - taud)
+
+    res = dc + (A - B + C) / D
 
     return res
 
@@ -98,6 +102,8 @@ def boxcar(x, width):
     res: ~np.array
         The boxcar data.
     """
+
+    assert width > 0
 
     res = np.zeros(len(x))
 
