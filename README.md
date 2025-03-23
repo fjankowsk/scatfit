@@ -107,3 +107,5 @@ The images below show some example output from the program obtained when fitting
 ![Width scaling](https://github.com/fjankowsk/scatfit/raw/master/docs/width_scaling.png "Width scaling")
 
 ![Correlations](https://github.com/fjankowsk/scatfit/raw/master/docs/corner.png "Correlations")
+
+![Fit dynamic spectrum](https://github.com/fjankowsk/scatfit/raw/master/docs/fit_dynamic_spectrum.png "Fit dynamic spectrum")
