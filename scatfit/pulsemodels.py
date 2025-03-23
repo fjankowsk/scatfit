@@ -67,21 +67,19 @@ def gaussian_scattered_afb_instrumental(
     assert taus != taui
     assert taus != taud
 
-    A = np.power(taus, 2) * scattered_gaussian_pulse(
-        x, fluence, center, sigma, taus, 0.0
-    )
+    A = np.power(taus, 2) * scattered_gaussian_pulse(x, 1.0, center, sigma, taus, 0.0)
 
-    B = np.power(taui, 2) * scattered_gaussian_pulse(
-        x, fluence, center, sigma, taui, 0.0
-    )
+    B = np.power(taui, 2) * scattered_gaussian_pulse(x, 1.0, center, sigma, taui, 0.0)
 
-    C = np.power(taud, 2) * scattered_gaussian_pulse(
-        x, fluence, center, sigma, taud, 0.0
-    )
+    C = np.power(taud, 2) * scattered_gaussian_pulse(x, 1.0, center, sigma, taud, 0.0)
 
     D = (taus - taui) * (taus - taud)
 
-    res = dc + (A - B + C) / D
+    res = (A - B + C) / D
+
+    # normalise to match input fluence
+    tot_fluence = np.sum(res) * np.abs(x[0] - x[1])
+    res = dc + (fluence / tot_fluence) * res
 
     return res
 
