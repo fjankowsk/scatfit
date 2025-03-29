@@ -1,4 +1,5 @@
 import os.path
+import numpy as np
 from setuptools import Extension, find_packages, setup
 
 
@@ -32,6 +33,7 @@ setup(
     url="https://github.com/fjankowsk/scatfit",
     license="MIT",
     packages=find_packages(),
+    include_dirs=[np.get_include()],
     install_requires=[
         "astropy",
         "corner",

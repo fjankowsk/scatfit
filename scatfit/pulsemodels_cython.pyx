@@ -6,6 +6,10 @@
 cimport cython
 cimport libc.math as cmath
 import numpy as np
+cimport numpy as np
+
+
+np.import_array()
 
 
 @cython.boundscheck(False)
