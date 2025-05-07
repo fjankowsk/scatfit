@@ -15,7 +15,16 @@ import scatfit.pulsemodels as pulsemodels
 class Pulse(object):
     def __init__(self, dm, sigma, taus_1ghz):
         """
-        A pulse.
+        A scattered pulse.
+
+        Parameters
+        ----------
+        dm: float
+            The dispersion measure of the pulse.
+        sigma: float
+            The Gaussian standard deviation.
+        tau_1ghz: float
+            The scattering time at 1 GHz.
         """
 
         self.dm = dm
