@@ -51,6 +51,16 @@ def parse_args():
     )
 
     parser.add_argument(
+        "--center",
+        action="append",
+        dest="center",
+        type=float,
+        metavar=("value"),
+        default=[],
+        help="The center of the model component. Use several times to define multiple model components.",
+    )
+
+    parser.add_argument(
         "--binburst",
         dest="bin_burst",
         default=None,
@@ -207,6 +217,12 @@ def check_args(args):
     args: populated namespace
         The commandline arguments.
     """
+
+    # center
+    if len(args.center) > 1:
+        if len(set(args.center)) < len(args.center):
+            print(f"Center is invalid: {args.center}")
+            sys.exit(1)
 
     # fitrange
     if args.fitrange[0] < args.fitrange[1]:
@@ -464,54 +480,68 @@ def fit_profile_model(fit_range, profile, smodel, params):
     else:
         raise NotImplementedError(f"Scattering model not implemented: {smodel}")
 
-    model = Model(scat_model)
-
-    model.set_param_hint("fluence", value=5.0, min=0.1)
-    model.set_param_hint("center", value=0.0, min=-20.0, max=20.0)
-    # set the minimum to the sampling time of the data
-    model.set_param_hint("sigma", value=1.5, min=params["tsamp"], max=20.0)
-
-    arg_list = list(inspect.signature(scat_model).parameters.keys())
-
-    if "taus" in arg_list:
-        model.set_param_hint("taus", value=1.5, min=params["tsamp"])
-
-    if "taui" in arg_list:
-        model.set_param_hint("taui", value=params["tsamp"], vary=False)
-
-    if "taud" in arg_list:
-        model.set_param_hint("taud", value=params["dm_smear"], vary=False)
-
-    if "dc" in arg_list:
-        model.set_param_hint("dc", value=0.0, min=-0.3, max=0.3)
-
-    if "f_lo" in arg_list:
-        model.set_param_hint("f_lo", value=params["f_lo"], vary=False)
-
-    if "f_hi" in arg_list:
-        model.set_param_hint("f_hi", value=params["f_hi"], vary=False)
-
-    if "nfreq" in arg_list:
-        # use one frequency evaluation per mhz of bandwidth
-        _bw_subband = np.abs(params["f_hi"] - params["f_lo"])
-        nfreq = int(np.ceil(_bw_subband))
-        assert nfreq > 0
-        print(f"Bandwidth sub-band, nfreq: {_bw_subband:.2f} MHz, {nfreq}")
-        if params["fast"]:
-            if nfreq > 3:
-                nfreq = 3
+    # build the total composite model
+    for i, center in enumerate(params["center"]):
+        if len(params["center"]) == 1:
+            prefix = ""
         else:
-            if nfreq > 9:
-                nfreq = 9
+            prefix = f"c{i}_"
 
-        model.set_param_hint("nfreq", value=nfreq, vary=False)
+        model = Model(scat_model, prefix=prefix)
 
-    fitparams = model.make_params()
+        model.set_param_hint(f"{prefix}fluence", value=5.0, min=0.1)
+        model.set_param_hint(
+            f"{prefix}center",
+            value=center,
+            min=center - 20.0,
+            max=center + 20.0,
+        )
+        # set the minimum to the sampling time of the data
+        model.set_param_hint(f"{prefix}sigma", value=1.5, min=params["tsamp"], max=20.0)
 
-    fitparams.add("w50i", expr="2.3548200*sigma")
-    fitparams.add("w10i", expr="4.2919320*sigma")
+        arg_list = list(inspect.signature(scat_model).parameters.keys())
 
-    fitresult_ml = model.fit(
+        if "taus" in arg_list:
+            model.set_param_hint(f"{prefix}taus", value=1.5, min=params["tsamp"])
+
+        if "taui" in arg_list:
+            model.set_param_hint(f"{prefix}taui", value=params["tsamp"], vary=False)
+
+        if "taud" in arg_list:
+            model.set_param_hint(f"{prefix}taud", value=params["dm_smear"], vary=False)
+
+        if "dc" in arg_list:
+            model.set_param_hint(f"{prefix}dc", value=0.0, min=-0.3, max=0.3)
+
+        if "f_lo" in arg_list:
+            model.set_param_hint(f"{prefix}f_lo", value=params["f_lo"], vary=False)
+
+        if "f_hi" in arg_list:
+            model.set_param_hint(f"{prefix}f_hi", value=params["f_hi"], vary=False)
+
+        if "nfreq" in arg_list:
+            # use one frequency evaluation per mhz of bandwidth
+            _bw_subband = np.abs(params["f_hi"] - params["f_lo"])
+            nfreq = int(np.ceil(_bw_subband))
+            assert nfreq > 0
+            print(f"Bandwidth sub-band, nfreq: {_bw_subband:.2f} MHz, {nfreq}")
+            if params["fast"]:
+                if nfreq > 3:
+                    nfreq = 3
+            else:
+                if nfreq > 9:
+                    nfreq = 9
+
+            model.set_param_hint(f"{prefix}nfreq", value=nfreq, vary=False)
+
+        if i == 0:
+            total_model = model
+        else:
+            total_model += model
+
+    fitparams = total_model.make_params()
+
+    fitresult_ml = total_model.fit(
         data=profile, x=fit_range, params=fitparams, method="leastsq"
     )
 
@@ -532,7 +562,7 @@ def fit_profile_model(fit_range, profile, smodel, params):
     emcee_params = fitresult_ml.params.copy()
     emcee_params.add("__lnsigma", value=np.log(0.1), min=np.log(0.001), max=np.log(2.0))
 
-    fitresult_emcee = model.fit(
+    fitresult_emcee = total_model.fit(
         data=profile,
         x=fit_range,
         params=emcee_params,
@@ -789,7 +819,14 @@ def main():
     # sanity check command line arguments
     check_args(args)
 
+    # use zero as default center if nothing is given
+    if len(args.center) == 0:
+        args.center = [0.0]
+
+    print(f"Component centers: {args.center}")
+
     params = {
+        "center": args.center,
         "compare": args.compare,
         "fast": args.fast,
         "fitrange": args.fitrange,
