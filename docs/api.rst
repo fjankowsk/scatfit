@@ -47,6 +47,12 @@ sigproc
 .. automodule:: scatfit.sigproc
     :members:
 
+simulate
+--------
+
+.. automodule:: scatfit.simulate
+    :members:
+
 stats_helpers
 -------------
 
