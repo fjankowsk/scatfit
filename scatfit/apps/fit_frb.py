@@ -511,7 +511,11 @@ def fit_profile_model(fit_range, profile, smodel, params):
             model.set_param_hint(f"{prefix}taud", value=params["dm_smear"], vary=False)
 
         if "dc" in arg_list:
-            model.set_param_hint(f"{prefix}dc", value=0.0, min=-0.3, max=0.3)
+            # allow only the first component to have a non-zero dc
+            if i == 0:
+                model.set_param_hint(f"{prefix}dc", value=0.0, min=-0.3, max=0.3)
+            else:
+                model.set_param_hint(f"{prefix}dc", value=0.0, vary=False)
 
         if "f_lo" in arg_list:
             model.set_param_hint(f"{prefix}f_lo", value=params["f_lo"], vary=False)
