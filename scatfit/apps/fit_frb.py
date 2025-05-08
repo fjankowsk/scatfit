@@ -612,8 +612,6 @@ def compute_post_widths(fit_range, t_fitresult):
     samples = fitresult.flatchain
     params = fitresult.params.copy()
 
-    df = pd.DataFrame(columns=["weq", "w50p", "w10p"])
-
     for idx in range(len(samples)):
         for field in samples.columns:
             params[field].set(value=samples.loc[idx, field])
@@ -629,7 +627,10 @@ def compute_post_widths(fit_range, t_fitresult):
             index=[idx],
         )
 
-        df = pd.concat([df, temp], ignore_index=True)
+        try:
+            df = pd.concat([df, temp], ignore_index=True)
+        except NameError:
+            df = temp.copy()
 
     # convert object to numeric
     df = df.apply(pd.to_numeric)
@@ -674,25 +675,6 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, t_params):
     """
 
     params = copy.deepcopy(t_params)
-
-    df = pd.DataFrame(
-        columns=[
-            "band",
-            "cfreq",
-            "fluence",
-            "err_fluence",
-            "center",
-            "err_center",
-            "sigma",
-            "err_sigma",
-            "weq",
-            "err_weq",
-            "w50p",
-            "err_w50p",
-            "w10p",
-            "err_w10p",
-        ]
-    )
 
     nsub = cand.dynspec.shape[0]
     fitresults = []
@@ -771,12 +753,7 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, t_params):
             {
                 "band": iband,
                 "cfreq": cfreq,
-                "fluence": fitresult.best_values["fluence"],
-                "err_fluence": fitresult.params["fluence"].stderr,
-                "center": fitresult.best_values["center"],
-                "err_center": fitresult.params["center"].stderr,
-                "sigma": fitresult.best_values["sigma"],
-                "err_sigma": fitresult.params["sigma"].stderr,
+                # those are for the total profile
                 "weq": widths_post["weq"]["value"],
                 "err_weq": widths_post["weq"]["error"],
                 "w50p": widths_post["w50p"]["value"],
@@ -787,23 +764,47 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, t_params):
             index=[iband],
         )
 
-        if "taus" in fitresult.best_values:
-            temp["taus"] = fitresult.best_values["taus"]
-            temp["err_taus"] = fitresult.params["taus"].stderr
+        # component separated values
+        for icomp in range(len(params["center"])):
+            if len(params["center"]) == 1:
+                prefix = ""
+            else:
+                prefix = f"c{icomp}_"
 
-        if "taud" in fitresult.best_values:
-            temp["taud"] = fitresult.best_values["taud"]
+            for item in ["fluence", "center", "sigma"]:
+                _field = f"{prefix}{item}"
+                _err_field = f"{prefix}err_{item}"
+                temp[_field] = fitresult.best_values[_field]
+                temp[_err_field] = fitresult.params[_field].stderr
 
-        df = pd.concat([df, temp], ignore_index=True)
+            if f"{prefix}taus" in fitresult.best_values:
+                temp[f"{prefix}taus"] = fitresult.best_values[f"{prefix}taus"]
+                temp[f"{prefix}err_taus"] = fitresult.params[f"{prefix}taus"].stderr
+
+            if f"{prefix}taud" in fitresult.best_values:
+                temp[f"{prefix}taud"] = fitresult.best_values[f"{prefix}taud"]
+
+        try:
+            df = pd.concat([df, temp], ignore_index=True)
+        except NameError:
+            df = temp.copy()
 
     # convert object to numeric
     df = df.apply(pd.to_numeric)
 
+    print(df.info())
+
     # compute intrinsic w50 and w10
-    df["w50i"] = pulsemodels.gaussian_fwhm(df["sigma"])
-    df["err_w50i"] = pulsemodels.gaussian_fwhm(df["err_sigma"])
-    df["w10i"] = pulsemodels.gaussian_fwtm(df["sigma"])
-    df["err_w10i"] = pulsemodels.gaussian_fwtm(df["err_sigma"])
+    for icomp in range(len(params["center"])):
+        if len(params["center"]) == 1:
+            prefix = ""
+        else:
+            prefix = f"c{icomp}_"
+
+        df[f"{prefix}w50i"] = pulsemodels.gaussian_fwhm(df[f"{prefix}sigma"])
+        df[f"{prefix}err_w50i"] = pulsemodels.gaussian_fwhm(df[f"{prefix}err_sigma"])
+        df[f"{prefix}w10i"] = pulsemodels.gaussian_fwtm(df[f"{prefix}sigma"])
+        df[f"{prefix}err_w10i"] = pulsemodels.gaussian_fwtm(df[f"{prefix}err_sigma"])
 
     return df, fitresults
 
@@ -898,48 +899,48 @@ def main():
     # save fit result as csv
     fit_df.to_csv("scattering_fit_result.csv")
 
-    # compute updated dm
-    if len(fit_df.index) >= 2:
-        plotting.plot_center_scaling(fit_df, params)
-        compute_updated_dm(fit_df, args.dm, params)
+    # # compute updated dm
+    # if len(fit_df.index) >= 2:
+    #     plotting.plot_center_scaling(fit_df, params)
+    #     compute_updated_dm(fit_df, args.dm, params)
 
-    if args.smodel == "unscattered" and args.tscrunch_factor == 1:
-        # best topocentric burst arrival time
-        # at the highest frequency channel
-        try:
-            start_mjd = Time(
-                cand._header["tstart"], format="mjd", scale="utc", precision=9
-            )
-        except AttributeError:
-            start_mjd = Time(cand.tstart, format="mjd", scale="utc", precision=9)
-        burst_offset = TimeDelta(
-            bin_burst * cand.tsamp * args.tscrunch_factor, format="sec"
-        )
-        fit_offset = TimeDelta(1.0e-3 * fit_df["center"].iloc[0], format="sec")
-        mjd_topo = start_mjd + burst_offset + fit_offset
-        print(f"Topocentric burst arrival time at {cand.fch1} MHz: MJD {mjd_topo}")
+    # if args.smodel == "unscattered" and args.tscrunch_factor == 1:
+    #     # best topocentric burst arrival time
+    #     # at the highest frequency channel
+    #     try:
+    #         start_mjd = Time(
+    #             cand._header["tstart"], format="mjd", scale="utc", precision=9
+    #         )
+    #     except AttributeError:
+    #         start_mjd = Time(cand.tstart, format="mjd", scale="utc", precision=9)
+    #     burst_offset = TimeDelta(
+    #         bin_burst * cand.tsamp * args.tscrunch_factor, format="sec"
+    #     )
+    #     fit_offset = TimeDelta(1.0e-3 * fit_df["center"].iloc[0], format="sec")
+    #     mjd_topo = start_mjd + burst_offset + fit_offset
+    #     print(f"Topocentric burst arrival time at {cand.fch1} MHz: MJD {mjd_topo}")
 
-    if args.fit_scatindex and len(fit_df.index) >= 2 and "taus" in fit_df.columns:
-        fitresult = fit_powerlaw(
-            1e-3 * fit_df["cfreq"].to_numpy(),
-            fit_df["taus"].to_numpy(),
-            fit_df["err_taus"].to_numpy(),
-            params,
-        )
-    else:
-        fitresult = None
+    # if args.fit_scatindex and len(fit_df.index) >= 2 and "taus" in fit_df.columns:
+    #     fitresult = fit_powerlaw(
+    #         1e-3 * fit_df["cfreq"].to_numpy(),
+    #         fit_df["taus"].to_numpy(),
+    #         fit_df["err_taus"].to_numpy(),
+    #         params,
+    #     )
+    # else:
+    #     fitresult = None
 
-    plotting.plot_width_scaling(fit_df, cand, fitresult, params)
+    # plotting.plot_width_scaling(fit_df, cand, fitresult, params)
 
     plotting.plot_frb(cand, plot_range, profile, params)
 
-    plotting.plot_frb_scat(
-        cand, fit_df, fit_results, args.smodel, plot_range, params, dynspec=True
-    )
+    # plotting.plot_frb_scat(
+    #     cand, fit_df, fit_results, args.smodel, plot_range, params, dynspec=True
+    # )
 
-    plotting.plot_frb_scat(
-        cand, fit_df, fit_results, args.smodel, plot_range, params, dynspec=False
-    )
+    # plotting.plot_frb_scat(
+    #     cand, fit_df, fit_results, args.smodel, plot_range, params, dynspec=False
+    # )
 
     if not args.output:
         plt.show()
