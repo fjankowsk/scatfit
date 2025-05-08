@@ -167,7 +167,8 @@ class Pulse(object):
         """
 
         # waterfall plot
-        fig = plt.figure()
+        figsize = [6.4, 6.4]
+        fig = plt.figure(figsize=figsize)
         ax = fig.add_subplot()
 
         time_step = np.diff(self.times)[0]
@@ -191,7 +192,8 @@ class Pulse(object):
         fig.tight_layout()
 
         # line plot
-        fig = plt.figure()
+        figsize = [4.8, 9.6]
+        fig = plt.figure(figsize=figsize)
         ax = fig.add_subplot()
 
         freqs = np.copy(self.freqs)
@@ -278,9 +280,6 @@ class Pulse(object):
         # convert to integers
         nbit = self.instrument.nbit
         data_int = self.convert_to_integer(self.data, nbit=nbit)
-
-        # print(data_int.shape)
-        # self.plot_data(data_int.astype(np.float64))
 
         sigproc_obj = make_sigproc_object(
             rawdatafile=filename,
