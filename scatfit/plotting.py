@@ -105,7 +105,6 @@ def plot_frb_scat(
     cand,
     df,
     fitresults,
-    smodel,
     plot_range,
     params,
     cmap1="Greys",
@@ -115,24 +114,6 @@ def plot_frb_scat(
     """
     Plot the dynamic spectrum and the sub-band profiles in a combined figure.
     """
-
-    # TODO: Include additional arguments in result to be ablo to plot all models
-    if smodel == "unscattered":
-        scat_model = pulsemodels.gaussian_normed
-    elif smodel == "scattered_isotropic_analytic":
-        scat_model = pulsemodels.scattered_gaussian_pulse
-    elif smodel == "scattered_isotropic_convolving":
-        scat_model = pulsemodels.scattered_profile
-    elif smodel == "scattered_isotropic_bandintegrated":
-        scat_model = pulsemodels.bandintegrated_model
-    elif smodel == "scattered_isotropic_afb_instrumental":
-        scat_model = pulsemodels.gaussian_scattered_afb_instrumental
-    elif smodel == "scattered_isotropic_dfb_instrumental":
-        scat_model = pulsemodels.gaussian_scattered_dfb_instrumental
-    else:
-        raise NotImplementedError(f"Scattering model not implemented: {smodel}")
-
-    model = Model(scat_model)
 
     cmap1 = plt.get_cmap(cmap1)
     color1 = [cmap1((ii + 2) / (df.shape[0] + 2)) for ii in range(df.shape[0])]
@@ -162,7 +143,7 @@ def plot_frb_scat(
         fitresult = fitresults[iband]
         axs[0].plot(
             plot_range,
-            model.eval(params=fitresult.params, x=plot_range) - band,
+            fitresult.eval(x=plot_range) - band,
             color=color2[iband],
             lw=1.5,
             zorder=8,

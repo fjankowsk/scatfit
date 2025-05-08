@@ -937,21 +937,21 @@ def main():
     #     plotting.plot_center_scaling(fit_df, params)
     #     compute_updated_dm(fit_df, args.dm, params)
 
-    # if args.smodel == "unscattered" and args.tscrunch_factor == 1:
-    #     # best topocentric burst arrival time
-    #     # at the highest frequency channel
-    #     try:
-    #         start_mjd = Time(
-    #             cand._header["tstart"], format="mjd", scale="utc", precision=9
-    #         )
-    #     except AttributeError:
-    #         start_mjd = Time(cand.tstart, format="mjd", scale="utc", precision=9)
-    #     burst_offset = TimeDelta(
-    #         bin_burst * cand.tsamp * args.tscrunch_factor, format="sec"
-    #     )
-    #     fit_offset = TimeDelta(1.0e-3 * fit_df["center"].iloc[0], format="sec")
-    #     mjd_topo = start_mjd + burst_offset + fit_offset
-    #     print(f"Topocentric burst arrival time at {cand.fch1} MHz: MJD {mjd_topo}")
+    if args.smodel == "unscattered" and args.tscrunch_factor == 1:
+        # best topocentric burst arrival time
+        # at the highest frequency channel
+        try:
+            start_mjd = Time(
+                cand._header["tstart"], format="mjd", scale="utc", precision=9
+            )
+        except AttributeError:
+            start_mjd = Time(cand.tstart, format="mjd", scale="utc", precision=9)
+        burst_offset = TimeDelta(
+            bin_burst * cand.tsamp * args.tscrunch_factor, format="sec"
+        )
+        fit_offset = TimeDelta(1.0e-3 * fit_df["center"].iloc[0], format="sec")
+        mjd_topo = start_mjd + burst_offset + fit_offset
+        print(f"Topocentric burst arrival time at {cand.fch1} MHz: MJD {mjd_topo}")
 
     # if args.fit_scatindex and len(fit_df.index) >= 2 and "taus" in fit_df.columns:
     #     fitresult = fit_powerlaw(
@@ -967,13 +967,9 @@ def main():
 
     plotting.plot_frb(cand, plot_range, profile, params)
 
-    # plotting.plot_frb_scat(
-    #     cand, fit_df, fit_results, args.smodel, plot_range, params, dynspec=True
-    # )
+    plotting.plot_frb_scat(cand, fit_df, fit_results, plot_range, params, dynspec=True)
 
-    # plotting.plot_frb_scat(
-    #     cand, fit_df, fit_results, args.smodel, plot_range, params, dynspec=False
-    # )
+    plotting.plot_frb_scat(cand, fit_df, fit_results, plot_range, params, dynspec=False)
 
     if not args.output:
         plt.show()
