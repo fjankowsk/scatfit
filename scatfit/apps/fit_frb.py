@@ -833,6 +833,7 @@ def main():
     params = {
         "center": args.center,
         "compare": args.compare,
+        "dpi": 300,
         "fast": args.fast,
         "fitrange": args.fitrange,
         "nodmsmearing": args.nodmsmearing,

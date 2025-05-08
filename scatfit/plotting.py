@@ -637,7 +637,7 @@ def plot_chains(fitresult_emcee, params):
     fig, axs = plt.subplots(nrows=nvary, ncols=1, sharex=True, figsize=(8, 9))
 
     for i, name in enumerate(var_names):
-        axs[i].plot(samples.iloc[:, i], color="black", alpha=0.5)
+        axs[i].plot(samples.iloc[:, i], color="black", alpha=0.5, rasterized=True)
         axs[i].set_ylabel(name)
 
     axs[nvary - 1].set_xlabel("Step Number")
@@ -652,7 +652,7 @@ def plot_chains(fitresult_emcee, params):
 
     if params["output"]:
         filename = "chains_band-{0}.pdf".format(params["iband"])
-        fig.savefig(filename, bbox_inches="tight")
+        fig.savefig(filename, bbox_inches="tight", dpi=params["dpi"])
 
 
 def plot_corner(fitresult_emcee, fnlabel, params):
