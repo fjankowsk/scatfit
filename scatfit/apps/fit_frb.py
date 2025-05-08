@@ -898,8 +898,36 @@ def main():
     fit_df, fit_results = fit_profile(
         cand, plot_range, args.fscrunch_factor, args.smodel, params
     )
+
     print("\nFit results")
-    print(fit_df)
+    # general
+    _columns = [
+        "band",
+        "cfreq",
+        "weq",
+        "err_weq",
+        "w50p",
+        "err_w50p",
+        "w10p",
+        "err_w10p",
+    ]
+    print("General")
+    print(fit_df.to_string(columns=_columns))
+
+    for icomp in range(len(params["center"])):
+        if len(params["center"]) == 1:
+            prefix = ""
+        else:
+            prefix = f"c{icomp}_"
+
+        _columns = ["band", "cfreq"]
+        col_list = fit_df.columns.tolist()
+        for item in col_list:
+            if item.startswith(prefix):
+                _columns.append(item)
+
+        print(f"\nComponent {icomp}")
+        print(fit_df.to_string(columns=_columns))
 
     # save fit result as csv
     fit_df.to_csv("scattering_fit_result.csv")
