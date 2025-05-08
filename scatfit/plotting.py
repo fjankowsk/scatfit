@@ -235,7 +235,7 @@ def plot_frb_scat(
     else:
         filename = "scattering_fit_allbands.pdf"
 
-    fig.savefig(filename, bbox_inches="tight", pad_inches=0.1)
+    fig.savefig(filename, bbox_inches="tight", dpi=params["dpi"], pad_inches=0.1)
 
 
 def plot_profile_models(params):
@@ -323,7 +323,7 @@ def plot_profile_models(params):
     fig.tight_layout()
 
     if params["output"]:
-        fig.savefig("profile_models.pdf", bbox_inches="tight")
+        fig.savefig("profile_models.pdf", bbox_inches="tight", dpi=params["dpi"])
 
 
 def plot_profile_fit(
@@ -429,7 +429,9 @@ def plot_profile_fit(
 
     fig.tight_layout()
 
-    fig.savefig(f"scattering_fit_band-{iband}.pdf", bbox_inches="tight")
+    fig.savefig(
+        f"scattering_fit_band-{iband}.pdf", bbox_inches="tight", dpi=params["dpi"]
+    )
 
 
 def plot_width_scaling(t_df, cand, fitresult, params):
@@ -579,7 +581,7 @@ def plot_width_scaling(t_df, cand, fitresult, params):
 
     fig.tight_layout()
 
-    fig.savefig("width_scaling.pdf", bbox_inches="tight")
+    fig.savefig("width_scaling.pdf", bbox_inches="tight", dpi=params["dpi"])
 
 
 def plot_center_scaling(t_df, params):
@@ -615,7 +617,7 @@ def plot_center_scaling(t_df, params):
     fig.tight_layout()
 
     if params["output"]:
-        fig.savefig("center_scaling.pdf", bbox_inches="tight")
+        fig.savefig("center_scaling.pdf", bbox_inches="tight", dpi=params["dpi"])
 
 
 def plot_chains(fitresult_emcee, params):
@@ -736,7 +738,7 @@ def plot_corner(fitresult_emcee, fnlabel, params):
         else:
             filename = f"corner_{fnlabel}.pdf"
 
-        fig.savefig(filename, bbox_inches="tight")
+        fig.savefig(filename, bbox_inches="tight", dpi=params["dpi"])
 
     # reset
     matplotlib.rcParams["font.size"] = fontsize_before
