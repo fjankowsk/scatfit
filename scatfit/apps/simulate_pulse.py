@@ -37,6 +37,8 @@ def parse_args():
 def main():
     parse_args()
 
+    # single component pulse
+    # meerkat l-band
     pulse = Pulse(dm=500.0, sigma=2.5, taus_1ghz=20.0)
     instrument = MeerKAT_Lband()
 
@@ -45,6 +47,7 @@ def main():
 
     pulse.write_to_sigproc_file("test_fake_meerkat.fil")
 
+    # nenufar
     pulse = Pulse(dm=70.0, sigma=2.5, taus_1ghz=0.01)
     instrument = NenuFAR()
 
@@ -52,6 +55,19 @@ def main():
     pulse.plot_data(pulse.data)
 
     pulse.write_to_sigproc_file("test_fake_nenufar.fil")
+
+    # two component pulse
+    # meerkat l-band
+    pulse = Pulse(dm=500.0, sigma=2.5, taus_1ghz=20.0)
+    instrument = MeerKAT_Lband()
+
+    # add secondary pulse component
+    pulse.add_component(fluence=3.0, center=120.0, sigma=3.5)
+
+    pulse.generate_data(instrument, osfact=64)
+    pulse.plot_data(pulse.data)
+
+    pulse.write_to_sigproc_file("test_fake_meerkat_two_component.fil")
 
     plt.show()
 

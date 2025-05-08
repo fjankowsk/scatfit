@@ -27,19 +27,46 @@ class Pulse(object):
             The scattering time at 1 GHz.
         """
 
+        # number of pulse components
+        self.ncomponent = 1
+
         self.dm = dm
         self.dm_index = -2.0
         self.scatindex = -4.0
-        self.spectral_index = -1.5
-        self.fluence_1ghz = 10.0
+        self.spectral_index = [-1.5]
+        self.fluence_1ghz = [10.0]
         # ms
-        self.sigma = sigma
-        self.toa_highest_freq = 100.0
-        self.taus_1ghz = taus_1ghz
-        self.dc = 0.0
+        self.sigma = [sigma]
+        self.toa_highest_freq = [100.0]
+        self.taus_1ghz = [taus_1ghz]
+        self.dc = [0.0]
 
         # noise
         self.sigma_noise = 0.1
+
+    def add_component(self, fluence, center, sigma):
+        """
+        Add a profile component.
+
+        Parameters
+        ----------
+        fluence: float
+            The fluence in arbitrary units.
+        center: float
+            The ToA centre at the highest frequency in ms.
+        sigma: float
+            The Gaussian standard deviation in ms.
+        """
+
+        self.ncomponent += 1
+
+        self.spectral_index.append(self.spectral_index[0])
+        self.fluence_1ghz.append(fluence)
+
+        self.sigma.append(sigma)
+        self.toa_highest_freq.append(center)
+        self.taus_1ghz.append(self.taus_1ghz[0])
+        self.dc.append(self.dc[0])
 
     def generate_data(self, instrument, osfact=32):
         """
@@ -80,6 +107,7 @@ class Pulse(object):
         rng = np.random.default_rng(seed=42)
 
         for i, ifreq in enumerate(freqs):
+            temp[:, :] = 0
             top_freq = ifreq - 0.5 * foff
             bot_freq = ifreq + 0.5 * foff
             sub_foff = foff / float(osfact)
@@ -91,18 +119,24 @@ class Pulse(object):
                 dm_shift = (
                     1.0e3
                     * KDM
-                    * (jfreq**self.dm_index - freqs[0] ** self.dm_index)
                     * self.dm
+                    * (jfreq**self.dm_index - freqs[0] ** self.dm_index)
                 )
-                fluence = self.fluence_1ghz * (jfreq / 1000.0) ** self.spectral_index
-                center = self.toa_highest_freq + dm_shift
-                taus = self.taus_1ghz * (jfreq / 1000.0) ** self.scatindex
-                print(
-                    f"Cfreq, subfreq, fluence, center, taus: {ifreq:.2f} MHz, {jfreq:.2f} MHz, {fluence:.2f} a.u., {center:.2f} ms, {taus:.2f} ms"
-                )
-                temp[j, :] = pulsemodels.scattered_profile(
-                    times, fluence, center, self.sigma, taus, self.dc
-                )
+
+                # add all pulse components
+                for icomp in range(self.ncomponent):
+                    fluence = (
+                        self.fluence_1ghz[icomp]
+                        * (jfreq / 1000.0) ** self.spectral_index[icomp]
+                    )
+                    center = self.toa_highest_freq[icomp] + dm_shift
+                    taus = self.taus_1ghz[icomp] * (jfreq / 1000.0) ** self.scatindex
+                    print(
+                        f"Component, cfreq, subfreq, fluence, center, taus: {icomp}, {ifreq:.2f} MHz, {jfreq:.2f} MHz, {fluence:.2f} a.u., {center:.2f} ms, {taus:.2f} ms"
+                    )
+                    temp[j, :] += pulsemodels.scattered_profile(
+                        times, fluence, center, self.sigma[icomp], taus, self.dc[icomp]
+                    )
 
             # this is for incoherent dedispersion only. for coherent dedispersion, we need
             # to straighten the signal in each frequency channel before averaging
@@ -237,11 +271,16 @@ class Pulse(object):
         return data_int
 
     def write_to_sigproc_file(self, filename):
+        """
+        Write the data to a SIGPROC filterbank file.
+        """
+
         # convert to integers
         nbit = self.instrument.nbit
         data_int = self.convert_to_integer(self.data, nbit=nbit)
-        print(data_int.shape)
-        self.plot_data(data_int)
+
+        # print(data_int.shape)
+        # self.plot_data(data_int.astype(np.float64))
 
         sigproc_obj = make_sigproc_object(
             rawdatafile=filename,
