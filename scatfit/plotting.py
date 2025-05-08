@@ -699,17 +699,18 @@ def plot_corner(fitresult_emcee, fnlabel, params):
         smooth = True
 
         mapping = {
+            "__lnsigma": r"$\ln(\epsilon)$",
             "fluence": "$F$",
             "center": "$t_0$",
             "sigma": r"$\sigma$",
             "taus": r"$\tau_s$",
             "dc": "$b$",
-            "__lnsigma": r"$\ln(\epsilon)$",
         }
 
-        for idx, key in enumerate(var_names):
-            if key in mapping:
-                var_names[idx] = mapping[key]
+        for idx, name in enumerate(var_names):
+            for repl in mapping:
+                if name.endswith(repl):
+                    var_names[idx] = var_names[idx].replace(repl, mapping[repl])
 
     fig = corner.corner(
         samples,
