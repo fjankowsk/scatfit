@@ -953,17 +953,39 @@ def main():
         mjd_topo = start_mjd + burst_offset + fit_offset
         print(f"Topocentric burst arrival time at {cand.fch1} MHz: MJD {mjd_topo}")
 
-    # if args.fit_scatindex and len(fit_df.index) >= 2 and "taus" in fit_df.columns:
-    #     fitresult = fit_powerlaw(
-    #         1e-3 * fit_df["cfreq"].to_numpy(),
-    #         fit_df["taus"].to_numpy(),
-    #         fit_df["err_taus"].to_numpy(),
-    #         params,
-    #     )
-    # else:
-    #     fitresult = None
+    # use the taus measurements from all pulse components simultaneously
+    # we assume that the scattering is the same for all pulse components
+    if args.fit_scatindex and len(fit_df.index) >= 2:
+        for icomp in range(len(params["center"])):
+            if len(params["center"]) == 1:
+                prefix = ""
+            else:
+                prefix = f"c{icomp}_"
 
-    # plotting.plot_width_scaling(fit_df, cand, fitresult, params)
+            assert f"{prefix}taus" in fit_df.columns
+
+            try:
+                _cfreqs = np.concatenate((_cfreqs, fit_df["cfreq"].to_numpy()))
+            except NameError:
+                _cfreqs = fit_df["cfreq"].to_numpy().copy()
+
+            try:
+                _taus = np.concatenate((_taus, fit_df[f"{prefix}taus"].to_numpy()))
+            except NameError:
+                _taus = fit_df[f"{prefix}taus"].to_numpy().copy()
+
+            try:
+                _err_taus = np.concatenate(
+                    (_err_taus, fit_df[f"{prefix}err_taus"].to_numpy())
+                )
+            except NameError:
+                _err_taus = fit_df[f"{prefix}err_taus"].to_numpy().copy()
+
+        pl_fitresult = fit_powerlaw(1e-3 * _cfreqs, _taus, _err_taus, params)
+    else:
+        pl_fitresult = None
+
+    # plotting.plot_width_scaling(fit_df, cand, pl_fitresult, params)
 
     plotting.plot_frb(cand, plot_range, profile, params)
 
