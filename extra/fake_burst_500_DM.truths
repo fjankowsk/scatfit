@@ -1,0 +1,12 @@
+# specific
+dm: 500.0
+sigma: 2.5
+taus_1ghz: 20.0
+
+# default
+dm_index: -2.0
+scatindex: -4.0
+spectral_index: -1.5
+toa_highest_freq: 100.0
+dc: 0.0
+sigma_noise: 0.1
