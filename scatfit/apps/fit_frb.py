@@ -530,7 +530,9 @@ def fit_profile_model(fit_range, profile, smodel, params):
             _bw_subband = np.abs(params["f_hi"] - params["f_lo"])
             nfreq = int(np.ceil(_bw_subband))
             assert nfreq > 0
-            print(f"Bandwidth sub-band, nfreq: {_bw_subband:.2f} MHz, {nfreq}")
+            print(
+                f"Component {i}, bandwidth sub-band, nfreq: {_bw_subband:.2f} MHz, {nfreq}"
+            )
             if params["fast"]:
                 if nfreq > 3:
                     nfreq = 3
