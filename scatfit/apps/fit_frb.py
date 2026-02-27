@@ -938,13 +938,14 @@ def main():
 
     # compute updated dm
     if len(fit_df.index) >= 2:
-        if len(params["center"]) == 1:
-            prefix = ""
-        else:
-            prefix = f"c{icomp}_"
+        for icomp in range(len(params["center"])):
+            if len(params["center"]) == 1:
+                prefix = ""
+            else:
+                prefix = f"c{icomp}_"
 
-        plotting.plot_center_scaling(fit_df, prefix, params)
-        compute_updated_dm(fit_df, args.dm, prefix, params)
+            plotting.plot_center_scaling(fit_df, prefix, params)
+            compute_updated_dm(fit_df, args.dm, prefix, params)
 
     if args.smodel == "unscattered" and args.tscrunch_factor == 1:
         # best topocentric burst arrival time
