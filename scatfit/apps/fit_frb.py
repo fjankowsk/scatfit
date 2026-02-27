@@ -502,6 +502,9 @@ def fit_profile_model(fit_range, profile, smodel, params):
 
         if "taus" in arg_list:
             model.set_param_hint(f"{prefix}taus", value=1.5, min=params["tsamp"])
+            # force taus to be the same for each component
+            if i > 0:
+                model.set_param_hint(f"{prefix}taus", expr=f"c0_taus")
 
         if "taui" in arg_list:
             model.set_param_hint(f"{prefix}taui", value=params["tsamp"], vary=False)
