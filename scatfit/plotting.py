@@ -481,7 +481,7 @@ def plot_width_scaling(t_df, cand, fitresult, params):
     # scattering time fit
     if fitresult is not None:
         ax.plot(
-            fact * df["cfreq"],
+            fact * 10 ** fitresult.userkws["x"],
             10**fitresult.best_fit,
             color="dimgrey",
             ls="solid",
