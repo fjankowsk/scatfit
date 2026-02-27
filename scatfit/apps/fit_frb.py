@@ -391,7 +391,7 @@ def compute_updated_dm(t_df, dm, prefix, params):
 
     # x is in MHz^-2
     x = (df["cfreq"] ** -2 - df["cfreq"].iat[0] ** -2).to_numpy()
-    y = (df[f"{prefix}center"] - df["{prefix}center"].iat[0]).to_numpy()
+    y = (df[f"{prefix}center"] - df[f"{prefix}center"].iat[0]).to_numpy()
     err_y = df[f"{prefix}err_center"].to_numpy()
 
     # convert to seconds and divide by dispersion constant
