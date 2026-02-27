@@ -978,7 +978,7 @@ def main():
     else:
         pl_fitresult = None
 
-    # plotting.plot_width_scaling(fit_df, cand, pl_fitresult, params)
+    plotting.plot_width_scaling(fit_df, cand, pl_fitresult, params)
 
     plotting.plot_frb(cand, plot_range, profile, params)
 

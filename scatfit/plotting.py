@@ -436,26 +436,7 @@ def plot_width_scaling(t_df, cand, fitresult, params):
     fig = plt.figure()
     ax = fig.add_subplot()
 
-    ax.errorbar(
-        x=fact * df["cfreq"],
-        y=df["w50i"],
-        yerr=df["err_w50i"],
-        fmt="o",
-        color="black",
-        zorder=7,
-        label=r"$\mathrm{W}_\mathrm{50i}$",
-    )
-
-    ax.errorbar(
-        x=fact * df["cfreq"],
-        y=df["w10i"],
-        yerr=df["err_w10i"],
-        fmt="+",
-        color="darkgrey",
-        zorder=6,
-        label=r"$\mathrm{W}_\mathrm{10i}$",
-    )
-
+    # entire profile values
     ax.scatter(
         x=fact * df["cfreq"],
         y=df["weq"],
