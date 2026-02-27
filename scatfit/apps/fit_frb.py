@@ -975,6 +975,10 @@ def main():
             except NameError:
                 _err_taus = fit_df[f"{prefix}err_taus"].to_numpy().copy()
 
+        print(_cfreqs)
+        print(_taus)
+        print(_err_taus)
+
         pl_fitresult = fit_powerlaw(1e-3 * _cfreqs, _taus, _err_taus, params)
     else:
         pl_fitresult = None
