@@ -955,9 +955,8 @@ def main():
 
     # XXX: we assume that the scattering is the same for all profile components
     # use c0_taus only here, the other ci_taus are the same
-    if args.fit_scatindex and len(fit_df.index) >= 2:
+    if args.fit_scatindex and len(fit_df.index) >= 2 and "c0_taus" in fit_df.columns:
         print("\nScattering index")
-        assert f"c0_taus" in fit_df.columns
         pl_fitresult = fit_powerlaw(
             1e-3 * fit_df["cfreq"], fit_df["c0_taus"], fit_df["c0_taus"], params
         )
