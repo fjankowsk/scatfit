@@ -565,7 +565,7 @@ def plot_width_scaling(t_df, cand, fitresult, params):
     fig.savefig("width_scaling.pdf", bbox_inches="tight", dpi=params["dpi"])
 
 
-def plot_center_scaling(t_df, params):
+def plot_center_scaling(t_df, prefix, params):
     """
     Plot the scaling of fitted center with frequency.
 
@@ -573,6 +573,8 @@ def plot_center_scaling(t_df, params):
     ----------
     t_df: ~pd.DataFrame
         The input data.
+    prefix: str
+        The prefix for the component selection.
     params: dict
         Other parameters that affect the output.
     """
@@ -584,8 +586,8 @@ def plot_center_scaling(t_df, params):
 
     ax.errorbar(
         x=1e-3 * df["cfreq"],
-        y=df["center"],
-        yerr=df["err_center"],
+        y=df[f"{prefix}center"],
+        yerr=df[f"{prefix}err_center"],
         fmt="o",
         color="black",
         zorder=5,
@@ -595,10 +597,16 @@ def plot_center_scaling(t_df, params):
     ax.set_xlabel("Frequency (GHz)")
     ax.set_ylabel("Center (ms)")
 
+    fig.suptitle("Component: {0}".format(prefix.rstrip("_").upper()))
+
     fig.tight_layout()
 
     if params["output"]:
-        fig.savefig("center_scaling.pdf", bbox_inches="tight", dpi=params["dpi"])
+        fig.savefig(
+            "center_scaling_{0}.pdf".format(prefix.rstrip("_")),
+            bbox_inches="tight",
+            dpi=params["dpi"],
+        )
 
 
 def plot_chains(fitresult_emcee, params):

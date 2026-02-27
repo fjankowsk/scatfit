@@ -370,7 +370,7 @@ def fit_powerlaw(x, y, err_y, params):
     return fitresult_emcee
 
 
-def compute_updated_dm(t_df, dm, params):
+def compute_updated_dm(t_df, dm, prefix, params):
     """
     Compute an updated dispersion measure by fitting the
     center versus frequency curve.
@@ -381,6 +381,8 @@ def compute_updated_dm(t_df, dm, params):
         The input data.
     dm: float
         The previous DM.
+    prefix: str
+        The prefix for the component selection.
     params: dict
         Additional parameters that affect the processing.
     """
@@ -389,8 +391,8 @@ def compute_updated_dm(t_df, dm, params):
 
     # x is in MHz^-2
     x = (df["cfreq"] ** -2 - df["cfreq"].iat[0] ** -2).to_numpy()
-    y = (df["center"] - df["center"].iat[0]).to_numpy()
-    err_y = df["err_center"].to_numpy()
+    y = (df[f"{prefix}center"] - df["{prefix}center"].iat[0]).to_numpy()
+    err_y = df[f"{prefix}err_center"].to_numpy()
 
     # convert to seconds and divide by dispersion constant
     # so the slope is delta dm in the right units
@@ -438,8 +440,8 @@ def compute_updated_dm(t_df, dm, params):
     updated_dm = {"value": dm + delta_dm, "error": err_delta_dm}
 
     print(
-        "Updated DM: {0:.4f} +- {1:.4f} pc cm^-3".format(
-            updated_dm["value"], updated_dm["error"]
+        "Updated DM for component {0}: {1:.4f} +- {2:.4f} pc cm^-3".format(
+            prefix.rstrip("_").upper(), updated_dm["value"], updated_dm["error"]
         )
     )
 
@@ -932,10 +934,15 @@ def main():
     # save fit result as csv
     fit_df.to_csv("scattering_fit_result.csv")
 
-    # # compute updated dm
-    # if len(fit_df.index) >= 2:
-    #     plotting.plot_center_scaling(fit_df, params)
-    #     compute_updated_dm(fit_df, args.dm, params)
+    # compute updated dm
+    if len(fit_df.index) >= 2:
+        if len(params["center"]) == 1:
+            prefix = ""
+        else:
+            prefix = f"c{icomp}_"
+
+        plotting.plot_center_scaling(fit_df, prefix, params)
+        compute_updated_dm(fit_df, args.dm, prefix, params)
 
     if args.smodel == "unscattered" and args.tscrunch_factor == 1:
         # best topocentric burst arrival time
