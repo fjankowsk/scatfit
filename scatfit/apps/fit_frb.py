@@ -484,10 +484,7 @@ def fit_profile_model(fit_range, profile, smodel, params):
 
     # build the total composite model
     for i, center in enumerate(params["center"]):
-        if len(params["center"]) == 1:
-            prefix = ""
-        else:
-            prefix = f"c{i}_"
+        prefix = f"c{i}_"
 
         model = Model(scat_model, prefix=prefix)
 
@@ -774,10 +771,7 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, t_params):
 
         # component separated values
         for icomp in range(len(params["center"])):
-            if len(params["center"]) == 1:
-                prefix = ""
-            else:
-                prefix = f"c{icomp}_"
+            prefix = f"c{icomp}_"
 
             for item in ["fluence", "center", "sigma"]:
                 _field = f"{prefix}{item}"
@@ -804,10 +798,7 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, t_params):
 
     # compute intrinsic w50 and w10
     for icomp in range(len(params["center"])):
-        if len(params["center"]) == 1:
-            prefix = ""
-        else:
-            prefix = f"c{icomp}_"
+        prefix = f"c{icomp}_"
 
         df[f"{prefix}w50i"] = pulsemodels.gaussian_fwhm(df[f"{prefix}sigma"])
         df[f"{prefix}err_w50i"] = pulsemodels.gaussian_fwhm(df[f"{prefix}err_sigma"])
@@ -919,10 +910,7 @@ def main():
     print(fit_df.to_string(columns=_columns))
 
     for icomp in range(len(params["center"])):
-        if len(params["center"]) == 1:
-            prefix = ""
-        else:
-            prefix = f"c{icomp}_"
+        prefix = f"c{icomp}_"
 
         _columns = ["band", "cfreq"]
         col_list = fit_df.columns.tolist()
@@ -939,10 +927,7 @@ def main():
     # compute updated dm
     if len(fit_df.index) >= 2:
         for icomp in range(len(params["center"])):
-            if len(params["center"]) == 1:
-                prefix = ""
-            else:
-                prefix = f"c{icomp}_"
+            prefix = f"c{icomp}_"
 
             plotting.plot_center_scaling(fit_df, prefix, params)
             compute_updated_dm(fit_df, args.dm, prefix, params)
@@ -967,11 +952,7 @@ def main():
     # we assume that the scattering is the same for all pulse components
     if args.fit_scatindex and len(fit_df.index) >= 2:
         for icomp in range(len(params["center"])):
-            if len(params["center"]) == 1:
-                prefix = ""
-            else:
-                prefix = f"c{icomp}_"
-
+            prefix = f"c{icomp}_"
             assert f"{prefix}taus" in fit_df.columns
 
             try:
