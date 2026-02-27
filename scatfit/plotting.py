@@ -476,7 +476,7 @@ def plot_width_scaling(t_df, cand, fitresult, params):
         ax.errorbar(
             x=fact * df["cfreq"],
             y=df["c0_taus"],
-            yerr=df["err_c0_taus"],
+            yerr=df["c0_err_taus"],
             fmt="x",
             color="dimgrey",
             linestyle="none",
