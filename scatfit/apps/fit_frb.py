@@ -895,7 +895,7 @@ def main():
     )
 
     print("\nFit results")
-    # general
+    # entire profile
     _columns = [
         "band",
         "cfreq",
@@ -909,6 +909,7 @@ def main():
     print("Entire profile")
     print(fit_df.to_string(columns=_columns))
 
+    # for each component
     for icomp in range(len(params["center"])):
         prefix = f"c{icomp}_"
 
