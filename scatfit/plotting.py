@@ -585,7 +585,7 @@ def plot_center_scaling(t_df, prefix, params):
     ax.set_xlabel("Frequency (GHz)")
     ax.set_ylabel("Center (ms)")
 
-    fig.suptitle("Component: {0}".format(prefix.rstrip("_").upper()))
+    fig.suptitle("Component {0}".format(prefix.rstrip("_").upper()))
 
     fig.tight_layout()
 

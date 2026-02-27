@@ -951,7 +951,7 @@ def main():
         print(f"Topocentric burst arrival time at {cand.fch1} MHz: MJD {mjd_topo}")
 
     # use the taus measurements from all pulse components simultaneously
-    # we assume that the scattering is the same for all pulse components
+    # XXX: we assume that the scattering is the same for all profile components
     if args.fit_scatindex and len(fit_df.index) >= 2:
         print("\nScattering index")
         for icomp in range(len(params["center"])):
@@ -975,7 +975,7 @@ def main():
             except NameError:
                 _err_taus = fit_df[f"{prefix}err_taus"].to_numpy().copy()
 
-        pl_fitresult = fit_powerlaw(_cfreqs, _taus, _err_taus, params)
+        pl_fitresult = fit_powerlaw(1e-3 * _cfreqs, _taus, _err_taus, params)
     else:
         pl_fitresult = None
 
