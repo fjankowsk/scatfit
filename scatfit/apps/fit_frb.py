@@ -953,36 +953,14 @@ def main():
         mjd_topo = start_mjd + burst_offset + fit_offset
         print(f"Topocentric burst arrival time at {cand.fch1} MHz: MJD {mjd_topo}")
 
-    # use the taus measurements from all pulse components simultaneously
     # XXX: we assume that the scattering is the same for all profile components
+    # use c0_taus only here, the other ci_taus are the same
     if args.fit_scatindex and len(fit_df.index) >= 2:
         print("\nScattering index")
-        for icomp in range(len(params["center"])):
-            prefix = f"c{icomp}_"
-            assert f"{prefix}taus" in fit_df.columns
-
-            try:
-                _cfreqs = np.concatenate((_cfreqs, fit_df["cfreq"].to_numpy()))
-            except NameError:
-                _cfreqs = fit_df["cfreq"].to_numpy().copy()
-
-            try:
-                _taus = np.concatenate((_taus, fit_df[f"{prefix}taus"].to_numpy()))
-            except NameError:
-                _taus = fit_df[f"{prefix}taus"].to_numpy().copy()
-
-            try:
-                _err_taus = np.concatenate(
-                    (_err_taus, fit_df[f"{prefix}err_taus"].to_numpy())
-                )
-            except NameError:
-                _err_taus = fit_df[f"{prefix}err_taus"].to_numpy().copy()
-
-        print(_cfreqs)
-        print(_taus)
-        print(_err_taus)
-
-        pl_fitresult = fit_powerlaw(1e-3 * _cfreqs, _taus, _err_taus, params)
+        assert f"c0_taus" in fit_df.columns
+        pl_fitresult = fit_powerlaw(
+            1e-3 * fit_df["cfreq"], fit_df["c0_taus"], fit_df["c0_taus"], params
+        )
     else:
         pl_fitresult = None
 
