@@ -470,11 +470,13 @@ def plot_width_scaling(t_df, cand, fitresult, params):
         label=r"$\mathrm{W}_\mathrm{10p}$",
     )
 
-    if "taus" in df.columns:
+    # scattering time measured from profile fit
+    # we assume that all profile component experience the same scattering
+    if "c0_taus" in df.columns:
         ax.errorbar(
             x=fact * df["cfreq"],
-            y=df["taus"],
-            yerr=df["err_taus"],
+            y=df["c0_taus"],
+            yerr=df["err_c0_taus"],
             fmt="x",
             color="dimgrey",
             linestyle="none",
