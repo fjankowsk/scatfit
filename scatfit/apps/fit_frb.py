@@ -937,6 +937,10 @@ def main():
             plotting.plot_center_scaling(fit_df, prefix, params)
             compute_updated_dm(fit_df, args.dm, prefix, params)
 
+    # spectral index
+    plotting.plot_fluence_scaling(fit_df, params)
+
+    # topocentric arrival time
     if args.smodel == "unscattered" and args.tscrunch_factor == 1:
         # best topocentric burst arrival time
         # at the highest frequency channel
@@ -953,6 +957,7 @@ def main():
         mjd_topo = start_mjd + burst_offset + fit_offset
         print(f"Topocentric burst arrival time at {cand.fch1} MHz: MJD {mjd_topo}")
 
+    # fit scattering index
     # XXX: we assume that the scattering is the same for all profile components
     # use c0_taus only here, the other ci_taus are the same
     if args.fit_scatindex and len(fit_df.index) >= 2 and "c0_taus" in fit_df.columns:

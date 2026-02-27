@@ -599,6 +599,46 @@ def plot_center_scaling(t_df, prefix, params):
         )
 
 
+def plot_fluece_scaling(t_df, params):
+    """
+    Plot the scaling of the fitted fluences with frequency.
+
+    Parameters
+    ----------
+    t_df: ~pd.DataFrame
+        The input data.
+    params: dict
+        Other parameters that affect the output.
+    """
+
+    df = t_df.copy()
+
+    fig = plt.figure()
+    ax = fig.add_subplot()
+
+    for icomp in range(len(params["center"])):
+        prefix = f"c{icomp}_"
+
+        ax.errorbar(
+            x=1e-3 * df["cfreq"],
+            y=df[f"{prefix}fluence"],
+            yerr=df[f"{prefix}err_fluence"],
+            fmt="o",
+            label=f"c{icomp}",
+            zorder=5,
+        )
+
+    ax.grid()
+    ax.legend(loc="best")
+    ax.set_xlabel("Frequency (GHz)")
+    ax.set_ylabel("Fluence")
+
+    fig.tight_layout()
+
+    if params["output"]:
+        fig.savefig("fluence_scaling.pdf", bbox_inches="tight", dpi=params["dpi"])
+
+
 def plot_chains(fitresult_emcee, params):
     """
     Plot the MCMC chains from an emcee sampling run.
