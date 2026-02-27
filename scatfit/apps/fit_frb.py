@@ -952,6 +952,7 @@ def main():
     # use the taus measurements from all pulse components simultaneously
     # we assume that the scattering is the same for all pulse components
     if args.fit_scatindex and len(fit_df.index) >= 2:
+        print("\nScattering index")
         for icomp in range(len(params["center"])):
             prefix = f"c{icomp}_"
             assert f"{prefix}taus" in fit_df.columns
