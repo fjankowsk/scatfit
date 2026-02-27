@@ -440,7 +440,7 @@ def compute_updated_dm(t_df, dm, prefix, params):
     updated_dm = {"value": dm + delta_dm, "error": err_delta_dm}
 
     print(
-        "Updated DM for component {0}: {1:.4f} +- {2:.4f} pc cm^-3".format(
+        "\nUpdated DM for component {0}: {1:.4f} +- {2:.4f} pc cm^-3".format(
             prefix.rstrip("_").upper(), updated_dm["value"], updated_dm["error"]
         )
     )
@@ -906,7 +906,7 @@ def main():
         "w10p",
         "err_w10p",
     ]
-    print("General")
+    print("Entire profile")
     print(fit_df.to_string(columns=_columns))
 
     for icomp in range(len(params["center"])):
@@ -926,6 +926,7 @@ def main():
 
     # compute updated dm
     if len(fit_df.index) >= 2:
+        print("\nUpdated DM")
         for icomp in range(len(params["center"])):
             prefix = f"c{icomp}_"
 
