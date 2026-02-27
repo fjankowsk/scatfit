@@ -486,10 +486,9 @@ def plot_width_scaling(t_df, cand, fitresult, params):
 
     # scattering time fit
     if fitresult is not None:
-        plot_range = np.geomspace(freqs.min(), freqs.max(), num=100)
         ax.plot(
-            fact * plot_range,
-            10 ** fitresult.eval(x=plot_range),
+            fact * df["cfreq"],
+            10**fitresult.best_fit,
             color="dimgrey",
             ls="solid",
             lw=2.0,
