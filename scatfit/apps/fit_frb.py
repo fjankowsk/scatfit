@@ -988,7 +988,7 @@ def main():
         _wmean = np.average(_dms, weights=_weights)
         _err_wmean = np.sqrt(1.0 / np.sum(_weights))
         print(
-            "\nWeighted mean DM over {0} profile components: {1} +- {2}".format(
+            "\nWeighted mean DM over {0} profile components: {1:.4f} +- {2:.4f} pc cm^-3".format(
                 len(params["center"]), _wmean, _err_wmean
             )
         )
