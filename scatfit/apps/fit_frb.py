@@ -1019,7 +1019,10 @@ def main():
     if args.fit_scatindex and len(fit_df.index) >= 2 and "c0_taus" in fit_df.columns:
         print("\nScattering index")
         pl_fitresult = fit_powerlaw(
-            1e-3 * fit_df["cfreq"], fit_df["c0_taus"], fit_df["c0_taus"], params
+            1e-3 * fit_df["cfreq"].to_numpy(),
+            fit_df["c0_taus"].to_numpy(),
+            fit_df["c0_err_taus"].to_numpy(),
+            params,
         )
     else:
         pl_fitresult = None
