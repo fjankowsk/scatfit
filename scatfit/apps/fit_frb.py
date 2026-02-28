@@ -57,7 +57,7 @@ def parse_args():
         type=float,
         metavar=("value"),
         default=[],
-        help="The center of the model component. Use several times to define multiple model components.",
+        help="The center of the model component. Use several times to define multiple model components. The center values must be in increasing order.",
     )
 
     parser.add_argument(
@@ -220,8 +220,14 @@ def check_args(args):
 
     # center
     if len(args.center) > 1:
+        # uniqueness
         if len(set(args.center)) < len(args.center):
             print(f"Center is invalid: {args.center}")
+            sys.exit(1)
+
+        # ensure sorting
+        if args.center != sorted(args.center):
+            print(f"Center must be in increasing order: {args.center}")
             sys.exit(1)
 
     # fitrange
@@ -495,6 +501,12 @@ def fit_profile_model(fit_range, profile, smodel, params):
             min=center - 20.0,
             max=center + 20.0,
         )
+
+        # enforce increasing order of the centers
+        if i > 0:
+            model.set_param_hint(f"c{i}_off", value=2.0, min=params["tsamp"])
+            model.set_param_hint(f"{prefix}center", expr=f"c{i-1}_center + c{i}_off")
+
         # set the minimum to the sampling time of the data
         model.set_param_hint(f"{prefix}sigma", value=1.5, min=params["tsamp"], max=20.0)
 
@@ -504,7 +516,7 @@ def fit_profile_model(fit_range, profile, smodel, params):
             model.set_param_hint(f"{prefix}taus", value=1.5, min=params["tsamp"])
             # force taus to be the same for each component
             if i > 0:
-                model.set_param_hint(f"{prefix}taus", expr=f"c0_taus")
+                model.set_param_hint(f"{prefix}taus", expr="c0_taus")
 
         if "taui" in arg_list:
             model.set_param_hint(f"{prefix}taui", value=params["tsamp"], vary=False)
