@@ -599,7 +599,7 @@ def plot_center_scaling(t_df, prefix, params):
         )
 
 
-def plot_fluece_scaling(t_df, params):
+def plot_fluence_scaling(t_df, params):
     """
     Plot the scaling of the fitted fluences with frequency.
 

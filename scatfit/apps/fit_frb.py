@@ -832,7 +832,7 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, t_params):
     # convert object to numeric
     df = df.apply(pd.to_numeric)
 
-    print(df.info())
+    df.info()
 
     # compute intrinsic w50 and w10
     for icomp in range(len(params["center"])):
