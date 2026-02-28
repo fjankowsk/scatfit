@@ -647,6 +647,7 @@ def plot_fluence_scaling(t_df, params):
     ax.xaxis.set_major_formatter(sfor)
     ax.xaxis.set_minor_formatter(sfor)
     ax.yaxis.set_major_formatter(sfor)
+    ax.yaxis.set_minor_formatter(sfor)
 
     fig.tight_layout()
 
