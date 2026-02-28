@@ -614,7 +614,7 @@ def plot_fluence_scaling(t_df, params):
     df = t_df.copy()
 
     # switch between ghz and mhz
-    if df["cfreq"] > 1000.0:
+    if df["cfreq"].max() > 1000.0:
         fact = 1e-3
         xlabel = "Frequency (GHz)"
     else:
