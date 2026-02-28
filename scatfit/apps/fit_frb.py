@@ -504,7 +504,9 @@ def fit_profile_model(fit_range, profile, smodel, params):
 
         # enforce increasing order of the centers
         if i > 0:
-            model.set_param_hint(f"c{i}_off", value=2.0, min=params["tsamp"])
+            _delta = center - params["center"][i - 1]
+            assert _delta > 0
+            model.set_param_hint(f"c{i}_off", value=_delta, min=params["tsamp"])
             model.set_param_hint(f"{prefix}center", expr=f"c{i-1}_center + c{i}_off")
 
         # set the minimum to the sampling time of the data
