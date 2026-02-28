@@ -500,8 +500,8 @@ def fit_profile_model(fit_range, profile, smodel, params):
         _offset = 40.0
         if len(params["center"]) == 1:
             # single component
-            _min = center - _offset
-            _max = center + _offset
+            _dleft = _offset
+            _dright = _offset
         else:
             if i == 0:
                 # first component
@@ -516,10 +516,10 @@ def fit_profile_model(fit_range, profile, smodel, params):
                 _dleft = center - params["center"][i - 1]
                 _dright = params["center"][i + 1] - center
 
-            assert _dleft > 0
-            assert _dright > 0
-            _min = center - 0.5 * _dleft
-            _max = center + 0.5 * _dright
+        assert _dleft > 0
+        assert _dright > 0
+        _min = center - 0.5 * _dleft
+        _max = center + 0.5 * _dright
 
         print(f"Allowed center range for component {i}: [{_min}, {center}, {_max}]")
 
