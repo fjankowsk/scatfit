@@ -613,6 +613,14 @@ def plot_fluence_scaling(t_df, params):
 
     df = t_df.copy()
 
+    # switch between ghz and mhz
+    if df["cfreq"] > 1000.0:
+        fact = 1e-3
+        xlabel = "Frequency (GHz)"
+    else:
+        fact = 1
+        xlabel = "Frequency (MHz)"
+
     fig = plt.figure()
     ax = fig.add_subplot()
 
@@ -620,7 +628,7 @@ def plot_fluence_scaling(t_df, params):
         prefix = f"c{icomp}_"
 
         ax.errorbar(
-            x=1e-3 * df["cfreq"],
+            x=fact * df["cfreq"],
             y=df[f"{prefix}fluence"],
             yerr=df[f"{prefix}err_fluence"],
             fmt="o",
@@ -630,8 +638,15 @@ def plot_fluence_scaling(t_df, params):
 
     ax.grid()
     ax.legend(loc="best")
-    ax.set_xlabel("Frequency (GHz)")
+    ax.set_xlabel(xlabel)
     ax.set_ylabel("Fluence")
+    ax.set_xscale("log")
+    ax.set_yscale("log")
+
+    sfor = FormatStrFormatter("%g")
+    ax.xaxis.set_major_formatter(sfor)
+    ax.xaxis.set_minor_formatter(sfor)
+    ax.yaxis.set_major_formatter(sfor)
 
     fig.tight_layout()
 
