@@ -391,6 +391,11 @@ def compute_updated_dm(t_df, dm, prefix, params):
         The prefix for the component selection.
     params: dict
         Additional parameters that affect the processing.
+
+    Returns
+    -------
+    updated_dm: dict
+        The updated DM.
     """
 
     df = t_df.copy()
@@ -450,6 +455,8 @@ def compute_updated_dm(t_df, dm, prefix, params):
             prefix.rstrip("_").upper(), updated_dm["value"], updated_dm["error"]
         )
     )
+
+    return updated_dm
 
 
 def fit_profile_model(fit_range, profile, smodel, params):
@@ -966,11 +973,25 @@ def main():
     # compute updated dm
     if len(fit_df.index) >= 2:
         print("\nUpdated DM")
+        _dms = []
+        _err_dms = []
         for icomp in range(len(params["center"])):
             prefix = f"c{icomp}_"
 
             plotting.plot_center_scaling(fit_df, prefix, params)
-            compute_updated_dm(fit_df, args.dm, prefix, params)
+            _res = compute_updated_dm(fit_df, args.dm, prefix, params)
+            _dms.append(_res["value"])
+            _err_dms.append(_res["error"])
+
+        _dms = np.array(_dms)
+        _weights = 1.0 / np.array(_err_dms) ** 2
+        _wmean = np.average(_dms, weights=_weights)
+        _err_wmean = np.sqrt(1.0 / np.sum(_weights))
+        print(
+            "\nWeighted mean DM over {0} profile components: {1} +- {2}".format(
+                len(params["center"]), _wmean, _err_wmean
+            )
+        )
 
     # spectral index
     plotting.plot_fluence_scaling(fit_df, params)
