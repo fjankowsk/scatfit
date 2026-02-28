@@ -495,19 +495,40 @@ def fit_profile_model(fit_range, profile, smodel, params):
         model = Model(scat_model, prefix=prefix)
 
         model.set_param_hint(f"{prefix}fluence", value=5.0, min=0.1)
+
+        # enforce increasing order of the centers
+        _offset = 40.0
+        if len(params["center"]) == 1:
+            # single component
+            _min = center - _offset
+            _max = center + _offset
+        else:
+            if i == 0:
+                # first component
+                _dleft = _offset
+                _dright = params["center"][i + 1] - center
+            elif i == len(params["center"]) - 1:
+                # last component
+                _dleft = center - params["center"][i - 1]
+                _dright = _offset
+            else:
+                # middle component
+                _dleft = center - params["center"][i - 1]
+                _dright = params["center"][i + 1] - center
+
+            assert _dleft > 0
+            assert _dright > 0
+            _min = center - 0.5 * _dleft
+            _max = center + 0.5 * _dright
+
+        print(f"Allowed center range for component {i}: [{_min}, {center}, {_max}]")
+
         model.set_param_hint(
             f"{prefix}center",
             value=center,
-            min=center - 20.0,
-            max=center + 20.0,
+            min=_min,
+            max=_max,
         )
-
-        # enforce increasing order of the centers
-        if i > 0:
-            _delta = center - params["center"][i - 1]
-            assert _delta > 0
-            model.set_param_hint(f"c{i}_off", value=_delta, min=params["tsamp"])
-            model.set_param_hint(f"{prefix}center", expr=f"c{i-1}_center + c{i}_off")
 
         # set the minimum to the sampling time of the data
         model.set_param_hint(f"{prefix}sigma", value=1.5, min=params["tsamp"], max=20.0)
