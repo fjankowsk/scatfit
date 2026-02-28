@@ -984,11 +984,18 @@ def main():
             _err_dms.append(_res["error"])
 
         _dms = np.array(_dms)
+        _mean = np.mean(_dms)
+        _err_mean = np.std(_dms, ddof=1) / np.sqrt(len(_dms))
+        print(
+            "\nMean DM over {0} profile components: {1:.4f} +- {2:.4f} pc cm^-3".format(
+                len(params["center"]), _mean, _err_mean
+            )
+        )
         _weights = 1.0 / np.array(_err_dms) ** 2
         _wmean = np.average(_dms, weights=_weights)
         _err_wmean = np.sqrt(1.0 / np.sum(_weights))
         print(
-            "\nWeighted mean DM over {0} profile components: {1:.4f} +- {2:.4f} pc cm^-3".format(
+            "Error-weighted mean DM over {0} profile components: {1:.4f} +- {2:.4f} pc cm^-3".format(
                 len(params["center"]), _wmean, _err_wmean
             )
         )
