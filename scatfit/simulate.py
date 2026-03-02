@@ -48,7 +48,7 @@ class Pulse(object):
         # noise
         self.sigma_noise = 0.1
 
-    def add_component(self, fluence, center, sigma):
+    def add_component(self, fluence, center, sigma, spectral_index=-1.5):
         """
         Add a profile component.
 
@@ -60,11 +60,13 @@ class Pulse(object):
             The ToA centre at the highest frequency in ms.
         sigma: float
             The Gaussian standard deviation in ms.
+        spectral_index: float
+            The fluence spectral index.
         """
 
         self.ncomponent += 1
 
-        self.spectral_index.append(self.spectral_index[0])
+        self.spectral_index.append(spectral_index)
         self.fluence_1ghz.append(fluence)
 
         self.sigma.append(sigma)
