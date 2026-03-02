@@ -128,7 +128,7 @@ class Pulse(object):
                     center = self.toa_highest_freq[icomp]
                     taus = self.taus_1ghz[icomp] * (jfreq / 1000.0) ** self.scatindex
                     print(
-                        f"Component, cfreq, subfreq, fluence, center, taus: {icomp}, {ifreq:.2f} MHz, {jfreq:.2f} MHz, {fluence:.2f} a.u., {center:.2f} ms, {taus:.2f} ms"
+                        f"Component, cfreq, fluence, center, taus: {icomp}, {ifreq:.2f} MHz, {fluence:.2f} a.u., {center:.2f} ms, {taus:.2f} ms"
                     )
                     mean_profile[:] += pulsemodels.scattered_profile(
                         times, fluence, center, self.sigma[icomp], taus, self.dc[icomp]
