@@ -13,7 +13,7 @@ import scatfit.pulsemodels as pulsemodels
 
 
 class Pulse(object):
-    def __init__(self, dm, sigma, taus_1ghz, scatindex=-4.0):
+    def __init__(self, dm, sigma, taus_1ghz, scatindex=-4.0, spectral_index=-1.5):
         """
         A scattered pulse.
 
@@ -27,6 +27,8 @@ class Pulse(object):
             The scattering time at 1 GHz.
         scatindex: float
             The scattering power law index.
+        spectral_index: float
+            The fluence spectral index.
         """
 
         # number of pulse components
@@ -35,7 +37,7 @@ class Pulse(object):
         self.dm = dm
         self.dm_index = -2.0
         self.scatindex = scatindex
-        self.spectral_index = [-1.5]
+        self.spectral_index = [spectral_index]
         self.fluence_1ghz = [10.0]
         # ms
         self.sigma = [sigma]
