@@ -142,7 +142,7 @@ class Pulse(object):
                     * (ifreq**self.dm_index - freqs[0] ** self.dm_index)
                 )
                 # disperse
-                _dm_shift_int = int(np.round(dm_shift))
+                _dm_shift_int = int(np.round(dm_shift / instrument.tsamp))
                 mean_profile = np.roll(mean_profile, _dm_shift_int)
 
             # incoherent dedispersion
