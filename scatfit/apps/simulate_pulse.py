@@ -69,6 +69,22 @@ def main():
 
     pulse.write_to_sigproc_file("test_fake_meerkat_two_component.fil")
 
+    # three component pulse
+    # nenufar
+    pulse = Pulse(dm=10.0, sigma=4.0, taus_1ghz=1.0)
+    instrument = NenuFAR()
+
+    # add second pulse component
+    pulse.add_component(fluence=2.0, center=140.0, sigma=4.0)
+
+    # add third pulse component
+    pulse.add_component(fluence=6.0, center=170.0, sigma=6.0)
+
+    pulse.generate_data(instrument, osfact=64)
+    pulse.plot_data(pulse.data)
+
+    pulse.write_to_sigproc_file("test_fake_nenufar_three_component.fil")
+
     plt.show()
 
 
