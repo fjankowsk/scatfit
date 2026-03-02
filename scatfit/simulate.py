@@ -123,10 +123,10 @@ class Pulse(object):
                 for icomp in range(self.ncomponent):
                     fluence = (
                         self.fluence_1ghz[icomp]
-                        * (jfreq / 1000.0) ** self.spectral_index[icomp]
+                        * (ifreq / 1000.0) ** self.spectral_index[icomp]
                     )
                     center = self.toa_highest_freq[icomp]
-                    taus = self.taus_1ghz[icomp] * (jfreq / 1000.0) ** self.scatindex
+                    taus = self.taus_1ghz[icomp] * (ifreq / 1000.0) ** self.scatindex
                     print(
                         f"Component, cfreq, fluence, center, taus: {icomp}, {ifreq:.2f} MHz, {fluence:.2f} a.u., {center:.2f} ms, {taus:.2f} ms"
                     )
@@ -440,7 +440,7 @@ class NenuFAR(Instrument):
 
         # ms
         self.tsamp = 0.65536
-        self.time_range = 400000.0
+        self.time_range = 50000.0
         # mhz
         self.fch1 = 73.73046875  # centre frequency of first channel
         self.bandwidth = -37.5
