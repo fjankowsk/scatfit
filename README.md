@@ -6,6 +6,7 @@
 [![License - MIT](https://img.shields.io/pypi/l/scatfit.svg)](https://github.com/fjankowsk/scatfit/blob/master/LICENSE)
 [![Paper link](https://img.shields.io/badge/paper-10.1093/mnras/stad2041-blue.svg)](https://doi.org/10.1093/mnras/stad2041)
 [![arXiv link](https://img.shields.io/badge/arXiv-2302.10107-blue.svg)](https://arxiv.org/abs/2302.10107)
+[![ascl:2208.003](https://img.shields.io/badge/ascl-2208.003-blue.svg?colorB=262255)](https://ascl.net/2208.003)
 
 This repository contains code to fit fast radio burst (FRB) or pulsar profiles to measure scattering and other parameters. The code is mainly developed for Python 3 from version 3.8 onwards.
 
