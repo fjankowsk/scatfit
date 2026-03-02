@@ -415,9 +415,22 @@ def plot_profile_fit(
     )
 
 
-def plot_width_scaling(t_df, cand, fitresult, params):
+def plot_width_scaling(t_df, cand, fitresult, params, allcomp):
     """
     Plot the scaling of fitted widths with frequency.
+
+    Parameters
+    ----------
+    t_df: ~pd.DataFrame
+        The fit results as a DataFrame.
+    cand: ~mtcutils.Candidate
+        The candidate FRB or pulsar data.
+    fitresult: dict
+        The result object from the fit.
+    params: dict
+        Additional parameters that affect the processing.
+    allcomp: bool
+        Plot the intrinsic width scaling for all profile components.
     """
 
     df = t_df.copy()
@@ -490,6 +503,29 @@ def plot_width_scaling(t_df, cand, fitresult, params):
         zorder=6,
         label=r"$\mathrm{W}_\mathrm{10i}$ (c0)",
     )
+
+    # other profile components
+    if allcomp and len(params["center"]) > 1:
+        for icomp in range(len(params["center"])):
+            prefix = f"c{icomp}_"
+
+            ax.errorbar(
+                x=fact * df["cfreq"],
+                y=df[f"{prefix}_w50i"],
+                yerr=df[f"{prefix}_err_w50i"],
+                fmt="o",
+                zorder=7,
+                label=r"$\mathrm{W}_\mathrm{50i}$" + f" (c{icomp})",
+            )
+
+            ax.errorbar(
+                x=fact * df["cfreq"],
+                y=df[f"{prefix}_w10i"],
+                yerr=df[f"{prefix}_err_w10i"],
+                fmt="+",
+                zorder=6,
+                label=r"$\mathrm{W}_\mathrm{10i}$" + f" (c{icomp})",
+            )
 
     # scattering time measured from profile fit
     # we assume that all profile component experience the same scattering
@@ -573,7 +609,12 @@ def plot_width_scaling(t_df, cand, fitresult, params):
 
     fig.tight_layout()
 
-    fig.savefig("width_scaling.pdf", bbox_inches="tight", dpi=params["dpi"])
+    if allcomp:
+        filename = "width_scaling_allcomp.pdf"
+    else:
+        filename = "width_scaling.pdf"
+
+    fig.savefig(filename, bbox_inches="tight", dpi=params["dpi"])
 
 
 def plot_center_scaling(t_df, prefix, params):
