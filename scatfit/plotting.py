@@ -506,13 +506,13 @@ def plot_width_scaling(t_df, cand, fitresult, params, allcomp):
 
     # other profile components
     if allcomp and len(params["center"]) > 1:
-        for icomp in range(len(params["center"])):
+        for icomp in range(1, len(params["center"])):
             prefix = f"c{icomp}_"
 
             ax.errorbar(
                 x=fact * df["cfreq"],
-                y=df[f"{prefix}_w50i"],
-                yerr=df[f"{prefix}_err_w50i"],
+                y=df[f"{prefix}w50i"],
+                yerr=df[f"{prefix}err_w50i"],
                 fmt="o",
                 zorder=7,
                 label=r"$\mathrm{W}_\mathrm{50i}$" + f" (c{icomp})",
@@ -520,8 +520,8 @@ def plot_width_scaling(t_df, cand, fitresult, params, allcomp):
 
             ax.errorbar(
                 x=fact * df["cfreq"],
-                y=df[f"{prefix}_w10i"],
-                yerr=df[f"{prefix}_err_w10i"],
+                y=df[f"{prefix}w10i"],
+                yerr=df[f"{prefix}err_w10i"],
                 fmt="+",
                 zorder=6,
                 label=r"$\mathrm{W}_\mathrm{10i}$" + f" (c{icomp})",
