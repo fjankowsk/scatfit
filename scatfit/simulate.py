@@ -106,50 +106,87 @@ class Pulse(object):
         times = np.copy(instrument.times)
         foff = np.copy(instrument.foff)
         data = np.zeros(shape=(len(freqs), len(times)), dtype=np.float64)
-        temp = np.zeros(shape=(osfact, len(times)), dtype=np.float64)
+        mean_profile = np.zeros(len(times), dtype=np.float64)
+        temp_inco = np.zeros(shape=(osfact, len(times)), dtype=np.float64)
 
         rng = np.random.default_rng(seed=42)
 
         for i, ifreq in enumerate(freqs):
-            temp[:, :] = 0
-            top_freq = ifreq - 0.5 * foff
-            bot_freq = ifreq + 0.5 * foff
-            sub_foff = foff / float(osfact)
-            subfreqs = np.linspace(
-                top_freq + 0.5 * sub_foff, bot_freq - 0.5 * sub_foff, num=osfact
-            )
-
-            for j, jfreq in enumerate(subfreqs):
-                dm_shift = (
-                    1.0e3
-                    * KDM
-                    * self.dm
-                    * (jfreq**self.dm_index - freqs[0] ** self.dm_index)
-                )
-
+            # coherent dedispersion
+            # for coherent dedispersion, we need to straighten the signal in each frequency channel
+            # for coherent dedispersion, create the data at zero dm, i.e.
+            # centre = 0 and the channel centre frequencies (do not oversample).
+            # then we shift/roll the data by the appropriate amount to disperse the pulse.
+            if instrument.coherent:
                 # add all pulse components
+                mean_profile[:] = 0
                 for icomp in range(self.ncomponent):
                     fluence = (
                         self.fluence_1ghz[icomp]
                         * (jfreq / 1000.0) ** self.spectral_index[icomp]
                     )
-                    center = self.toa_highest_freq[icomp] + dm_shift
+                    center = self.toa_highest_freq[icomp]
                     taus = self.taus_1ghz[icomp] * (jfreq / 1000.0) ** self.scatindex
                     print(
                         f"Component, cfreq, subfreq, fluence, center, taus: {icomp}, {ifreq:.2f} MHz, {jfreq:.2f} MHz, {fluence:.2f} a.u., {center:.2f} ms, {taus:.2f} ms"
                     )
-                    temp[j, :] += pulsemodels.scattered_profile(
+                    mean_profile[:] += pulsemodels.scattered_profile(
                         times, fluence, center, self.sigma[icomp], taus, self.dc[icomp]
                     )
 
-            # this is for incoherent dedispersion only. for coherent dedispersion, we need
-            # to straighten the signal in each frequency channel before averaging
-            # XXX: for coherent dedispersion, create the data at zero dm, i.e.
-            # centre = 0 and the channel centre frequencies (do not oversample).
-            # then shift/roll the data by the appropriate amount to disperse the pulse.
-            mean_profile = np.mean(temp, axis=0)
+                # dm shift at band centre
+                dm_shift = (
+                    1.0e3
+                    * KDM
+                    * self.dm
+                    * (ifreq**self.dm_index - freqs[0] ** self.dm_index)
+                )
+                # disperse
+                _dm_shift_int = int(np.round(dm_shift))
+                mean_profile = np.roll(mean_profile, _dm_shift_int)
+
+            # incoherent dedispersion
+            else:
+                temp_inco[:, :] = 0
+                top_freq = ifreq - 0.5 * foff
+                bot_freq = ifreq + 0.5 * foff
+                sub_foff = foff / float(osfact)
+                subfreqs = np.linspace(
+                    top_freq + 0.5 * sub_foff, bot_freq - 0.5 * sub_foff, num=osfact
+                )
+                for j, jfreq in enumerate(subfreqs):
+                    dm_shift = (
+                        1.0e3
+                        * KDM
+                        * self.dm
+                        * (jfreq**self.dm_index - freqs[0] ** self.dm_index)
+                    )
+                    # add all pulse components
+                    for icomp in range(self.ncomponent):
+                        fluence = (
+                            self.fluence_1ghz[icomp]
+                            * (jfreq / 1000.0) ** self.spectral_index[icomp]
+                        )
+                        center = self.toa_highest_freq[icomp] + dm_shift
+                        taus = (
+                            self.taus_1ghz[icomp] * (jfreq / 1000.0) ** self.scatindex
+                        )
+                        print(
+                            f"Component, cfreq, subfreq, fluence, center, taus: {icomp}, {ifreq:.2f} MHz, {jfreq:.2f} MHz, {fluence:.2f} a.u., {center:.2f} ms, {taus:.2f} ms"
+                        )
+                        temp_inco[j, :] += pulsemodels.scattered_profile(
+                            times,
+                            fluence,
+                            center,
+                            self.sigma[icomp],
+                            taus,
+                            self.dc[icomp],
+                        )
+
+                mean_profile = np.mean(temp_inco, axis=0)
 
             # add some gaussian radiometer noise
+            assert mean_profile.shape[0] == len(times)
             noise = rng.normal(loc=0.0, scale=self.sigma_noise, size=len(times))
             data[i, :] = mean_profile + noise
 
