@@ -71,7 +71,7 @@ def main():
 
     # three component pulse
     # nenufar
-    pulse = Pulse(dm=10.0, sigma=4.0, taus_1ghz=1.0)
+    pulse = Pulse(dm=10.0, sigma=4.0, taus_1ghz=1.5, scatindex=-0.25)
     instrument = NenuFAR()
 
     # add second pulse component
