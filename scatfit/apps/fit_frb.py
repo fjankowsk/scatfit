@@ -973,32 +973,32 @@ def main():
     # compute updated dm
     if len(fit_df.index) >= 2:
         print("\nUpdated DM")
-        _dms = []
-        _err_dms = []
+        _dms = {"value": [], "error": []}
         for icomp in range(len(params["center"])):
             prefix = f"c{icomp}_"
-
             plotting.plot_center_scaling(fit_df, prefix, params)
             _res = compute_updated_dm(fit_df, args.dm, prefix, params)
-            _dms.append(_res["value"])
-            _err_dms.append(_res["error"])
+            _dms["value"].append(_res["value"])
+            _dms["error"].append(_res["error"])
 
-        _dms = np.array(_dms)
-        _mean = np.mean(_dms)
-        _err_mean = np.std(_dms, ddof=1) / np.sqrt(len(_dms))
-        print(
-            "\nMean DM over {0} profile components: {1:.4f} +- {2:.4f} pc cm^-3".format(
-                len(params["center"]), _mean, _err_mean
+        if len(params["center"]) > 1:
+            _dms["value"] = np.array(_dms["value"])
+            _dms["error"] = np.array(_dms["error"])
+            _mean = np.mean(_dms["value"])
+            _err_mean = np.std(_dms["value"], ddof=1) / np.sqrt(len(_dms["value"]))
+            print(
+                "\nMean DM over {0} profile components: {1:.4f} +- {2:.4f} pc cm^-3".format(
+                    len(params["center"]), _mean, _err_mean
+                )
             )
-        )
-        _weights = 1.0 / np.array(_err_dms) ** 2
-        _wmean = np.average(_dms, weights=_weights)
-        _err_wmean = np.sqrt(1.0 / np.sum(_weights))
-        print(
-            "Error-weighted mean DM over {0} profile components: {1:.4f} +- {2:.4f} pc cm^-3".format(
-                len(params["center"]), _wmean, _err_wmean
+            _weights = 1.0 / _dms["error"] ** 2
+            _wmean = np.average(_dms["value"], weights=_weights)
+            _err_wmean = np.sqrt(1.0 / np.sum(_weights))
+            print(
+                "Error-weighted mean DM over {0} profile components: {1:.4f} +- {2:.4f} pc cm^-3".format(
+                    len(params["center"]), _wmean, _err_wmean
+                )
             )
-        )
 
     # spectral index
     plotting.plot_fluence_scaling(fit_df, params)
