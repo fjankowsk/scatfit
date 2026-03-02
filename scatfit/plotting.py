@@ -470,6 +470,27 @@ def plot_width_scaling(t_df, cand, fitresult, params):
         label=r"$\mathrm{W}_\mathrm{10p}$",
     )
 
+    # c0 component
+    ax.errorbar(
+        x=fact * df["cfreq"],
+        y=df["c0_w50i"],
+        yerr=df["c0_err_w50i"],
+        fmt="o",
+        color="black",
+        zorder=7,
+        label=r"$\mathrm{W}_\mathrm{50i}$ (c0)",
+    )
+
+    ax.errorbar(
+        x=fact * df["cfreq"],
+        y=df["c0_w10i"],
+        yerr=df["c0_err_w10i"],
+        fmt="+",
+        color="darkgrey",
+        zorder=6,
+        label=r"$\mathrm{W}_\mathrm{10i}$ (c0)",
+    )
+
     # scattering time measured from profile fit
     # we assume that all profile component experience the same scattering
     if "c0_taus" in df.columns:
