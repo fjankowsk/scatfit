@@ -48,7 +48,7 @@ def main():
     pulse.write_to_sigproc_file("test_fake_meerkat.fil")
 
     # nenufar
-    pulse = Pulse(dm=70.0, fluence=10.0, center=100.0, sigma=2.5, taus=0.01)
+    pulse = Pulse(dm=10.0, fluence=10.0, center=100.0, sigma=2.5, taus=0.01)
     instrument = NenuFAR()
 
     pulse.generate_data(instrument, osfact=32)
