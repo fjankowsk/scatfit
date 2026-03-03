@@ -96,7 +96,7 @@ def main():
 
     # add second pulse component
     pulse.add_component(
-        fluence=2.0, center=offset + 45.0, sigma=4.0, spectral_index=-0.3
+        fluence=2.0, center=offset + 40.0, sigma=4.0, spectral_index=-0.3
     )
 
     # add third pulse component
