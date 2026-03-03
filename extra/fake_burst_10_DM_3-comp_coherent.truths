@@ -1,0 +1,27 @@
+# general
+dm: 10.0
+taus_1ghz: 1.5
+scatindex: -0.25
+
+# component 0
+c0_fluence: 10.0
+c0_center: 0.0
+c0_sigma: 4.0
+c0_spectral_index: -0.5
+
+# component 1
+c1_fluence: 2.0
+c1_center: 40.0
+c1_sigma: 4.0
+c1_spectral_index: -0.3
+
+# component 2
+c2_fluence: 6.0
+c2_center: 70.0
+c2_sigma: 6.0
+c2_spectral_index: -0.7
+
+# default
+dm_index: -2.0
+dc: 0.0
+sigma_noise: 0.1
