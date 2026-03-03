@@ -51,7 +51,15 @@ def main():
     instrument = NenuFAR()
     # place the pulse start at 1/4 into the file
     offset = -0.25 * instrument.time_range
-    pulse = Pulse(dm=10.0, fluence=10.0, center=offset + 100.0, sigma=2.5, taus=0.01)
+    pulse = Pulse(
+        dm=10.0,
+        fluence=10.0,
+        center=offset + 100.0,
+        sigma=2.5,
+        taus=1.0,
+        scatindex=-0.5,
+        spectral_index=-0.5,
+    )
 
     pulse.generate_data(instrument, osfact=32)
     pulse.plot_data(pulse.data)
