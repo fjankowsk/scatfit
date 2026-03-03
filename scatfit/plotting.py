@@ -596,7 +596,14 @@ def plot_width_scaling(t_df, cand, fitresult, params, allcomp):
         )
 
     ax.grid()
-    ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.0), frameon=False, ncol=4)
+    ax.legend(
+        loc="lower center",
+        bbox_to_anchor=(0.5, 1.0),
+        frameon=False,
+        ncol=4,
+        columnspacing=0.5,
+        handletextpad=0.5,
+    )
     ax.set_xlabel(xlabel)
     ax.set_ylabel("Width (ms)")
     ax.set_xscale("log")
