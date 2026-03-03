@@ -120,3 +120,5 @@ The images below show some example output from the program obtained when fitting
 ![Correlations](https://github.com/fjankowsk/scatfit/raw/master/docs/corner.png "Correlations")
 
 ![Fit dynamic spectrum](https://github.com/fjankowsk/scatfit/raw/master/docs/fit_dynamic_spectrum.png "Fit dynamic spectrum")
+
+![Multi-component fit dynamic spectrum](https://github.com/fjankowsk/scatfit/raw/master/docs/multi-comp_fit_dynamic_spectrum.png "Multi-component fit dynamic spectrum")
