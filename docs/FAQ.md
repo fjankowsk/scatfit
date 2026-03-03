@@ -85,7 +85,7 @@ You can run `scatfit` non-interactively and quasi-automatically, e.g. as part of
 
 ## How do I fit multi-component profile bursts or pulses? ##
 
-Since version 0.5.0, `scatfit` has the functionality to fit multi-component bursts or pulses. You enable its multi-component mode by specifying the command-line option `--center` several times. The argument is the offset from the highest peak in the band-integrated profile in milliseconds. For instance, for a 3-component pulse in which the first (leftmost) profile component is the dominant one (located at 0.0 milliseconds by definition) and where the separations are 40 and 70 milliseconds from the leftmost component, use the following command:
+Since version 0.5.0, `scatfit` has the functionality to fit multi-component bursts or pulses. You enable its multi-component mode by specifying the command-line option `--center` several times. The argument is the offset from the highest peak in the band-integrated profile in milliseconds. For instance, for a 3-component pulse in which the first (leftmost) profile component is the dominant one (located at 0.0 milliseconds by definition) and where the separations are 40 and 70 milliseconds from the leftmost component, use the following command:  
 `$ scatfit-fitfrb filename 10.0 --fitrange -400 400 -z -100 150 --fscrunch 24 --center 0.0 --center 40.0 --center 70.0 --fitscatindex -o`
 
-This command also extends the `fitrange`, changes the `zoom` window, `fscrunch`es 24 frequency channels, fits the scattering index, and `output`s plots to PDF files.
+This command also demonstrates how to extend the `fitrange`, change the `zoom` window, `fscrunch` to 24 frequency channels, fit the scattering index, and `output` plots to PDF files.
