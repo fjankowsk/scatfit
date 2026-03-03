@@ -57,8 +57,10 @@ Further documentation of the software is available on our dedicated [Read the do
 
 ```console
 $ scatfit-fitfrb -h
-usage: scatfit-fitfrb [-h] [--binburst bin] [--fast] [--fitrange start end] [--fscrunch factor] [--tscrunch factor] [--norfi]
-                      [--smodel {unscattered,scattered_isotropic_analytic,scattered_isotropic_convolving,scattered_isotropic_bandintegrated,scattered_isotropic_afb_instrumental,scattered_isotropic_dfb_instrumental}] [--snr snr] [--compare] [--fitscatindex] [--showmodels] [--nodmsmearing] [-o] [--publish]
+usage: scatfit-fitfrb [-h] [--center value] [--binburst bin] [--fast] [--fitrange start end] [--fscrunch factor]
+                      [--tscrunch factor] [--norfi]
+                      [--smodel {unscattered,scattered_isotropic_analytic,scattered_isotropic_convolving,scattered_isotropic_bandintegrated,scattered_isotropic_afb_instrumental,scattered_isotropic_dfb_instrumental}]
+                      [--snr snr] [--compare] [--fitscatindex] [--showmodels] [--nodmsmearing] [-o] [--publish]
                       [-z start end]
                       filename dm
 
@@ -68,14 +70,20 @@ positional arguments:
   filename              The name of the input filterbank file.
   dm                    The dispersion measure of the FRB.
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
+  --center value        The center of the model component. Use several times to define multiple model components. The
+                        center values must be in increasing order. (default: [])
   --binburst bin        Specify the burst location bin manually. (default: None)
   --fast                Enable fast processing. This reduces the number of MCMC steps drastically. (default: False)
-  --fitrange start end  Consider only this time range of data in the fit. Increase the region for wide or highly-scattered bursts. Ensure that most of the scattering tail is included in the fit. (default: [-150.0, 150.0])
+  --fitrange start end  Consider only this time range of data in the fit. Increase the region for wide or highly-
+                        scattered bursts. Ensure that most of the scattering tail is included in the fit. (default:
+                        [-150.0, 150.0])
   --fscrunch factor     Integrate this many frequency channels. (default: 256)
   --tscrunch factor     Integrate this many time samples. (default: 1)
-  --norfi               Disable all internal RFI excision methods and use the input data as provided (aside from scaling). This is useful for synthetic input data or if you have cleaned the data already using external tools. (default: False)
+  --norfi               Disable all internal RFI excision methods and use the input data as provided (aside from
+                        scaling). This is useful for synthetic input data or if you have cleaned the data already using
+                        external tools. (default: False)
   --smodel {unscattered,scattered_isotropic_analytic,scattered_isotropic_convolving,scattered_isotropic_bandintegrated,scattered_isotropic_afb_instrumental,scattered_isotropic_dfb_instrumental}
                         Use the specified scattering model. (default: scattered_isotropic_analytic)
   --snr snr             Only consider sub-bands above this S/N threshold. (default: 10.0)
@@ -86,11 +94,11 @@ Additional analyses:
   --showmodels          Show comparison plot of implemented scattering models. (default: False)
 
 Output formatting:
-  --nodmsmearing        Do not show the DM smearing in the width scaling plot. This is useful for coherently dedispersed data. (default: False)
+  --nodmsmearing        Do not show the DM smearing in the width scaling plot. This is useful for coherently dedispersed
+                        data. (default: False)
   -o, --output          Output plots to file rather than to screen. (default: False)
   --publish             Output plots suitable for publication. (default: False)
-  -z start end, --zoom start end
-                        Zoom into this time region. (default: [-50.0, 50.0])
+  -z, --zoom start end  Zoom into this time region. (default: [-50.0, 50.0])
 ```
 
 ```console
@@ -99,7 +107,7 @@ usage: scatfit-simpulse [-h]
 
 Simulate scattered pulses.
 
-optional arguments:
+options:
   -h, --help  show this help message and exit
 ```
 
