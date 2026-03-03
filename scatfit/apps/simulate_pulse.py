@@ -39,8 +39,8 @@ def main():
 
     # single component pulse
     # meerkat l-band
-    pulse = Pulse(dm=500.0, fluence=10.0, center=100.0, sigma=2.5, taus=20.0)
     instrument = MeerKAT_Lband()
+    pulse = Pulse(dm=500.0, fluence=10.0, center=100.0, sigma=2.5, taus=20.0)
 
     pulse.generate_data(instrument, osfact=64)
     pulse.plot_data(pulse.data)
@@ -48,8 +48,10 @@ def main():
     pulse.write_to_sigproc_file("test_fake_meerkat.fil")
 
     # nenufar
-    pulse = Pulse(dm=10.0, fluence=10.0, center=100.0, sigma=2.5, taus=0.01)
     instrument = NenuFAR()
+    # place the pulse start at 1/4 into the file
+    offset = -0.25 * instrument.time_range
+    pulse = Pulse(dm=10.0, fluence=10.0, center=offset + 100.0, sigma=2.5, taus=0.01)
 
     pulse.generate_data(instrument, osfact=32)
     pulse.plot_data(pulse.data)
@@ -58,8 +60,8 @@ def main():
 
     # two component pulse
     # meerkat l-band
-    pulse = Pulse(dm=500.0, fluence=10.0, center=100.0, sigma=2.5, taus=20.0)
     instrument = MeerKAT_Lband()
+    pulse = Pulse(dm=500.0, fluence=10.0, center=100.0, sigma=2.5, taus=20.0)
 
     # add secondary pulse component
     pulse.add_component(fluence=3.0, center=120.0, sigma=3.5)
@@ -71,22 +73,28 @@ def main():
 
     # three component pulse
     # nenufar
+    instrument = NenuFAR()
+    # place the pulse start at 1/4 into the file
+    offset = -0.25 * instrument.time_range
     pulse = Pulse(
         dm=10.0,
         fluence=10.0,
-        center=-100.0,
+        center=offset + 0.0,
         sigma=4.0,
         taus=1.5,
         scatindex=-0.25,
         spectral_index=-0.5,
     )
-    instrument = NenuFAR()
 
     # add second pulse component
-    pulse.add_component(fluence=2.0, center=-60.0, sigma=4.0, spectral_index=-0.3)
+    pulse.add_component(
+        fluence=2.0, center=offset + 45.0, sigma=4.0, spectral_index=-0.3
+    )
 
     # add third pulse component
-    pulse.add_component(fluence=6.0, center=-30.0, sigma=6.0, spectral_index=-0.7)
+    pulse.add_component(
+        fluence=6.0, center=offset + 70.0, sigma=6.0, spectral_index=-0.7
+    )
 
     pulse.generate_data(instrument, osfact=64)
     pulse.plot_data(pulse.data)

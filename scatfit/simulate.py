@@ -448,7 +448,7 @@ class NenuFAR(Instrument):
 
         # ms
         self.tsamp = 0.65536
-        self.time_range = 50000.0
+        self.time_range = 40000.0
         # mhz
         self.fch1 = 73.73046875  # centre frequency of first channel
         self.bandwidth = -37.5
