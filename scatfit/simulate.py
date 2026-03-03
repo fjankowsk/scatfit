@@ -13,7 +13,9 @@ import scatfit.pulsemodels as pulsemodels
 
 
 class Pulse(object):
-    def __init__(self, dm, sigma, taus_1ghz, scatindex=-4.0, spectral_index=-1.5):
+    def __init__(
+        self, dm, center, sigma, taus_1ghz, scatindex=-4.0, spectral_index=-1.5
+    ):
         """
         A scattered pulse.
 
@@ -21,6 +23,8 @@ class Pulse(object):
         ----------
         dm: float
             The dispersion measure of the pulse.
+        center: float
+            The ToA centre at the highest frequency in ms.
         sigma: float
             The Gaussian standard deviation.
         tau_1ghz: float
@@ -41,7 +45,7 @@ class Pulse(object):
         self.fluence_1ghz = [10.0]
         # ms
         self.sigma = [sigma]
-        self.toa_highest_freq = [100.0]
+        self.toa_highest_freq = [center]
         self.taus_1ghz = [taus_1ghz]
         self.dc = [0.0]
 
