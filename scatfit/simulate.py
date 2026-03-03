@@ -14,7 +14,7 @@ import scatfit.pulsemodels as pulsemodels
 
 class Pulse(object):
     def __init__(
-        self, dm, center, sigma, taus_1ghz, scatindex=-4.0, spectral_index=-1.5
+        self, dm, fluence, center, sigma, taus, scatindex=-4.0, spectral_index=-1.5
     ):
         """
         A scattered pulse.
@@ -23,12 +23,14 @@ class Pulse(object):
         ----------
         dm: float
             The dispersion measure of the pulse.
+        fluence: float
+            The fluence at 1 GHz in arbitrary units.
         center: float
             The ToA centre at the highest frequency in ms.
         sigma: float
             The Gaussian standard deviation.
-        tau_1ghz: float
-            The scattering time at 1 GHz.
+        taus: float
+            The scattering time at 1 GHz in ms.
         scatindex: float
             The scattering power law index.
         spectral_index: float
@@ -42,11 +44,11 @@ class Pulse(object):
         self.dm_index = -2.0
         self.scatindex = scatindex
         self.spectral_index = [spectral_index]
-        self.fluence_1ghz = [10.0]
+        self.fluence_1ghz = [fluence]
         # ms
         self.sigma = [sigma]
         self.toa_highest_freq = [center]
-        self.taus_1ghz = [taus_1ghz]
+        self.taus_1ghz = [taus]
         self.dc = [0.0]
 
         # noise
@@ -59,7 +61,7 @@ class Pulse(object):
         Parameters
         ----------
         fluence: float
-            The fluence in arbitrary units.
+            The fluence at 1 GHz in arbitrary units.
         center: float
             The ToA centre at the highest frequency in ms.
         sigma: float

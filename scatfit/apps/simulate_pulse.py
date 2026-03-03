@@ -39,7 +39,7 @@ def main():
 
     # single component pulse
     # meerkat l-band
-    pulse = Pulse(dm=500.0, center=100.0, sigma=2.5, taus_1ghz=20.0)
+    pulse = Pulse(dm=500.0, fluence=10.0, center=100.0, sigma=2.5, taus=20.0)
     instrument = MeerKAT_Lband()
 
     pulse.generate_data(instrument, osfact=64)
@@ -48,7 +48,7 @@ def main():
     pulse.write_to_sigproc_file("test_fake_meerkat.fil")
 
     # nenufar
-    pulse = Pulse(dm=70.0, center=100.0, sigma=2.5, taus_1ghz=0.01)
+    pulse = Pulse(dm=70.0, fluence=10.0, center=100.0, sigma=2.5, taus=0.01)
     instrument = NenuFAR()
 
     pulse.generate_data(instrument, osfact=32)
@@ -58,7 +58,7 @@ def main():
 
     # two component pulse
     # meerkat l-band
-    pulse = Pulse(dm=500.0, center=100.0, sigma=2.5, taus_1ghz=20.0)
+    pulse = Pulse(dm=500.0, fluence=10.0, center=100.0, sigma=2.5, taus=20.0)
     instrument = MeerKAT_Lband()
 
     # add secondary pulse component
@@ -73,9 +73,10 @@ def main():
     # nenufar
     pulse = Pulse(
         dm=10.0,
+        fluence=10.0,
         center=-100.0,
         sigma=4.0,
-        taus_1ghz=1.5,
+        taus=1.5,
         scatindex=-0.25,
         spectral_index=-0.5,
     )
