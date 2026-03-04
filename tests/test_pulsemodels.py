@@ -10,12 +10,15 @@ def test_normalisation_gaussian():
     has the correct fluence.
     """
 
+    # XXX: remove this later
+    integrate = getattr(np, "trapezoid", np.trapz)
+
     plot_range = np.linspace(-400.0, 400.0, num=4000)
 
     for fluence in np.geomspace(0.1, 1000.0, num=10):
         for center in np.linspace(-100.0, 100.0, num=10):
             for sigma in np.geomspace(2.0, 50.0, num=10):
-                res = np.trapezoid(
+                res = integrate(
                     pulsemodels.gaussian_normed(plot_range, fluence, center, sigma),
                     x=plot_range,
                 )
@@ -29,6 +32,9 @@ def test_conservation_of_fluence():
     scattering.
     """
 
+    # XXX: remove this later
+    integrate = getattr(np, "trapezoid", np.trapz)
+
     plot_range = np.linspace(-1000.0, 1000.0, num=8000)
 
     sigma = 2.5
@@ -40,7 +46,7 @@ def test_conservation_of_fluence():
         for fluence in np.geomspace(0.1, 1000.0, num=10):
             for center in np.linspace(-100.0, 100.0, num=10):
                 for taus in np.geomspace(3.0, 50.0, num=10):
-                    res = np.trapezoid(
+                    res = integrate(
                         model(plot_range, fluence, center, sigma, taus, dc),
                         x=plot_range,
                     )
@@ -53,6 +59,9 @@ def test_agreement_analytical_and_full_convolution_model():
     Check that the analytical model agrees with the full numerical
     convolution model.
     """
+
+    # XXX: remove this later
+    integrate = getattr(np, "trapezoid", np.trapz)
 
     plot_range = np.linspace(-1000.0, 1000.0, num=8000)
 
@@ -73,8 +82,8 @@ def test_agreement_analytical_and_full_convolution_model():
                     )
 
                     # ensure that the energy, i.e. fluence, is the same
-                    fluence_full = np.trapezoid(curve_full, x=plot_range)
-                    fluence_analytical = np.trapezoid(curve_analytical, x=plot_range)
+                    fluence_full = integrate(curve_full, x=plot_range)
+                    fluence_analytical = integrate(curve_analytical, x=plot_range)
 
                     rel_error = np.abs(fluence_analytical - fluence_full) / fluence_full
                     assert rel_error < 0.01
