@@ -15,7 +15,7 @@ def test_normalisation_gaussian():
     for fluence in np.geomspace(0.1, 1000.0, num=10):
         for center in np.linspace(-100.0, 100.0, num=10):
             for sigma in np.geomspace(2.0, 50.0, num=10):
-                res = np.trapz(
+                res = np.trapezoid(
                     pulsemodels.gaussian_normed(plot_range, fluence, center, sigma),
                     x=plot_range,
                 )
@@ -40,7 +40,7 @@ def test_conservation_of_fluence():
         for fluence in np.geomspace(0.1, 1000.0, num=10):
             for center in np.linspace(-100.0, 100.0, num=10):
                 for taus in np.geomspace(3.0, 50.0, num=10):
-                    res = np.trapz(
+                    res = np.trapezoid(
                         model(plot_range, fluence, center, sigma, taus, dc),
                         x=plot_range,
                     )
@@ -73,8 +73,8 @@ def test_agreement_analytical_and_full_convolution_model():
                     )
 
                     # ensure that the energy, i.e. fluence, is the same
-                    fluence_full = np.trapz(curve_full, x=plot_range)
-                    fluence_analytical = np.trapz(curve_analytical, x=plot_range)
+                    fluence_full = np.trapezoid(curve_full, x=plot_range)
+                    fluence_analytical = np.trapezoid(curve_analytical, x=plot_range)
 
                     rel_error = np.abs(fluence_analytical - fluence_full) / fluence_full
                     assert rel_error < 0.01
