@@ -1,6 +1,6 @@
 #
 #   Simulate scattered pulses.
-#   2022 - 2025 Fabian Jankowski
+#   2022 - 2026 Fabian Jankowski
 #
 
 import argparse
