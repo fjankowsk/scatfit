@@ -8,7 +8,6 @@ import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FormatStrFormatter
 import numpy as np
-from lmfit import Model
 
 from scatfit.dm import get_dm_smearing
 import scatfit.pulsemodels as pulsemodels
