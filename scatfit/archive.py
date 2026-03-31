@@ -51,6 +51,8 @@ class Candidate(object):
         return arch
 
     def _load_data(self):
+        """Load data and place it in FT order"""
+        self._arch.tscrunch()
         self._arch.remove_baseline()
 
         # treat already dedispersed data
@@ -64,11 +66,16 @@ class Candidate(object):
                 self._arch.convert_state("Stokes")
                 assert self.state == "Stokes"
                 print("Converted the data to Stokes polarisation order.")
-            data = np.squeeze(self._arch.get_data())
-            data = data[0]
-        # total intensity
-        else:
-            data = np.squeeze(self._arch.get_data())
+
+        # order is subint, pol, chan, bin
+        # get subint 0, pol 0 data
+        data = self._arch.get_data()
+        data = data[0, 0, :, :]
+
+        assert data.shape == (
+            self.nchans,
+            self.nsamp,
+        )
 
         self._freqs = self._arch.get_frequencies()
 
