@@ -47,7 +47,7 @@ class Candidate(object):
         self._dispersion_shifts = np.zeros(self.nchans, dtype=int)
 
         if len(self.freqs) > 1:
-            assert np.isclose(np.diff(self.freqs)[0], self.foff)
+            assert np.allclose(np.diff(self.freqs), np.full_like(self.freqs, self.foff))
 
     def _load_arch(self):
         arch = ps.Archive_load(self._fname)
