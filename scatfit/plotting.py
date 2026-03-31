@@ -64,7 +64,7 @@ def plot_frb(cand, plot_range, profile, params):
 
     # plot dedispersed waterfall
     freqs = cand.freqs
-    chan_bw = np.diff(freqs)[0]
+    chan_bw = cand.foff
 
     quantiles = np.quantile(
         cand.dynspec,
@@ -175,7 +175,7 @@ def plot_frb_scat(
         axs[0].tick_params(axis="x", which="both", labelbottom=False)
 
         freqs = cand.freqs
-        chan_bw = np.diff(freqs)[0]
+        chan_bw = cand.foff
 
         axs[1].imshow(
             cand.dynspec,
@@ -435,7 +435,7 @@ def plot_width_scaling(t_df, cand, fitresult, params, allcomp):
     df = t_df.copy()
 
     freqs = cand.freqs
-    chan_bw = np.diff(freqs)[0]
+    chan_bw = cand.foff
 
     # switch between ghz and mhz
     if np.max(freqs) > 1000.0:

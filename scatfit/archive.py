@@ -46,6 +46,9 @@ class Candidate(object):
         self._dm = 0.0
         self._dispersion_shifts = np.zeros(self.nchans, dtype=int)
 
+        if len(self.freqs) > 1:
+            assert np.isclose(np.diff(self.freqs)[0], self.foff)
+
     def _load_arch(self):
         arch = ps.Archive_load(self._fname)
         return arch
