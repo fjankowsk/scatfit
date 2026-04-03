@@ -141,14 +141,14 @@ def plot_frb_scat(
 
         fitresult = fitresults[iband]
         axs[0].plot(
-            plot_range,
-            fitresult.eval(x=plot_range) - band,
+            fitresult.x,
+            fitresult.best_fit - band,
             color=color2[iband],
             lw=1.5,
             zorder=8,
         )
         axs[0].plot(
-            plot_range, sub_profile - band, color=color1[iband], lw=0.5, alpha=0.7
+            fitresult.x, fitresult.data - band, color=color1[iband], lw=0.5, alpha=0.7
         )
 
     yloc = -df["band"].to_numpy()
