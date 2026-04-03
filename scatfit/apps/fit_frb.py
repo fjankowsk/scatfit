@@ -720,8 +720,8 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, t_params):
     -------
     df: ~pd.DataFrame
         The fit results as a DataFrame.
-    fitresult: dict
-        The result object from the fit.
+    fitresult: list of dict
+        The result objects from the fit.
     """
 
     params = copy.deepcopy(t_params)
@@ -1039,9 +1039,8 @@ def main():
 
     plotting.plot_frb(cand, plot_range, profile, params)
 
-    plotting.plot_frb_scat(cand, fit_df, fit_results, plot_range, params, dynspec=True)
-
     plotting.plot_frb_scat(cand, fit_df, fit_results, plot_range, params, dynspec=False)
+    plotting.plot_frb_scat(cand, fit_df, fit_results, plot_range, params, dynspec=True)
 
     if not args.output:
         plt.show()
