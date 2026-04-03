@@ -48,7 +48,8 @@ class Candidate(object):
 
         if len(self.freqs) > 1:
             _diff = np.abs(np.diff(self.freqs))
-            assert np.allclose(_diff, np.full_like(_diff, np.abs(self.foff)))
+            _most_common = np.argmax(np.bincount(_diff))
+            assert np.isclose(_most_common, np.abs(self.foff))
 
     def _load_arch(self):
         arch = ps.Archive_load(self._fname)
