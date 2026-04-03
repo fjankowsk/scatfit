@@ -504,7 +504,7 @@ def fit_profile_model(fit_range, profile, smodel, params):
         model.set_param_hint(f"{prefix}fluence", value=5.0, min=0.1)
 
         # enforce increasing order of the centers
-        _offset = 40.0
+        _offset = 60.0
         if len(params["center"]) == 1:
             # single component
             _dleft = _offset
