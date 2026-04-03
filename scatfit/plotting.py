@@ -134,8 +134,8 @@ def plot_frb_scat(
 
     for iband, row in df.iterrows():
         band = int(row["band"])
-
         fitresult = fitresults[iband]
+
         axs[0].plot(
             fitresult.userkws["x"],
             fitresult.best_fit - band,
