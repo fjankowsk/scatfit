@@ -781,7 +781,12 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, t_params):
         params["cfreq"] = cfreq
         params["dm_smear"] = dm_smear
 
-        fitresult = fit_profile_model(fit_range, sub_profile, smodel, params)
+        try:
+            fitresult = fit_profile_model(fit_range, sub_profile, smodel, params)
+        except RuntimeError as _err:
+            print(f"Fit failed for sub-band: {iband}, {_err}")
+            continue
+
         fitresults.append(fitresult)
 
         # fit an unscattered model for comparison
