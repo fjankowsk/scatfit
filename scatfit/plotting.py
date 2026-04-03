@@ -100,23 +100,15 @@ def plot_frb(cand, plot_range, profile, params):
     fig.tight_layout()
 
 
-def plot_frb_scat(
-    cand,
-    df,
-    fitresults,
-    plot_range,
-    params,
-    cmap1="Greys",
-    cmap2="YlGnBu",
-    dynspec=True,
-):
+def plot_frb_scat(cand, df, fitresults, plot_range, params, dynspec):
     """
     Plot the dynamic spectrum and the sub-band profiles in a combined figure.
     """
 
-    cmap1 = plt.get_cmap(cmap1)
+    cmap1 = plt.get_cmap("Greys")
+    cmap2 = plt.get_cmap("YlGnBu")
+
     color1 = [cmap1((ii + 2) / (df.shape[0] + 2)) for ii in range(df.shape[0])]
-    cmap2 = plt.get_cmap(cmap2)
     color2 = [cmap2((ii + 2) / (df.shape[0] + 2)) for ii in range(df.shape[0])]
 
     # setup plot
