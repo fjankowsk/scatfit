@@ -119,7 +119,7 @@ def plot_frb_scat(
     cmap2 = plt.get_cmap(cmap2)
     color2 = [cmap2((ii + 2) / (df.shape[0] + 2)) for ii in range(df.shape[0])]
 
-    # setting up plot
+    # setup plot
     if dynspec:
         fig, axs = plt.subplots(
             figsize=(7, 7),
@@ -135,20 +135,20 @@ def plot_frb_scat(
     for iband, row in df.iterrows():
         band = int(row["band"])
 
-        sub_profile = cand.dynspec[band, :]
-        sub_profile = sub_profile - np.mean(sub_profile)
-        sub_profile = sub_profile / np.max(sub_profile)
-
         fitresult = fitresults[iband]
         axs[0].plot(
-            fitresult.x,
+            fitresult.userkws["x"],
             fitresult.best_fit - band,
             color=color2[iband],
             lw=1.5,
             zorder=8,
         )
         axs[0].plot(
-            fitresult.x, fitresult.data - band, color=color1[iband], lw=0.5, alpha=0.7
+            fitresult.userkws["x"],
+            fitresult.data - band,
+            color=color1[iband],
+            lw=0.5,
+            alpha=0.7,
         )
 
     yloc = -df["band"].to_numpy()
