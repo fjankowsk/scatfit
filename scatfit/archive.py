@@ -48,7 +48,8 @@ class Candidate(object):
 
         if len(self.freqs) > 1:
             _diff = np.abs(np.diff(self.freqs))
-            _most_common = np.argmax(np.bincount(_diff))
+            _uniq, counts = np.unique(_diff, return_counts=True)
+            _most_common = _uniq[np.argmax(counts)]
             assert np.isclose(_most_common, np.abs(self.foff))
 
     def _load_arch(self):
