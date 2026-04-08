@@ -742,18 +742,19 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, t_params):
         fit_range = np.copy(plot_range[mask])
         sub_profile = sub_profile[mask]
 
-        # remove baseline and normalise
-        sub_profile = sub_profile - np.mean(sub_profile)
-        sub_profile = sub_profile / np.max(sub_profile)
-
-        # compute baseline statistics outside the central +- 30 ms
+        # assume baseline outside the central +- 50 ms
         # XXX: we should adjust this based on the actual pulse width
-        mask_offp = np.abs(fit_range) > 30.0
+        mask_offp = np.abs(fit_range) > 50.0
         mask_onp = np.logical_not(mask_offp)
+
+        # remove baseline and normalise
+        sub_profile = sub_profile - np.mean(sub_profile[mask_offp])
+        sub_profile = sub_profile / np.max(sub_profile[mask_onp])
+
+        # compute s/n using boxcar equivalent width
         _std_offp = get_robust_std(sub_profile[mask_offp], axis=None)
         snr_peak = np.max(sub_profile[mask_onp]) / _std_offp
 
-        # compute s/n using boxcar equivalent width
         snr_weq = get_snr_weq(sub_profile[mask_onp], sub_profile[mask_offp])
         print(f"S/N peak, Weq: {snr_peak:.2f}, {snr_weq:.2f}")
 
