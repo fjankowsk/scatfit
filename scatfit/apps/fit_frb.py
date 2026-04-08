@@ -543,7 +543,7 @@ def fit_profile_model(fit_range, profile, smodel, params):
         arg_list = list(inspect.signature(scat_model).parameters.keys())
 
         if "taus" in arg_list:
-            model.set_param_hint(f"{prefix}taus", value=1.5, min=params["tsamp"])
+            model.set_param_hint(f"{prefix}taus", value=1.5, min=1.0e-6)
             # force taus to be the same for each component
             if i > 0:
                 model.set_param_hint(f"{prefix}taus", expr="c0_taus")
