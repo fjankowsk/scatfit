@@ -97,6 +97,17 @@ def parse_args():
     )
 
     parser.add_argument(
+        "-g",
+        "--gates",
+        dest="gates",
+        type=float,
+        nargs=2,
+        metavar=("start", "end"),
+        default=[-50.0, 50.0],
+        help="Time gates marking the on-pulse range. All data outside this range is considered baseline.",
+    )
+
+    parser.add_argument(
         "--tscrunch",
         dest="tscrunch_factor",
         default=1,
@@ -236,6 +247,15 @@ def check_args(args):
     else:
         print(
             "Fit range is invalid: {0}, {1}".format(args.fitrange[0], args.fitrange[1])
+        )
+        sys.exit(1)
+
+    # gates
+    if args.fitrange[0] < args.gates[0] < args.gates[1] < args.fitrange[1]:
+        pass
+    else:
+        print(
+            "On-pulse gates are invalid: {0}, {1}".format(args.gates[0], args.gates[1])
         )
         sys.exit(1)
 
@@ -742,10 +762,9 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, t_params):
         fit_range = np.copy(plot_range[mask])
         sub_profile = sub_profile[mask]
 
-        # assume baseline outside the central +- 50 ms
-        # XXX: we should adjust this based on the actual pulse width
-        mask_offp = np.abs(fit_range) > 50.0
-        mask_onp = np.logical_not(mask_offp)
+        # get on-pulse mask
+        mask_onp = (fit_range >= params["gates"][0]) & (fit_range <= params["gates"][1])
+        mask_offp = np.logical_not(mask_onp)
 
         # remove baseline and normalise
         sub_profile = sub_profile - np.mean(sub_profile[mask_offp])
@@ -882,6 +901,7 @@ def main():
         "dpi": 300,
         "fast": args.fast,
         "fitrange": args.fitrange,
+        "gates": args.gates,
         "nodmsmearing": args.nodmsmearing,
         "output": args.output,
         "publish": args.publish,
