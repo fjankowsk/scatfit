@@ -942,6 +942,7 @@ def main():
         )
 
     # band-integrated profile
+    # XXX: we should use the on-pulse mask here
     profile = np.sum(cand.dynspec, axis=0)
     profile = profile - np.mean(profile)
     profile = profile / np.max(profile)
