@@ -104,7 +104,7 @@ def parse_args():
         nargs=2,
         metavar=("start", "end"),
         default=[-50.0, 50.0],
-        help="Time gates marking the on-pulse range. All data outside this range is considered baseline.",
+        help="Gates marking the on-pulse time range in milliseconds. All data outside this range is considered baseline. Set the gates wide enough so that all emission components are included. +-20-30 ms on either side is enough for narrow FRBs. Wide pulsar profiles might require +-200 ms or more.",
     )
 
     parser.add_argument(
