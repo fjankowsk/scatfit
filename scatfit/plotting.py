@@ -320,6 +320,7 @@ def plot_profile_fit(
         gridspec_kw={"height_ratios": [1, 0.3], "hspace": 0},
     )
 
+    # data
     ax1.step(
         fit_range,
         sub_profile,
@@ -330,6 +331,7 @@ def plot_profile_fit(
         zorder=3,
     )
 
+    # fit
     if not params["publish"]:
         ax1.plot(
             fit_range,
@@ -349,7 +351,7 @@ def plot_profile_fit(
         zorder=8,
     )
 
-    # plot second fit
+    # second fit
     if fitresult2 is not None:
         ax1.plot(
             fit_range,
@@ -359,6 +361,11 @@ def plot_profile_fit(
             lw=2.0,
             zorder=6,
         )
+
+    # highlight on-pulse range
+    if not params["publish"]:
+        for item in params["gates"]:
+            ax1.axvline(x=item, color="tab:red", zorder=4)
 
     # show centre frequency and scattering time
     info_str = f"{cfreq:.0f} MHz"
