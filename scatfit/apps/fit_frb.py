@@ -942,26 +942,33 @@ def main():
         )
 
     # band-integrated profile
-    # XXX: we should use the on-pulse mask here
-    profile = np.sum(cand.dynspec, axis=0)
-    profile = profile - np.mean(profile)
-    profile = profile / np.max(profile)
+    _profile = np.sum(cand.dynspec, axis=0)
+    _profile = _profile - np.mean(_profile)
+    _profile = _profile / np.max(_profile)
 
     # sampling time in ms
     tsamp = 1000 * cand.tsamp * args.tscrunch_factor
     print(f"Sampling time: {tsamp:.5f} ms")
     params["tsamp"] = tsamp
 
-    plot_range = np.linspace(0, tsamp * len(profile), num=len(profile))
+    plot_range = np.linspace(0, tsamp * len(_profile), num=len(_profile))
 
     # centre on the burst
     if args.bin_burst is not None:
         bin_burst = args.bin_burst
     else:
-        bin_burst = np.argmax(profile)
+        bin_burst = np.argmax(_profile)
     plot_range -= tsamp * bin_burst
 
-    # fit integrated profile
+    # recompute band-integrated profile more accurately using the on-pulse mask
+    mask_onp = (plot_range >= params["gates"][0]) & (plot_range <= params["gates"][1])
+    mask_offp = np.logical_not(mask_onp)
+
+    profile = np.sum(cand.dynspec, axis=0)
+    profile = profile - np.mean(profile[mask_offp])
+    profile = profile / np.max(profile[mask_onp])
+
+    # fit data
     fit_df, fit_results = fit_profile(
         cand, plot_range, args.fscrunch_factor, args.smodel, params
     )
