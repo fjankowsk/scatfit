@@ -14,7 +14,7 @@ np.import_array()
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def gaussian_normed(
+cpdef gaussian_normed(
     const double[::1] x,
     double fluence,
     double center,
@@ -50,7 +50,7 @@ def gaussian_normed(
     cdef double invsqrt = 1.0 / cmath.sqrt(2.0 * cmath.M_PI)
     cdef double A = fluence * invsigma * invsqrt
 
-    res = np.zeros(N, dtype=np.double)
+    cdef np.ndarray[np.float64_t, ndim=1] res = np.zeros(N, dtype=np.double)
     cdef double[::1] res_view = res
 
     for i in range(N):
@@ -61,7 +61,7 @@ def gaussian_normed(
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def scattered_gaussian_pulse(
+cpdef scattered_gaussian_pulse(
     const double[::1] x,
     double fluence,
     double center,
@@ -112,7 +112,7 @@ def scattered_gaussian_pulse(
     cdef double invK = 1.0 / K
     cdef double invsqrt = 1.0 / cmath.sqrt(2.0)
 
-    res = np.zeros(N, dtype=np.double)
+    cdef np.ndarray[np.float64_t, ndim=1] res = np.zeros(N, dtype=np.double)
     cdef double[::1] res_view = res
 
     cdef double mu_gauss
@@ -152,7 +152,7 @@ def scattered_gaussian_pulse(
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def bandintegrated_model(
+cpdef bandintegrated_model(
     const double[::1] x,
     double fluence,
     double center,
@@ -228,7 +228,7 @@ def bandintegrated_model(
     cdef double delta = cmath.log10(f_hi) - cmath.log10(f_lo)
     cdef double step = cmath.pow(10.0, delta / (nfreq - 1.0))
 
-    profile = np.zeros(N, dtype=np.double)
+    cdef np.ndarray[np.float64_t, ndim=1] profile = np.zeros(N, dtype=np.double)
     cdef double[::1] profile_view = profile
 
     for i in range(nfreq):
