@@ -1,6 +1,6 @@
 #
 #   Pulse models implemented using Cython.
-#   2022 - 2025 Fabian Jankowski
+#   2022 - 2026 Fabian Jankowski
 #
 
 cimport cython
@@ -50,7 +50,7 @@ cpdef gaussian_normed(
     cdef double invsqrt = 1.0 / cmath.sqrt(2.0 * cmath.M_PI)
     cdef double A = fluence * invsigma * invsqrt
 
-    cdef np.ndarray[np.float64_t, ndim=1] res = np.zeros(N, dtype=np.double)
+    cdef np.ndarray[np.float64_t, ndim=1] res = np.empty(N, dtype=np.double)
     cdef double[::1] res_view = res
 
     for i in range(N):
@@ -112,7 +112,7 @@ cpdef scattered_gaussian_pulse(
     cdef double invK = 1.0 / K
     cdef double invsqrt = 1.0 / cmath.sqrt(2.0)
 
-    cdef np.ndarray[np.float64_t, ndim=1] res = np.zeros(N, dtype=np.double)
+    cdef np.ndarray[np.float64_t, ndim=1] res = np.empty(N, dtype=np.double)
     cdef double[::1] res_view = res
 
     cdef double mu_gauss
