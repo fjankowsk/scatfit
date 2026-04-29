@@ -545,7 +545,7 @@ def fit_profile_model(fit_range, profile, smodel, params):
 
         assert _dleft > 0
         assert _dright > 0
-        _overlap = 0.5
+        _overlap = 0.75
         _min = center - _overlap * _dleft
         _max = center + _overlap * _dright
 
