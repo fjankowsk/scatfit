@@ -545,8 +545,9 @@ def fit_profile_model(fit_range, profile, smodel, params):
 
         assert _dleft > 0
         assert _dright > 0
-        _min = center - 0.5 * _dleft
-        _max = center + 0.5 * _dright
+        _overlap = 0.75
+        _min = center - _overlap * _dleft
+        _max = center + _overlap * _dright
 
         print(f"Allowed center range for component {i}: [{_min}, {center}, {_max}]")
 
@@ -620,8 +621,8 @@ def fit_profile_model(fit_range, profile, smodel, params):
 
     print(fitresult_ml.fit_report())
 
-    # 100 * (5000 - 600)/10 = 44k samples
-    emcee_kws = dict(steps=5000, burn=600, thin=10, is_weighted=False, progress=True)
+    # 100 * (5000 - 1000)/10 = 40k samples
+    emcee_kws = dict(steps=5000, burn=1000, thin=10, is_weighted=False, progress=True)
 
     if params["fast"]:
         # 100 * (400 - 200)/1 = 20k samples
