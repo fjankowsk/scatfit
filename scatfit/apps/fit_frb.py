@@ -818,13 +818,21 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, t_params):
         else:
             fitresult2 = None
 
-        plotting.plot_profile_fit(
-            fit_range, sub_profile, fitresult, iband, cfreq, params, fitresult2
-        )
-
         # compute profile statistics
         widths_post = compute_post_widths(fit_range, fitresult)
 
+        plotting.plot_profile_fit(
+            fit_range,
+            sub_profile,
+            fitresult,
+            iband,
+            cfreq,
+            widths_post,
+            params,
+            fitresult2,
+        )
+
+        # save width data
         temp = pd.DataFrame(
             {
                 "band": iband,

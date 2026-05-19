@@ -307,7 +307,7 @@ def plot_profile_models(params):
 
 
 def plot_profile_fit(
-    fit_range, sub_profile, fitresult, iband, cfreq, params, fitresult2=None
+    fit_range, sub_profile, fitresult, iband, cfreq, widths, params, fitresult2=None
 ):
     """
     Plot the profile fit.
@@ -366,6 +366,17 @@ def plot_profile_fit(
     if not params["publish"]:
         for item in params["gates"]:
             ax1.axvline(x=item, color="tab:red", zorder=4)
+
+    # plot pulse widths
+    if not params["publish"]:
+        for item, color in zip(["weq", "w50p", "w10p"], ["C0", "C1", "C2"]):
+            ax1.axvspan(
+                -0.5 * widths[item]["value"],
+                0.5 * widths[item]["value"],
+                color=color,
+                zorder=2,
+                alpha=0.3,
+            )
 
     # show centre frequency and scattering time
     info_str = f"{cfreq:.0f} MHz"
