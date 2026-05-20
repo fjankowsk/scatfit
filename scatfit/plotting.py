@@ -369,13 +369,15 @@ def plot_profile_fit(
 
     # plot pulse widths
     if not params["publish"]:
-        for item, color in zip(["weq", "w50p", "w10p"], ["C0", "C1", "C2"]):
-            ax1.axvspan(
-                -0.5 * widths[item]["value"],
-                0.5 * widths[item]["value"],
-                color=color,
-                zorder=2,
-                alpha=0.3,
+        for item, color, yval in zip(
+            ["weq", "w50p", "w10p"], ["C0", "C1", "C2"], [0.3, 0.5, 0.1]
+        ):
+            ax1.annotate(
+                "",
+                xy=(-0.5 * widths[item]["value"], yval),
+                xytext=(0.5 * widths[item]["value"], yval),
+                arrowprops=dict(arrowstyle="<->", color=color, lw=2),
+                zorder=9,
             )
 
     # show centre frequency and scattering time
