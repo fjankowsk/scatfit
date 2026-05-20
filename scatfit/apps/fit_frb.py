@@ -845,6 +845,8 @@ def fit_profile(cand, plot_range, fscrunch_factor, smodel, t_params):
                 "err_w50p": widths_post["w50p"]["error"],
                 "w10p": widths_post["w10p"]["value"],
                 "err_w10p": widths_post["w10p"]["error"],
+                "wd4s": widths_post["wd4s"]["value"],
+                "err_wd4s": widths_post["wd4s"]["error"],
             },
             index=[iband],
         )
@@ -994,6 +996,8 @@ def main():
         "err_w50p",
         "w10p",
         "err_w10p",
+        "wd4s",
+        "err_wd4s",
     ]
     print("Entire profile")
     print(fit_df.to_string(columns=_columns))
