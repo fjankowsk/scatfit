@@ -379,7 +379,6 @@ def plot_profile_fit(
                 arrowprops=dict(
                     arrowstyle="|-|",
                     color=color,
-                    headwidth=10,
                     lw=2,
                     mutation_scale=0.75,
                 ),
