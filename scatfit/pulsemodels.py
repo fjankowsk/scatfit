@@ -249,6 +249,31 @@ def full_width_post(x, amp, level):
     return width
 
 
+def d4sigma_width(x, amp):
+    """
+    Compute the D4Sigma pulse width based on the second-order (variance) width.
+
+    Parameters
+    ----------
+    x: ~np.array
+        The running variable (time).
+    amp: ~np.array
+        The pulse amplitude.
+
+    Returns
+    -------
+    wd4s: float
+        The D4sigma pulse width.
+    """
+
+    power = np.sum(amp)
+    x_mean = np.sum(amp * x) / power
+    variance = np.sum(amp * (x - x_mean) ** 2) / power
+    wd4s = 4.0 * np.sqrt(variance)
+
+    return wd4s
+
+
 def pbf_isotropic(plot_range, taus):
     """
     A pulse broadening function for isotropic scattering.

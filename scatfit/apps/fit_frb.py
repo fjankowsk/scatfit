@@ -692,9 +692,10 @@ def compute_post_widths(fit_range, t_fitresult):
         weq_post = pulsemodels.equivalent_width(dense_range, amps)
         w50_post = pulsemodels.full_width_post(dense_range, amps, 0.5)
         w10_post = pulsemodels.full_width_post(dense_range, amps, 0.1)
+        wd4s_post = pulsemodels.d4sigma_width(dense_range, amps)
 
         temp = pd.DataFrame(
-            {"weq": weq_post, "w50p": w50_post, "w10p": w10_post},
+            {"weq": weq_post, "w50p": w50_post, "w10p": w10_post, "wd4s": wd4s_post},
             index=[idx],
         )
 
