@@ -371,7 +371,7 @@ def plot_profile_fit(
     if not params["publish"]:
         for item, color, yval in zip(
             ["weq", "w50p", "w10p", "wd4s"],
-            ["C0", "C1", "C2", "C3"],
+            ["C0", "C1", "C2", "C4"],
             [0.3, 0.5, 0.1, 0.2],
         ):
             ax1.annotate(
