@@ -380,7 +380,7 @@ def plot_profile_fit(
                     arrowstyle="|-|",
                     color=color,
                     lw=2,
-                    mutation_scale=10,
+                    mutation_scale=8,
                 ),
                 zorder=9,
             )
