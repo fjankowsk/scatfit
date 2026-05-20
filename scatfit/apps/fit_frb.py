@@ -559,7 +559,9 @@ def fit_profile_model(fit_range, profile, smodel, params):
         )
 
         # set the minimum to the sampling time of the data
-        model.set_param_hint(f"{prefix}sigma", value=1.5, min=params["tsamp"], max=50.0)
+        model.set_param_hint(
+            f"{prefix}sigma", value=1.5, min=params["tsamp"], max=100.0
+        )
 
         arg_list = list(inspect.signature(scat_model).parameters.keys())
 
