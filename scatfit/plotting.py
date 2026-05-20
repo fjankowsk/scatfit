@@ -509,6 +509,17 @@ def plot_width_scaling(t_df, cand, fitresult, params, allcomp):
         label=r"$\mathrm{W}_\mathrm{10p}$",
     )
 
+    ax.errorbar(
+        x=fact * df["cfreq"],
+        y=df["wd4s"],
+        yerr=df["err_wd4s"],
+        color="grey",
+        linestyle="none",
+        marker="3",
+        zorder=9,
+        label=r"$\mathrm{W}_\mathrm{d4s}$",
+    )
+
     # c0 component
     ax.errorbar(
         x=fact * df["cfreq"],
