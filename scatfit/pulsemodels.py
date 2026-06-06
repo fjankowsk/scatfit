@@ -266,9 +266,23 @@ def d4sigma_width(x, amp):
         The D4sigma pulse width.
     """
 
+    assert x.dtype == np.float64
+    assert amp.dtype == np.float64
+    assert np.all(np.isfinite(x))
+    assert np.all(np.isfinite(amp))
+
     power = np.sum(amp)
+    if power <= 0.0:
+        return np.nan
+
     x_mean = np.sum(amp * x) / power
-    variance = np.sum(amp * (x - x_mean) ** 2) / power
+
+    x_diff = x - x_mean
+    variance = np.sum(amp * x_diff**2) / power
+
+    if variance < 0.0:
+        variance = 0.0
+
     wd4s = 4.0 * np.sqrt(variance)
 
     return wd4s
