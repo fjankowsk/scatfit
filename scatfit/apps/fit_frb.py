@@ -710,6 +710,7 @@ def compute_post_widths(fit_range, t_fitresult):
     df = df.apply(pd.to_numeric)
 
     widths = {}
+    stepsize = np.abs(dense_range[1] - dense_range[0])
 
     for field in df.columns:
         quantiles = np.quantile(df[field], q=[0.16, 0.5, 0.84])
@@ -717,6 +718,10 @@ def compute_post_widths(fit_range, t_fitresult):
         error = np.maximum(
             np.abs(quantiles[1] - quantiles[0]), np.abs(quantiles[2] - quantiles[1])
         )
+
+        # avoid zero errors
+        if field in ["w50p", "w10p"]:
+            error = np.maximum(error, stepsize)
 
         widths[field] = {"value": quantiles[1], "error": error}
 
