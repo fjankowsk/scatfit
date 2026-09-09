@@ -342,6 +342,7 @@ def plot_profile_fit(
             zorder=6,
         )
 
+    # total model best fit
     ax1.plot(
         fit_range,
         fitresult.best_fit,
@@ -350,6 +351,19 @@ def plot_profile_fit(
         lw=2.0,
         zorder=8,
     )
+
+    # plot individual model components
+    _components = fitresult.eval_components(x=fit_range)
+
+    for _, comp_best_fit in _components.items():
+        ax1.plot(
+            fit_range,
+            comp_best_fit,
+            color="grey",
+            ls="solid",
+            lw=1.0,
+            zorder=7,
+        )
 
     # second fit
     if fitresult2 is not None:
