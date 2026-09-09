@@ -12,6 +12,15 @@ import numpy as np
 from scatfit.dm import get_dm_smearing
 import scatfit.pulsemodels as pulsemodels
 
+LATEXMAPPING = {
+    "__lnsigma": r"$\ln(\epsilon)$",
+    "fluence": "$F$",
+    "center": "$t_0$",
+    "sigma": r"$\sigma$",
+    "taus": r"$\tau_s$",
+    "dc": "$b$",
+}
+
 
 def use_custom_matplotlib_formatting():
     """
@@ -792,6 +801,11 @@ def plot_chains(fitresult_emcee, params):
     var_names = fitresult_emcee.var_names
     nvary = len(var_names)
 
+    for idx, name in enumerate(var_names):
+        for repl in LATEXMAPPING:
+            if name.endswith(repl):
+                var_names[idx] = var_names[idx].replace(repl, LATEXMAPPING[repl])
+
     fig, axs = plt.subplots(nrows=nvary, ncols=1, sharex=True, figsize=(8, 9))
 
     for i, name in enumerate(var_names):
@@ -856,19 +870,10 @@ def plot_corner(fitresult_emcee, fnlabel, params):
         show_titles = False
         smooth = True
 
-        mapping = {
-            "__lnsigma": r"$\ln(\epsilon)$",
-            "fluence": "$F$",
-            "center": "$t_0$",
-            "sigma": r"$\sigma$",
-            "taus": r"$\tau_s$",
-            "dc": "$b$",
-        }
-
         for idx, name in enumerate(var_names):
-            for repl in mapping:
+            for repl in LATEXMAPPING:
                 if name.endswith(repl):
-                    var_names[idx] = var_names[idx].replace(repl, mapping[repl])
+                    var_names[idx] = var_names[idx].replace(repl, LATEXMAPPING[repl])
 
     fig = corner.corner(
         samples,
