@@ -390,9 +390,10 @@ def plot_profile_fit(
     # show centre frequency and scattering time
     info_str = f"{cfreq:.0f} MHz"
 
-    if "taus" in fitresult.best_values:
+    # we assume that all profile component experience the same scattering
+    if "c0_taus" in fitresult.best_values:
         info_str += "\n" + "${0:.1f} \pm {1:.1f}$ ms".format(
-            fitresult.best_values["taus"], fitresult.params["taus"].stderr
+            fitresult.best_values["c0_taus"], fitresult.params["c0_taus"].stderr
         )
 
     ax1.text(
@@ -841,6 +842,7 @@ def plot_corner(fitresult_emcee, fnlabel, params):
         show_titles = False
         smooth = True
 
+        # XXX: adjust for multi-component mode
         mapping = {
             "__lnsigma": r"$\ln(\epsilon)$",
             "fluence": "$F$",
