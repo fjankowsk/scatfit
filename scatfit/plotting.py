@@ -856,7 +856,6 @@ def plot_corner(fitresult_emcee, fnlabel, params):
         show_titles = False
         smooth = True
 
-        # XXX: adjust for multi-component mode
         mapping = {
             "__lnsigma": r"$\ln(\epsilon)$",
             "fluence": "$F$",
