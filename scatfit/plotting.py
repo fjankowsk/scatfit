@@ -860,6 +860,12 @@ def plot_corner(fitresult_emcee, fnlabel, params):
     smooth = False
     var_names = fitresult_emcee.var_names
 
+    # beautify and shorten
+    for idx, name in enumerate(var_names):
+        for repl in LATEXMAPPING:
+            if name.endswith(repl):
+                var_names[idx] = var_names[idx].replace(repl, LATEXMAPPING[repl])
+
     if not params["fast"]:
         bins = 40
 
@@ -870,11 +876,6 @@ def plot_corner(fitresult_emcee, fnlabel, params):
         matplotlib.rcParams["font.size"] = 34.0
         show_titles = False
         smooth = True
-
-        for idx, name in enumerate(var_names):
-            for repl in LATEXMAPPING:
-                if name.endswith(repl):
-                    var_names[idx] = var_names[idx].replace(repl, LATEXMAPPING[repl])
 
     fig = corner.corner(
         samples,
