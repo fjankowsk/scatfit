@@ -274,7 +274,7 @@ def d4sigma_width(x, amp):
     # rectify
     amp = np.abs(amp)
     max_amp = np.max(amp)
-    _thresh = 0.02
+    _thresh = 0.01
     mask = amp >= _thresh * max_amp
     x_valid = x[mask]
     amp_valid = amp[mask]
