@@ -129,5 +129,12 @@ The images below show some example output from the program obtained when fitting
 
 ![Fit dynamic spectrum](https://github.com/fjankowsk/scatfit/raw/master/docs/fit_dynamic_spectrum.png "Fit dynamic spectrum")
 
-![Multi-component fit dynamic spectrum](https://github.com/fjankowsk/scatfit/raw/master/docs/multi-comp_fit_dynamic_spectrum.png "Multi-component fit dynamic spectrum")
+Example plots for the multi-component mode are the ones below.
 
+![Multi-component mode profile fit](https://github.com/fjankowsk/scatfit/raw/master/docs/multi-comp_profile_fit.png "Multi-component mode profile fit")
+
+![Multi-component mode dynamic spectrum](https://github.com/fjankowsk/scatfit/raw/master/docs/multi-comp_fit_dynamic_spectrum.png "Multi-component mode dynamic spectrum")
+
+![Multi-component mode width scaling](https://github.com/fjankowsk/scatfit/raw/master/docs/multi-comp_corner.png "Multi-component mode width scaling")
+
+![Multi-component mode corner plot](https://github.com/fjankowsk/scatfit/raw/master/docs/multi-comp_corner.png "Multi-component mode corner plot")
