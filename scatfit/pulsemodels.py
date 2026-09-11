@@ -271,14 +271,22 @@ def d4sigma_width(x, amp):
     assert np.all(np.isfinite(x))
     assert np.all(np.isfinite(amp))
 
-    power = np.sum(amp)
+    # rectify
+    amp = np.abs(amp)
+    max_amp = np.max(amp)
+    _thresh = 0.02
+    mask = amp >= _thresh * max_amp
+    x_valid = x[mask]
+    amp_valid = amp[mask]
+
+    power = np.sum(amp_valid)
     if power <= 0.0:
         return np.nan
 
-    x_mean = np.sum(amp * x) / power
+    x_mean = np.sum(amp_valid * x_valid) / power
 
-    x_diff = x - x_mean
-    variance = np.sum(amp * x_diff**2) / power
+    x_diff = x_valid - x_mean
+    variance = np.sum(amp_valid * x_diff**2) / power
 
     if variance < 0.0:
         variance = 0.0
