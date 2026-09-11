@@ -279,14 +279,14 @@ def d4sigma_width(x, amp):
     x_valid = x[mask]
     amp_valid = amp[mask]
 
-    power = np.sum(amp_valid)
-    if power <= 0.0:
+    energy = np.sum(amp_valid)
+    if energy <= 0.0:
         return np.nan
 
-    x_mean = np.sum(amp_valid * x_valid) / power
+    x_mean = np.sum(amp_valid * x_valid) / energy
 
     x_diff = x_valid - x_mean
-    variance = np.sum(amp_valid * x_diff**2) / power
+    variance = np.sum(amp_valid * x_diff**2) / energy
 
     if variance < 0.0:
         variance = 0.0
