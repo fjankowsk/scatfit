@@ -35,7 +35,7 @@ Please verify that your installation works as expected by downloading a pre-gene
 `wget https://github.com/fjankowsk/scatfit/raw/master/extra/fake_burst_500_DM.fil`
 
 Then run the main analysis on the filterbank data file like this:  
-`scatfit-fitfrb fake_burst_500_DM.fil 500.0 --fitscatindex --fscrunch 128 --norfi --fast`
+`scatfit-fitfrb fake_burst_500_DM.fil 500.0 --norfi --fscrunch 128 --fitrange -200 400 --gates -50 200 --zoom -60 150 --fitscatindex --fast`
 
 You should see several diagnostic windows open. The terminal output should show an updated DM close to 500 pc cm$^{-3}$, a scattering index near -4.0, and a scattering time at 1 GHz of about 20 ms.
 
@@ -45,7 +45,7 @@ To test the multi-component profile fitting mode, download the following `SIGPRO
 `wget https://github.com/fjankowsk/scatfit/raw/master/extra/fake_burst_10_DM_3-comp_coherent.fil`
 
 Then run the fitting on the filterbank like this:  
-`scatfit-fitfrb fake_burst_10_DM_3-comp_coherent.fil 10.0 --norfi --fitrange -400 400 --gates -50 150 --zoom -100 200 --fscrunch 24 --center 0.0 --center 40.0 --center 70.0 --fitscatindex -o`
+`scatfit-fitfrb fake_burst_10_DM_3-comp_coherent.fil 10.0 --norfi --fscrunch 24 --fitrange -400 400 --gates -50 150 --zoom -100 200 --center 0.0 --center 40.0 --center 70.0 --fitscatindex -o`
 
 The terminal output should show a DM close to 10 pc cm$^{-3}$, a scattering index near -0.25, and a scattering time at 1 GHz of around 1.5 ms. The component separations should be approximately 40 and 30 ms, respectively. The component sigmas should be close to 4, 4, and 6 ms.
 
