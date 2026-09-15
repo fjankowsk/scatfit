@@ -255,9 +255,9 @@ def d4sigma_width(x, amp):
 
     Parameters
     ----------
-    x: ~np.array
+    x: ~np.array, float64
         The running variable (time).
-    amp: ~np.array
+    amp: ~np.array, float64
         The pulse amplitude.
 
     Returns
@@ -271,25 +271,33 @@ def d4sigma_width(x, amp):
     assert np.all(np.isfinite(x))
     assert np.all(np.isfinite(amp))
 
-    # rectify
-    amp = np.abs(amp)
+    # rectify, clip at zero
+    amp = np.maximum(amp, 0.0)
+
     max_amp = np.max(amp)
-    _thresh = 0.01
-    mask = amp >= _thresh * max_amp
+    if max_amp <= 0.0:
+        return np.nan
+
+    # thresholding
+    _thresh = 0.01 * max_amp
+    mask = amp >= _thresh
     x_valid = x[mask]
     amp_valid = amp[mask]
 
-    energy = np.sum(amp_valid)
-    if energy <= 0.0:
+    area = np.sum(amp_valid)
+    if not np.isfinite(area) or area <= 0.0:
         return np.nan
 
-    x_mean = np.sum(amp_valid * x_valid) / energy
+    # second moment
+    x_mean = np.sum(amp_valid * x_valid) / area
+    if not np.isfinite(x_mean):
+        return np.nan
 
     x_diff = x_valid - x_mean
-    variance = np.sum(amp_valid * x_diff**2) / energy
+    variance = np.sum(amp_valid * x_diff**2) / area
 
-    if variance < 0.0:
-        variance = 0.0
+    if not np.isfinite(variance) or variance < 0.0:
+        return np.nan
 
     wd4s = 4.0 * np.sqrt(variance)
 
