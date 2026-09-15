@@ -270,6 +270,7 @@ def d4sigma_width(x, amp):
     assert amp.dtype == np.float64
     assert np.all(np.isfinite(x))
     assert np.all(np.isfinite(amp))
+    assert len(x) == len(amp)
 
     # rectify, clip at zero
     amp = np.maximum(amp, 0.0)
