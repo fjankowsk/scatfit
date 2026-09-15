@@ -212,9 +212,25 @@ def equivalent_width(x, amp):
         The equivalent width.
     """
 
-    mask = amp >= 0
-    fluxsum = np.sum(amp[mask]) * np.abs(x[0] - x[1])
-    weq = fluxsum / np.max(amp)
+    assert x.dtype == np.float64
+    assert amp.dtype == np.float64
+    assert np.all(np.isfinite(x))
+    assert np.all(np.isfinite(amp))
+    assert len(x) == len(amp)
+
+    # rectify, clip at zero
+    amp = np.maximum(amp, 0.0)
+
+    max_amp = np.max(amp)
+    if max_amp <= 0.0:
+        return np.nan
+
+    dx = np.abs(x[1] - x[0])
+    fluxsum = np.sum(amp) * dx
+    weq = fluxsum / max_amp
+
+    if not np.isfinite(weq):
+        return np.nan
 
     return weq
 
