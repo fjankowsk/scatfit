@@ -276,7 +276,7 @@ def full_width_post(x, amp, level):
     return width
 
 
-def d4sigma_width(x, amp):
+def d4sigma_width(x, amp, sigma_noise=None):
     """
     Compute the D4Sigma pulse width based on the second-moment (variance) width.
 
@@ -286,6 +286,9 @@ def d4sigma_width(x, amp):
         The running variable (time).
     amp: ~np.array, float64
         The pulse amplitude.
+    sigma_noise: float, optional
+        1-sigma Gaussian baseline noise level. If given, used for thresholding.
+        Otherwise, 1 % of peak amplitude is used.
 
     Returns
     -------
@@ -307,7 +310,12 @@ def d4sigma_width(x, amp):
         return np.nan
 
     # thresholding
-    _thresh = 0.01 * max_amp
+    if sigma_noise is not None:
+        # remove 95 % of noise fluctuations
+        _thresh = 2.0 * sigma_noise
+    else:
+        _thresh = 0.01 * max_amp
+
     mask = amp >= _thresh
     x_valid = x[mask]
     amp_valid = amp[mask]
