@@ -279,6 +279,7 @@ def full_width_post(x, amp, level):
 def d4sigma_width(x, amp, sigma_noise=None):
     """
     Compute the D4Sigma pulse width based on the second-moment (variance) width.
+    The function assumes that the signal is centred.
 
     Parameters
     ----------
