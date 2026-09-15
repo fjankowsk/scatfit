@@ -195,7 +195,7 @@ def gaussian_fwtm(sigma):
     return res
 
 
-def equivalent_width(x, amp):
+def equivalent_width(x, amp, sigma_noise=None):
     """
     Compute the boxcar equivalent width.
 
@@ -205,6 +205,9 @@ def equivalent_width(x, amp):
         The running variable (time).
     amp: ~np.array
         The pulse amplitude.
+    sigma_noise: float, optional
+        1-sigma Gaussian baseline noise level. If given, used for thresholding.
+        Otherwise, 1 % of peak amplitude is used.
 
     Returns
     -------
@@ -225,8 +228,16 @@ def equivalent_width(x, amp):
     if max_amp <= 0.0:
         return np.nan
 
+    # thresholding
+    if sigma_noise is not None:
+        # remove 95 % of noise fluctuations
+        _thresh = 2.0 * sigma_noise
+    else:
+        _thresh = 0.01 * max_amp
+
+    mask = amp >= _thresh
     dx = np.abs(x[1] - x[0])
-    fluxsum = np.sum(amp) * dx
+    fluxsum = np.sum(amp[mask]) * dx
     weq = fluxsum / max_amp
 
     if not np.isfinite(weq):
