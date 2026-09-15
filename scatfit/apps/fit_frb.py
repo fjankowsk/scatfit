@@ -566,8 +566,9 @@ def fit_profile_model(fit_range, profile, smodel, params):
         arg_list = list(inspect.signature(scat_model).parameters.keys())
 
         if "taus" in arg_list:
-            # vary parameter in logspace
-            model.set_param_hint("c0_lntaus", value=np.log(1.5))
+            # vary parameter in logspace (one parameter)
+            if i == 0:
+                model.set_param_hint("c0_lntaus", value=np.log(1.5))
             # constrain the original model parameter to exp(log_param)
             # and force taus to be the same for each component
             model.set_param_hint(f"{prefix}taus", expr="exp(c0_lntaus)")
