@@ -265,13 +265,56 @@ def full_width_post(x, amp, level):
         The full pulse width at the given level.
     """
 
-    mask = amp >= level * np.max(amp)
+    assert x.dtype == np.float64
+    assert amp.dtype == np.float64
+    assert np.all(np.isfinite(x))
+    assert np.all(np.isfinite(amp))
+    assert len(x) == len(amp)
+    assert 0.0 < level <= 1.0
 
-    # treat special case when pulse is only one sample wide
-    if len(x[mask]) > 1:
-        width = np.abs(np.max(x[mask]) - np.min(x[mask]))
-    else:
-        width = np.abs(x[0] - x[1])
+    # rectify, clip at zero
+    amp = np.maximum(amp, 0.0)
+
+    max_amp = np.max(amp)
+    if max_amp <= 0.0:
+        return np.nan
+
+    threshold = level * max_amp
+    i_peak = int(np.argmax(amp))
+
+    above = amp >= threshold
+
+    # find transitions
+    edges = np.diff(above.view(np.int8))
+    rising = np.where(edges == 1)[0]
+    falling = np.where(edges == -1)[0]
+
+    # left crossing
+    left_idx = rising[rising < i_peak]
+    if left_idx.size == 0:
+        return np.nan
+
+    # below bin
+    k = left_idx[-1]
+    y0, y1 = amp[k], amp[k + 1]
+    # interpolate
+    left = x[k] + (threshold - y0) / (y1 - y0) * (x[k + 1] - x[k])
+
+    # right crossing
+    right_idx = falling[falling >= i_peak]
+    if right_idx.size == 0:
+        return np.nan
+
+    # above bin
+    k = right_idx[0]
+    y0, y1 = amp[k], amp[k + 1]
+    # interpolate
+    right = x[k] + (threshold - y0) / (y1 - y0) * (x[k + 1] - x[k])
+
+    width = right - left
+
+    if not (np.isfinite(width) and width > 0.0):
+        return np.nan
 
     return width
 
