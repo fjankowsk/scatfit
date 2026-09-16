@@ -246,7 +246,7 @@ def equivalent_width(x, amp, sigma_noise=None):
     return weq
 
 
-def full_width_post(x, amp, level):
+def full_width_post(x, amp, level, mode="inner"):
     """
     Compute the full pulse width post scattering numerically.
 
@@ -258,6 +258,10 @@ def full_width_post(x, amp, level):
         The pulse amplitude.
     level: float
         The level at which to evaluate the pulse width.
+    mode : {"inner", "outer"}
+        Determines which amplitude crossing to use to compute the pulse width.
+        "inner": used nearest (innermost) crossing to the peak (main-pulse width)
+        "outer": uses outermost crossing (full-profile extent)
 
     Returns
     -------
@@ -271,6 +275,7 @@ def full_width_post(x, amp, level):
     assert np.all(np.isfinite(amp))
     assert len(x) == len(amp)
     assert 0.0 < level <= 1.0
+    assert mode in ("inner", "outer")
 
     # rectify, clip at zero
     amp = np.maximum(amp, 0.0)
@@ -294,10 +299,13 @@ def full_width_post(x, amp, level):
     if left_idx.size == 0:
         return np.nan
 
-    # below bin
-    k = left_idx[-1]
-    y0, y1 = amp[k], amp[k + 1]
+    if mode == "inner":
+        k = left_idx[-1]
+    else:
+        k = left_idx[0]
+
     # interpolate
+    y0, y1 = amp[k], amp[k + 1]
     left = x[k] + (threshold - y0) / (y1 - y0) * (x[k + 1] - x[k])
 
     # right crossing
@@ -305,10 +313,13 @@ def full_width_post(x, amp, level):
     if right_idx.size == 0:
         return np.nan
 
-    # above bin
-    k = right_idx[0]
-    y0, y1 = amp[k], amp[k + 1]
+    if mode == "inner":
+        k = right_idx[0]
+    else:
+        k = right_idx[-1]
+
     # interpolate
+    y0, y1 = amp[k], amp[k + 1]
     right = x[k] + (threshold - y0) / (y1 - y0) * (x[k + 1] - x[k])
 
     width = right - left
