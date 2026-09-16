@@ -33,6 +33,79 @@ def test_gaussian_fwhm_and_fwtm():
                 assert np.isclose(numeric_fwtm, analytic_fwtm)
 
 
+def test_gaussian_boxcar_equivalent_width():
+    """
+    Check that the boxcar equivalent width Weq is computed correctly.
+    """
+
+    plot_range = np.linspace(-200.0, 500.0, num=100000)
+
+    bin_width = abs(plot_range[1] - plot_range[0])
+    print(f"Bin width: {bin_width}")
+
+    model = pulsemodels.gaussian_normed
+
+    for fluence in np.geomspace(0.1, 1000.0, num=10):
+        for center in np.linspace(-50.0, 50.0, num=10):
+            for sigma in np.geomspace(1.0, 50.0, num=10):
+                analytic_weq = np.sqrt(2.0 * np.pi) * sigma
+
+                amps = model(plot_range, fluence, center, sigma)
+                numeric_weq = pulsemodels.equivalent_width(plot_range, amps)
+
+                print(analytic_weq, numeric_weq)
+
+                assert np.isclose(numeric_weq, analytic_weq, rtol=1e-2)
+
+
+def test_gaussian_boxcar_width_independent_of_fluence():
+    """
+    The boxcar equivalent width of a Gaussian depends only on sigma,
+    not on fluence or center. Verify this explicitly.
+    """
+
+    plot_range = np.linspace(-200.0, 500.0, num=100000)
+
+    model = pulsemodels.gaussian_normed
+    sigma = 10.0
+
+    weq1 = pulsemodels.equivalent_width(
+        plot_range, model(plot_range, 0.5, -20.0, sigma)
+    )
+    weq2 = pulsemodels.equivalent_width(
+        plot_range, model(plot_range, 500.0, 30.0, sigma)
+    )
+
+    assert np.isclose(weq1, weq2)
+
+
+def test_gaussian_weq_vs_w50_ratio():
+    """
+    The ratio Weq / W50 ~= 1.0645 for any Gaussian. Test this.
+    """
+
+    plot_range = np.linspace(-200.0, 500.0, num=200000)
+
+    bin_width = abs(plot_range[1] - plot_range[0])
+    print(f"Bin width: {bin_width}")
+
+    model = pulsemodels.gaussian_normed
+
+    analytic_ratio = np.sqrt(np.pi / (4.0 * np.log(2.0)))
+
+    for fluence in np.geomspace(0.1, 1000.0, num=10):
+        for center in np.linspace(-50.0, 50.0, num=10):
+            for sigma in np.geomspace(0.1, 50.0, num=10):
+                amps = model(plot_range, fluence, center, sigma)
+
+                weq = pulsemodels.equivalent_width(plot_range, amps)
+                w50 = pulsemodels.full_width_post(plot_range, amps, 0.5)
+                ratio = weq / w50
+
+                print(ratio, analytic_ratio)
+                assert np.isclose(ratio, analytic_ratio, rtol=3e-3)
+
+
 if __name__ == "__main__":
     import pytest
 
