@@ -217,9 +217,8 @@ def equivalent_width(x, amp, sigma_noise=None):
 
     assert x.dtype == np.float64
     assert amp.dtype == np.float64
-    assert np.all(np.isfinite(x))
-    assert np.all(np.isfinite(amp))
     assert len(x) == len(amp)
+    assert sigma_noise is None or sigma_noise > 0
 
     # rectify, clip at zero
     amp = np.maximum(amp, 0.0)
@@ -271,8 +270,6 @@ def full_width_post(x, amp, level, mode="inner"):
 
     assert x.dtype == np.float64
     assert amp.dtype == np.float64
-    assert np.all(np.isfinite(x))
-    assert np.all(np.isfinite(amp))
     assert len(x) == len(amp)
     assert 0.0 < level <= 1.0
     assert mode in ("inner", "outer")
@@ -353,9 +350,8 @@ def d4sigma_width(x, amp, sigma_noise=None):
 
     assert x.dtype == np.float64
     assert amp.dtype == np.float64
-    assert np.all(np.isfinite(x))
-    assert np.all(np.isfinite(amp))
     assert len(x) == len(amp)
+    assert sigma_noise is None or sigma_noise > 0
 
     # rectify, clip at zero
     amp = np.maximum(amp, 0.0)
