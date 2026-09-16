@@ -368,11 +368,12 @@ def d4sigma_width(x, amp, sigma_noise=None):
     if not np.isfinite(area) or area <= 0.0:
         return np.nan
 
-    # second moment
+    # first moment (center of flux)
     x_mean = np.sum(amp_valid * x_valid) / area
     if not np.isfinite(x_mean):
         return np.nan
 
+    # second moment (variance)
     x_diff = x_valid - x_mean
     variance = np.sum(amp_valid * x_diff**2) / area
 
