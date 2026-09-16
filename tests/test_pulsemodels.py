@@ -25,7 +25,7 @@ def test_normalisation_gaussian():
                     x=plot_range,
                 )
 
-                assert np.allclose(res, fluence)
+                assert np.isclose(res, fluence)
 
 
 def test_conservation_of_fluence():
@@ -50,7 +50,7 @@ def test_conservation_of_fluence():
                         x=plot_range,
                     )
 
-                    assert np.allclose(res, fluence)
+                    assert np.isclose(res, fluence)
 
 
 def test_agreement_analytical_and_full_convolution_model():
