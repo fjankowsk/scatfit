@@ -18,7 +18,7 @@ If required, rotate the pulse profile so that the scattering tail does not wrap 
 `$ pam -r 0.3 filename.Tp -m`
 
 You can then run `scatfit` on the time and polarisation integrated data like this:  
-`$ scatfit-fitfrb filename.Tp 57.2 --fscrunch 48 --fitrange -200 200 -z -50 200 --fitscatindex --snr 15.0 --norfi`
+`$ scatfit-fitfrb filename.Tp 57.2 --fscrunch 48 --fitrange -200 200 --gates -100 100 --zoom -50 200 --fitscatindex --snr 15.0 --norfi`
 
 Select a good initial *DM* from the ATNF pulsar catalogue or from running `PSRCHIVE`'s `pdmp`. Use an *fscrunch* value appropriate for your data and their total number of channels. Adjust the fit and zoom range to fit your use case. Make sure that most of the on-pulse profile phase bins or time samples are used in the fit. Adjust the minimum sub-band S/N as required. As we have cleaned the data before, we turned off all further RFI excision methods within `scatfit`.
 
@@ -77,16 +77,16 @@ The leading edge of the burst profile should be as sharp as possible (in the abs
 
 ## Why do the plots take so long to display? ##
 
-`scatfit` opens a large number (~20 - 100) of diagnostic plots for the user to inspect. The more frequency sub-bands are processed, the higher this number. The plots include traces of the Markov chain, corner plots, and fit results. This behaviour is entirely on purpose and by design. It forces the user to briefly check each plot for sanity before closing it. For instance, it is evident if a Markov chain failed to converge (obvious patterns visible, jumping between values) or if there are strong correlations between the fit parameters (banana shapes). Displaying these plots is usually fast. However, drawing the plots might take a considerable amount of time on a well-utilised remote server or workstation with limited connectivity. That is especially true if several people are using it remotely. If you experience this issue, try outputting all the plots to file by using `scatfit`'s "-o" or "--output" command line option. Using it instructs `scatfit` to write all the diagnostic plots to PDF files in the current working directory. Do not forget to inspect them later, though.
+`scatfit` opens a large number (~20 - 100) of diagnostic plots for the user to inspect. The more frequency sub-bands are processed, the higher this number. The plots include traces of the Markov chain, corner plots, and fit results. This behaviour is entirely on purpose and by design. It forces the user to briefly check each plot for sanity before closing it. For instance, it is evident if a Markov chain failed to converge (obvious patterns visible, jumping between values) or if there are strong correlations between the fit parameters (banana shapes). Displaying these plots is usually fast. However, drawing the plots might take a considerable amount of time on a well-utilised remote server or workstation with limited connectivity. That is especially true if several people are using it remotely. If you experience this issue, try outputting all the plots to file by using `scatfit`'s `-o` or `--output` command line option. Using it instructs `scatfit` to write all the diagnostic plots to PDF files in the current working directory. Do not forget to inspect them later, though.
 
 ## How do I perform the scattering fits automatically? ##
 
-You can run `scatfit` non-interactively and quasi-automatically, e.g. as part of a pipeline. To do so, you must first identify a suitable combination of command line parameters for your input data. You can then use the "-o" or "--output" command line option to redirect all diagnostic plots to PDF files in the current working directory. This mode is ideal for non-interactive use.
+You can run `scatfit` non-interactively and quasi-automatically, e.g. as part of a pipeline. To do so, you must first identify a suitable combination of command line parameters for your input data. You can then use the `-o` or `--output` command line option to redirect all diagnostic plots to PDF files in the current working directory. This mode is ideal for non-interactive use.
 
 ## How do I fit multi-component profile bursts or pulses? ##
 
 Since version 0.5.0, `scatfit` has the functionality to fit multi-component bursts or pulses. You enable its multi-component mode by specifying the command-line option `--center` several times. The argument is the offset from the highest peak in the band-integrated profile in milliseconds. For instance, for a 3-component pulse in which the first (leftmost) profile component is the dominant one (located at 0.0 milliseconds by definition) and where the separations are 40 and 70 milliseconds from the leftmost component, use the following command:  
-`$ scatfit-fitfrb filename 10.0 --fitrange -400 400 -z -100 150 --fscrunch 24 --center 0.0 --center 40.0 --center 70.0 --fitscatindex -o`
+`$ scatfit-fitfrb filename 10.0 --fitrange -400 400 --gates -100 150 --zoom -100 150 --fscrunch 24 --center 0.0 --center 40.0 --center 70.0 --fitscatindex -o`
 
 This command also demonstrates how to extend the `fitrange`, change the `zoom` window, `fscrunch` to 24 frequency channels, fit the scattering index, and `output` plots to PDF files.
 
