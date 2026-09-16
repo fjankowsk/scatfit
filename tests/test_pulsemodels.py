@@ -93,6 +93,34 @@ def test_agreement_analytical_and_full_convolution_model():
                     assert np.all(rel_residual < 0.07)
 
 
+def test_low_scattering_agreement_with_gaussian():
+    """
+    Check that the scattered Gaussian pulse becomes a Gaussian
+    in the low-scattering regime.
+    """
+
+    plot_range = np.linspace(-500.0, 1000.0, num=10000)
+
+    dc = 0.0
+
+    model = pulsemodels.scattered_gaussian_pulse
+
+    for fluence in np.geomspace(0.1, 1000.0, num=5):
+        for center in np.linspace(-50.0, 50.0, num=5):
+            for taus in np.geomspace(0.1, 50.0, num=10):
+                for sigma in np.geomspace(10.0 * taus, 100.0 * taus, num=10):
+                    gaussian = pulsemodels.gaussian_normed(
+                        plot_range, fluence, center + taus, sigma
+                    )
+                    amps = model(plot_range, fluence, center, sigma, taus, dc)
+
+                    max_residual = np.max(np.abs(amps - gaussian))
+                    print(sigma, taus, sigma / taus, max_residual)
+
+                    assert max_residual < 1e-7
+                    assert np.allclose(amps, gaussian)
+
+
 def test_invalid_parameters():
     """
     Check the handling of invalid input parameters.
