@@ -89,3 +89,17 @@ Since version 0.5.0, `scatfit` has the functionality to fit multi-component burs
 `$ scatfit-fitfrb filename 10.0 --fitrange -400 400 -z -100 150 --fscrunch 24 --center 0.0 --center 40.0 --center 70.0 --fitscatindex -o`
 
 This command also demonstrates how to extend the `fitrange`, change the `zoom` window, `fscrunch` to 24 frequency channels, fit the scattering index, and `output` plots to PDF files.
+
+## What pulse width estimators are supported? ##
+
+Since version 0.5.2, `scatfit` supports the following pulse width estimators:
+* Full-width half maximum (FWHM, W50)
+* Full-width tenth maximum (FWTM, W10)
+* Boxcar-equivalent pulse width (Weq)
+* D4sigma pulse width based on the second-moment (variance) width (WD4s) - see Jankowski et al. 2026
+
+We measure the reported pulse widths and their uncertainties from the final Markov chain samples of the semi-analytical (noiseless) best-fitting profile model.
+
+Importantly, for W50 and W10 we use the outermost amplitude threshold crossings (at 50% and 10%, respectively), which characterise the full-profile width rather than the width of the central component. This is important for complex multi-component profiles with low-level conal "wing" emission.
+
+The pulse width estimators use half-wave signal rectification (clip at zero) and thresholding, where appropriate. This way, they can be directly used on noisy input data.
