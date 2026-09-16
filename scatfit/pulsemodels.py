@@ -245,9 +245,11 @@ def equivalent_width(x, amp, sigma_noise=None):
     return weq
 
 
-def full_width_post(x, amp, level, mode="inner"):
+def full_width_post(x, amp, level, mode="outer"):
     """
     Compute the full pulse width post scattering numerically.
+    The function returns the full-profile extent based on the outermost
+    amplitude threshold crossing by default.
 
     Parameters
     ----------
@@ -257,7 +259,7 @@ def full_width_post(x, amp, level, mode="inner"):
         The pulse amplitude.
     level: float
         The level at which to evaluate the pulse width.
-    mode : {"inner", "outer"}
+    mode : {"inner", "outer"}, optional
         Determines which amplitude crossing to use to compute the pulse width.
         "inner": used nearest (innermost) crossing to the peak (main-pulse width)
         "outer": uses outermost crossing (full-profile extent)
