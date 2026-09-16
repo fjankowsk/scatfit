@@ -106,6 +106,115 @@ def test_gaussian_weq_vs_w50_ratio():
                 assert np.isclose(ratio, analytic_ratio, rtol=3e-3)
 
 
+def test_wd4s_gaussian():
+    """
+    Check WD4s against the analytical 4 sigma for a Gaussian.
+    We effectively disable the thresholding here.
+    """
+
+    plot_range = np.linspace(-200.0, 500.0, num=100000)
+
+    bin_width = abs(plot_range[1] - plot_range[0])
+    print(f"Bin width: {bin_width}")
+
+    model = pulsemodels.gaussian_normed
+
+    for fluence in np.geomspace(0.1, 1000.0, num=10):
+        for center in np.linspace(-50.0, 50.0, num=10):
+            for sigma in np.geomspace(0.1, 50.0, num=10):
+                analytic_wd4s = 4.0 * sigma
+
+                amps = model(plot_range, fluence, center, sigma)
+                numeric_wd4s = pulsemodels.d4sigma_width(
+                    plot_range, amps, sigma_noise=1e-10
+                )
+
+                assert np.isclose(numeric_wd4s, analytic_wd4s, rtol=7e-3)
+
+
+def test_wd4s_independent_of_fluence():
+    """
+    The WD4s width depends only on sigma, not on fluence or center.
+    """
+
+    plot_range = np.linspace(-200.0, 500.0, num=100000)
+
+    model = pulsemodels.gaussian_normed
+    sigma = 10.0
+
+    w1 = pulsemodels.d4sigma_width(
+        plot_range,
+        model(plot_range, 0.5, -20.0, sigma),
+        sigma_noise=1e-10,
+    )
+    w2 = pulsemodels.d4sigma_width(
+        plot_range,
+        model(plot_range, 500.0, 30.0, sigma),
+        sigma_noise=1e-10,
+    )
+
+    assert np.isclose(w1, w2)
+
+
+def test_wd4s_vs_w50_ratio():
+    """
+    WD4s / FWHM ~= 1.6651 for an untruncated Gaussian. Check this.
+    """
+
+    plot_range = np.linspace(-200.0, 500.0, num=100000)
+
+    model = pulsemodels.gaussian_normed
+    fluence, center, sigma = 1.0, 0.0, 5.0
+
+    amps = model(plot_range, fluence, center, sigma)
+    wd4s = pulsemodels.d4sigma_width(plot_range, amps, sigma_noise=1e-10)
+    w50 = pulsemodels.full_width_post(plot_range, amps, 0.5)
+
+    ratio = wd4s / w50
+    analytic_ratio = np.sqrt(2.0 / np.log(2.0))
+
+    print(ratio, analytic_ratio)
+    assert np.isclose(ratio, analytic_ratio, rtol=1e-3)
+
+
+def test_wd4s_vs_weq_ratio():
+    """
+    WD4s / Weq ~= 1.5958 for an untruncated Gaussian. Check this.
+    """
+
+    plot_range = np.linspace(-200.0, 500.0, num=100000)
+
+    model = pulsemodels.gaussian_normed
+    fluence, center, sigma = 1.0, 0.0, 5.0
+
+    amps = model(plot_range, fluence, center, sigma)
+    wd4s = pulsemodels.d4sigma_width(plot_range, amps, sigma_noise=1e-10)
+    weq = pulsemodels.equivalent_width(plot_range, amps)
+
+    ratio = wd4s / weq
+    analytic_ratio = np.sqrt(8.0 / np.pi)
+
+    print(ratio, analytic_ratio)
+    assert np.isclose(ratio, analytic_ratio, rtol=7e-3)
+
+
+def test_wd4s_default_threshold_close_to_4sigma():
+    """
+    With the default 1 % threshold (no sigma_noise), the result
+    should be within 2 % of 4 sigma. This verifies the thresholding code.
+    """
+
+    plot_range = np.linspace(-200.0, 500.0, num=100000)
+
+    model = pulsemodels.gaussian_normed
+    sigma = 10.0
+
+    amps = model(plot_range, 1.0, 0.0, sigma)
+    wd4s = pulsemodels.d4sigma_width(plot_range, amps)
+
+    assert abs(wd4s - 4.0 * sigma) / (4.0 * sigma) < 0.02
+
+
 if __name__ == "__main__":
     import pytest
 
