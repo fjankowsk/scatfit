@@ -261,7 +261,7 @@ def full_width_post(x, amp, level, mode="outer"):
         The level at which to evaluate the pulse width.
     mode : {"inner", "outer"}, optional
         Determines which amplitude crossing to use to compute the pulse width.
-        "inner": used nearest (innermost) crossing to the peak (main-pulse width)
+        "inner": uses nearest (innermost) crossing to the peak (main-pulse width)
         "outer": uses outermost crossing (full-profile extent)
 
     Returns
